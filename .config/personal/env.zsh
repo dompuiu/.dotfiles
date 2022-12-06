@@ -9,3 +9,11 @@ addToPathFront() {
     export PATH=$1:$PATH
   fi
 }
+
+checkIfCommandExists() {
+  [[ -x "$(command -v $1)" ]]
+}
+
+checkIfFileExists() {
+  [[ ! -f $1 ]]
+}
