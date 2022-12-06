@@ -46,11 +46,12 @@ zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
 zicdreplay -q
 
 # Zoxide. The OPZP plugin doesn't let you provide flags to the init command.
-eval "$(zoxide init zsh --cmd cd)"
+[ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh --cmd cd)"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-alias r="ranger"
+[ -x "$(command -v ranger)" ] && alias rg="ranger"
+[ -x "$(command -v cola)" ] && alias mycola="(cola &> /dev/null &s)"
