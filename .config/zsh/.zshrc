@@ -13,6 +13,14 @@ if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
     print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
 
+PERSONAL=$XDG_CONFIG_HOME/personal
+source $PERSONAL/env.zsh
+
+addToPath "$HOME/.local/bin"
+addToPath "/snap/bin"
+addToPath "$HOME/Library/pnpm"
+addToPath "/opt/homebrew/bin"
+
 if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
