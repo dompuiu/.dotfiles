@@ -17,4 +17,6 @@ return require('packer').startup(function(use)
     })
 
     use "sainnhe/sonokai"
+
+    use "lukas-reineke/indent-blankline.nvim"
 end)
