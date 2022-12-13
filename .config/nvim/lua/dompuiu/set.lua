@@ -45,3 +45,19 @@ vim.opt.shortmess:append("c")
 vim.opt.colorcolumn = "80"
 
 vim.g.mapleader = " "
+
+-- Netrw Config
+vim.g.netrw_browse_split = 0
+vim.g.netrw_banner = 0
+vim.g.netrw_winsize = 25
+vim.g.netrw_keepdir = 0
+
+vim.opt.list = true
+vim.opt.listchars = {
+  space = '·',
+  tab = '🡢\\',
+  nbsp = '·',
+  trail = '·',
+  extends = '>',
+  precedes = '<'
+}
