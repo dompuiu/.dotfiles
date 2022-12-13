@@ -19,4 +19,7 @@ return require('packer').startup(function(use)
     use "sainnhe/sonokai"
 
     use "lukas-reineke/indent-blankline.nvim"
+
+    use "maxmellon/vim-jsx-pretty" -- To highlight JSX
+    use "yuezk/vim-js" -- To highlight JS
 end)
