@@ -22,4 +22,5 @@ return require('packer').startup(function(use)
 
     use "maxmellon/vim-jsx-pretty" -- To highlight JSX
     use "yuezk/vim-js" -- To highlight JS
+    use "HerringtonDarkholme/yats.vim" -- To highlight TypeScript
 end)
