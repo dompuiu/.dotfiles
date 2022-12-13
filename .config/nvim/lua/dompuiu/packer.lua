@@ -17,5 +17,5 @@ return require('packer').startup(function(use)
     run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
   })
 
-  use { "catppuccin/nvim", as = "catppuccin" }
+    use "sainnhe/sonokai"
 end)
