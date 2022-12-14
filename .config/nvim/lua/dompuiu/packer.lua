@@ -9,9 +9,16 @@ return require('packer').startup(function(use)
     use("nvim-lua/plenary.nvim")
     use("nvim-lua/popup.nvim")
     use("nvim-telescope/telescope.nvim")
-    use("nvim-treesitter/nvim-treesitter", {
-        run = ":TSUpdate"
-    })
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = function()
+            local ts_update = require('nvim-treesitter.install').update({
+                with_sync = true
+            })
+            ts_update()
+        end
+    }
+
     use('nvim-telescope/telescope-fzf-native.nvim', {
         run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
     })
