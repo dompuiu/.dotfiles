@@ -6,23 +6,30 @@ return require('packer').startup(function(use)
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
 
-    use("nvim-lua/plenary.nvim")
-    use("nvim-lua/popup.nvim")
-    use("nvim-telescope/telescope.nvim")
     use {
         'nvim-treesitter/nvim-treesitter',
-        run = function()
-            local ts_update = require('nvim-treesitter.install').update({
-                with_sync = true
-            })
-            ts_update()
-        end
+        run = ':TSUpdate'
     }
+
+    use("nvim-lua/plenary.nvim")
+    use("nvim-telescope/telescope.nvim")
 
     use('nvim-telescope/telescope-fzf-native.nvim', {
         run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
     })
 
     use "sainnhe/sonokai"
+    use "folke/tokyonight.nvim"
+
+    use "tpope/vim-surround"
+
     use "lukas-reineke/indent-blankline.nvim"
+
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = {
+            'kyazdani42/nvim-web-devicons',
+            opt = true
+        }
+    }
 end)
