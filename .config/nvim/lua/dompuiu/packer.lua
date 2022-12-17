@@ -20,8 +20,8 @@ return require('packer').startup(function(use)
         run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
     })
 
-    use "sainnhe/sonokai"
-    use "folke/tokyonight.nvim"
+    use "sainnhe/sonokai" -- Color Theme
+    use "folke/tokyonight.nvim" -- Color Theme
 
     use "tpope/vim-surround"
 
