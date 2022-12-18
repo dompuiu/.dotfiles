@@ -5,7 +5,7 @@ end
 
 treesitter.setup {
     -- A list of parser names, or "all"
-    ensure_installed = {"javascript", "lua", "vim"},
+    ensure_installed = {"javascript", "lua", "vim", "rust", "typescript", "help"},
 
     highlight = {
         enable = true,
