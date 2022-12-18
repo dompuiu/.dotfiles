@@ -25,6 +25,8 @@ return require("packer").startup(function(use)
 
     use "tpope/vim-surround"
 
+    use "folke/which-key.nvim"
+
     use "lukas-reineke/indent-blankline.nvim"
 
     use {
