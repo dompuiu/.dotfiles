@@ -165,6 +165,15 @@ local mappings = {
         f = {"<cmd>ToggleTerm direction=float<cr>", "Float"},
         h = {"<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal"},
         v = {"<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical"}
+    },
+
+    x = {
+        name = "Trouble",
+        x = {"<cmd>TroubleToggle<cr>", "Open Trouble List"},
+        w = {"<cmd>TroubleToggle workspace_diagnostics<cr>", "Document Diagnostics"},
+        d = {"<cmd>TroubleToggle document_diagnostics<cr>", "Workspace Diagnostics"},
+        l = {"<cmd>TroubleToggle loclist<cr>", "Items from the Location List"},
+        q = {"<cmd>TroubleToggle quickfix<cr>", "Quickfix"}
     }
 }
 

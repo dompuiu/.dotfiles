@@ -28,11 +28,15 @@ return require("packer").startup(function(use)
     use "lukas-reineke/indent-blankline.nvim"
 
     use {
+        "nvim-tree/nvim-web-devicons",
+        config = function()
+            require("nvim-web-devicons").setup()
+        end
+    }
+
+    use {
         "nvim-lualine/lualine.nvim",
-        requires = {
-            "kyazdani42/nvim-web-devicons",
-            opt = true
-        }
+        requires = {"nvim-tree/nvim-web-devicons"}
     }
 
     use {
@@ -63,7 +67,7 @@ return require("packer").startup(function(use)
 
     use {
         "folke/trouble.nvim",
-        requires = "kyazdani42/nvim-web-devicons",
+        requires = "nvim-tree/nvim-web-devicons",
         config = function()
             require("trouble").setup {
                 -- your configuration comes here
@@ -74,4 +78,5 @@ return require("packer").startup(function(use)
     }
 
     use "jose-elias-alvarez/null-ls.nvim"
+    use "nvim-tree/nvim-web-devicons"
 end)
