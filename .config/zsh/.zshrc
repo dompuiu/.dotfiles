@@ -18,7 +18,7 @@ source $PERSONAL/env.zsh
 
 addToPath "$HOME/.local/bin"
 addToPath "/snap/bin"
-addToPath "$HOME/Library/pnpm"
+addToPath "$PNPM_HOME"
 addToPath "/opt/homebrew/bin"
 
 if type brew &>/dev/null
