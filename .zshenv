@@ -8,5 +8,6 @@ export VISUAL="nvim"
 
 export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/ripgreprc"
 
 [[ ! -f ~/.zshenv.local ]] || source ~/.zshenv.local
