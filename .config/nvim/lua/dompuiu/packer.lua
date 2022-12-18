@@ -2,22 +2,22 @@
 -- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
 
-return require('packer').startup(function(use)
+return require("packer").startup(function(use)
     -- Packer can manage itself
-    use 'wbthomason/packer.nvim'
+    use "wbthomason/packer.nvim"
 
     use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
+        "nvim-treesitter/nvim-treesitter",
+        run = ":TSUpdate"
     }
 
     use {
-        'nvim-telescope/telescope.nvim',
-        requires = {{'nvim-lua/plenary.nvim'}}
+        "nvim-telescope/telescope.nvim",
+        requires = {{"nvim-lua/plenary.nvim"}}
     }
 
-    use('nvim-telescope/telescope-fzf-native.nvim', {
-        run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+    use("nvim-telescope/telescope-fzf-native.nvim", {
+        run = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build"
     })
 
     use "sainnhe/sonokai" -- Color Theme
@@ -28,9 +28,9 @@ return require('packer').startup(function(use)
     use "lukas-reineke/indent-blankline.nvim"
 
     use {
-        'nvim-lualine/lualine.nvim',
+        "nvim-lualine/lualine.nvim",
         requires = {
-            'kyazdani42/nvim-web-devicons',
+            "kyazdani42/nvim-web-devicons",
             opt = true
         }
     }
