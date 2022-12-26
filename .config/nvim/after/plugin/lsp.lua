@@ -15,6 +15,15 @@ lsp.configure('tsserver', {
 
 lsp.setup()
 
+vim.diagnostic.config({
+    virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+    underline = true,
+    severity_sort = true,
+    float = true
+})
+
 require("null-ls").setup({
     sources = {require("null-ls").builtins.formatting.prettier -- javascript formatting
     }
