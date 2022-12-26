@@ -44,6 +44,8 @@ vim.opt.shortmess:append("c")
 
 vim.opt.colorcolumn = "80"
 
+vim.opt.signcolumn = "yes"
+
 vim.g.mapleader = " "
 
 -- Netrw Config
