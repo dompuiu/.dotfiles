@@ -63,3 +63,8 @@ checkIfFileExists ${HOME}/.iterm2_shell_integration.zsh || source "${HOME}/.iter
 
 checkIfCommandExists "ranger" && alias rg="ranger"
 checkIfCommandExists "cola" && alias mycola="(cola &> /dev/null &)"
+
+# Bash like ctrl-d wrapper for IGNOREEOF
+setopt ignore_eof
+zle -N bash-ctrl-d
+bindkey "^d" bash-ctrl-d
