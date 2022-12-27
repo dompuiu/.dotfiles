@@ -66,6 +66,7 @@ return require("packer").startup(function(use)
         {"hrsh7th/cmp-nvim-lsp"}, {"hrsh7th/cmp-nvim-lua"}, -- Snippets
         {"L3MON4D3/LuaSnip"}, {"rafamadriz/friendly-snippets"}}
     }
+    use "jose-elias-alvarez/null-ls.nvim"
 
     use {
         "folke/trouble.nvim",
@@ -79,6 +80,17 @@ return require("packer").startup(function(use)
         end
     }
 
-    use "jose-elias-alvarez/null-ls.nvim"
+    use "tpope/vim-commentary"
+
+    use({
+        "kylechui/nvim-surround",
+        tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+        config = function()
+            require("nvim-surround").setup({
+                -- Configuration here, or leave empty to use defaults
+            })
+        end
+    })
+
     use "gpanders/editorconfig.nvim"
 end)
