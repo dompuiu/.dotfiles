@@ -93,4 +93,14 @@ return require("packer").startup(function(use)
     })
 
     use "gpanders/editorconfig.nvim"
+
+    use {
+        "j-hui/fidget.nvim",
+        config = function()
+            require("fidget").setup()
+        end
+    }
+
+    use "simrat39/rust-tools.nvim"
+    use 'mfussenegger/nvim-dap'
 end)
