@@ -26,6 +26,14 @@ lsp.configure("sumneko_lua", {
 
 local rt = require('rust-tools')
 local rust_lsp = lsp.build_options('rust_analyzer', {
+    settings = {
+        ["rust-analyzer"] = {
+            checkOnSave = {
+                -- default: `cargo check`
+                command = "clippy"
+            }
+        }
+    },
     on_attach = function(_, bufnr)
         -- Hover actions
         vim.keymap.set("n", "<Leader>a", rt.hover_actions.hover_actions, {
