@@ -99,9 +99,9 @@ return require("packer").startup(function(use)
         config = function()
             require("fidget").setup()
         end
-    }
+    } -- Standalone UI for nvim-lsp progress. Eye candy for the impatient.
 
     use "simrat39/rust-tools.nvim"
-    use "mfussenegger/nvim-dap"
-    use "wellle/targets.vim"
+    use "mfussenegger/nvim-dap" -- Debug Adapter Protocol client implementation for NeoVim.
+    use "wellle/targets.vim" -- Adds various text objects to give you more targets to operate on.
 end)
