@@ -97,7 +97,7 @@ local mappings = {
     ["e"] = {"<cmd>Ex<cr>", "Explorer"},
     ["w"] = {"<cmd>w!<CR>", "Save"},
     ["q"] = {"<cmd>q!<CR>", "Quit"},
-    ["c"] = {"<cmd>bd!<CR>", "Close Buffer"},
+    ["c"] = {"<cmd>Bdelete!<CR>", "Close Buffer"},
 
     ["f"] = {"<cmd>Telescope find_files<cr>", "Find Files"},
     ["F"] = {"<cmd>Telescope live_grep theme=ivy<cr>", "Find Text"},

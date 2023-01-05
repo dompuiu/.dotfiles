@@ -104,4 +104,5 @@ return require("packer").startup(function(use)
     use "simrat39/rust-tools.nvim"
     use "mfussenegger/nvim-dap" -- Debug Adapter Protocol client implementation for NeoVim.
     use "wellle/targets.vim" -- Adds various text objects to give you more targets to operate on.
+    use "moll/vim-bbye" -- Bbye allows you to do delete buffers (close files) without closing your windows or messing up your layout.
 end)
