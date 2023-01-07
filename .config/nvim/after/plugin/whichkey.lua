@@ -126,7 +126,7 @@ local mappings = {
         u = {"<cmd>PackerUpdate<cr>", "Update"}
     },
 
-    g = {
+    G = {
         name = "Git",
         j = {"<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk"},
         k = {"<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk"},
