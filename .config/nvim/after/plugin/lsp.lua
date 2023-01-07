@@ -31,6 +31,10 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
             checkOnSave = {
                 -- default: `cargo check`
                 command = "clippy"
+            },
+            -- HACK: https://github.com/simrat39/rust-tools.nvim/issues/300
+            inlayHints = {
+                locationLinks = false
             }
         }
     },
@@ -48,6 +52,16 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
         -- Move Item Up/Down
         vim.keymap.set("n", "<S-Up>", "<cmd>lua require'rust-tools'.move_item.move_item(true)<cr>")
         vim.keymap.set("n", "<S-Down>", "<cmd>lua require'rust-tools'.move_item.move_item(false)<cr>")
+
+        local status_ok, which_key = pcall(require, "which-key")
+        if status_ok then
+            which_key.register({
+                ["a"] = "Rust Hover Actions",
+                ["A"] = "Rust Code Actions"
+            }, {
+                prefix = "<leader>"
+            })
+        end
     end
 })
 
