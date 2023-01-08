@@ -179,3 +179,26 @@ local mappings = {
 
 which_key.setup(setup)
 which_key.register(mappings, opts)
+
+local status_ok, hop = pcall(require, "hop")
+if status_ok then
+    local directions = require('hop.hint').HintDirection
+
+    which_key.register({
+        h = {
+            name = "Hop",
+            c = {function()
+                hop.hint_char1({
+                    current_line_only = true
+                })
+            end, "Hop to any word on the current line"},
+            h = {function()
+                hop.hint_words({
+                    current_line_only = true
+                })
+            end, "Hop to any char on the current line"}
+        }
+    }, {
+        prefix = "<leader>"
+    })
+end

@@ -105,4 +105,15 @@ return require("packer").startup(function(use)
     use "mfussenegger/nvim-dap" -- Debug Adapter Protocol client implementation for NeoVim.
     use "wellle/targets.vim" -- Adds various text objects to give you more targets to operate on.
     use "moll/vim-bbye" -- Bbye allows you to do delete buffers (close files) without closing your windows or messing up your layout.
+
+    use {
+        'phaazon/hop.nvim',
+        branch = 'v2', -- optional but strongly recommended
+        config = function()
+            -- you can configure Hop the way you like here; see :h hop-config
+            require'hop'.setup {
+                keys = 'etovxqpdygfblzhckisuran'
+            }
+        end
+    }
 end)
