@@ -1,10 +1,10 @@
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
-local yank_group = augroup('HighlightYank', {})
+local yankGroup = augroup('HighlightYank', {})
 
 autocmd('TextYankPost', {
-    group = yank_group,
+    group = yankGroup,
     pattern = '*',
     callback = function()
         vim.highlight.on_yank({
