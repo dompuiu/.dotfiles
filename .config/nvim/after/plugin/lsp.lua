@@ -31,10 +31,6 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
             checkOnSave = {
                 -- default: `cargo check`
                 command = "clippy"
-            },
-            -- HACK: https://github.com/simrat39/rust-tools.nvim/issues/300
-            inlayHints = {
-                locationLinks = false
             }
         }
     },
