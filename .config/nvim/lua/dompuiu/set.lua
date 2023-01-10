@@ -55,10 +55,12 @@ vim.g.netrw_keepdir = 0
 -- Show special chars
 vim.opt.list = true
 vim.opt.listchars = {
-    space = '·',
-    tab = '▷▷',
-    nbsp = '·',
-    trail = '·',
-    extends = '>',
-    precedes = '<'
+    space = "·",
+    tab = "▷▷",
+    nbsp = "·",
+    trail = "·",
+    extends = ">",
+    precedes = "<"
 }
+
+vim.opt.clipboard = "unnamedplus"
