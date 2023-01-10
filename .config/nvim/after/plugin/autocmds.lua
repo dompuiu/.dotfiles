@@ -14,13 +14,6 @@ autocmd('TextYankPost', {
     end
 })
 
-local ThePrimeagenGroup = augroup('ThePrimeagen', {})
-autocmd({"BufWritePre"}, {
-    group = ThePrimeagenGroup,
-    pattern = "*",
-    command = "%s/\\s\\+$//e"
-})
-
 -- Start Netrw when editor is launched
 local initNetrwGroup = augroup("InitNetrw", {
     clear = true
@@ -29,4 +22,11 @@ autocmd("VimEnter", {
     pattern = "*",
     command = [[if expand("%") == "" | silent! Explore | endif]],
     group = initNetrwGroup
+})
+
+local fmtGroup = augroup('FormatOnSave', {})
+autocmd({ "BufWritePre" }, {
+    pattern = "*",
+    command = "LspZeroFormat",
+    group = fmtGroup
 })
