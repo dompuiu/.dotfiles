@@ -33,3 +33,7 @@ keymap("n", "<C-u>", "<C-u>zz", default_opts)
 
 -- Replace the word under cursor
 keymap("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
+-- Always paste from register 0.
+keymap("n", "p", "\"0p", default_opts)
+
