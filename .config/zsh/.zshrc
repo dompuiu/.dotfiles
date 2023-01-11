@@ -61,7 +61,6 @@ checkIfFileExists ~/.p10k.zsh || source ~/.p10k.zsh
 
 checkIfFileExists ${HOME}/.iterm2_shell_integration.zsh || source "${HOME}/.iterm2_shell_integration.zsh"
 
-checkIfCommandExists "ranger" && alias rg="ranger"
 checkIfCommandExists "cola" && alias mycola="(cola &> /dev/null &)"
 
 # Bash like ctrl-d wrapper for IGNOREEOF
