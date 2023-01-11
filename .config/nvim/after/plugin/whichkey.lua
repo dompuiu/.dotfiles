@@ -47,8 +47,8 @@ local setup = {
     window = {
         border = "rounded", -- none, single, double, shadow
         position = "bottom", -- bottom, top
-        margin = {1, 0, 1, 0}, -- extra window margin [top, right, bottom, left]
-        padding = {2, 2, 2, 2}, -- extra window padding [top, right, bottom, left]
+        margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
+        padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
         winblend = 0
     },
     layout = {
@@ -64,7 +64,7 @@ local setup = {
         align = "left" -- align columns left, center or right
     },
     ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
-    hidden = {"<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
+    hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
     show_help = true, -- show help message on the command line when the popup is visible
     show_keys = true, -- show the currently pressed key and its label as a message in the command line
     triggers = "auto", -- automatically setup triggers
@@ -73,14 +73,14 @@ local setup = {
         -- list of mode / prefixes that should never be hooked by WhichKey
         -- this is mostly relevant for key maps that start with a native binding
         -- most people should not need to change this
-        i = {"j", "k"},
-        v = {"j", "k"}
+        i = { "j", "k" },
+        v = { "j", "k" }
     },
     -- disable the WhichKey popup for certain buf types and file types.
     -- Disabled by deafult for Telescope
     disable = {
         buftypes = {},
-        filetypes = {"TelescopePrompt"}
+        filetypes = { "TelescopePrompt" }
     }
 }
 
@@ -94,95 +94,94 @@ local opts = {
 }
 
 local mappings = {
-    ["e"] = {"<cmd>Ex<cr>", "Explorer"},
-    ["w"] = {"<cmd>w!<CR>", "Save"},
-    ["q"] = {"<cmd>q!<CR>", "Quit"},
-    ["c"] = {"<cmd>Bdelete!<CR>", "Close Buffer"},
+    ["e"] = { "<cmd>Ex<cr>", "Explorer" },
+    ["w"] = { "<cmd>w!<CR>", "Save" },
+    ["q"] = { "<cmd>q!<CR>", "Quit" },
+    ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
 
-    ["f"] = {"<cmd>Telescope find_files<cr>", "Find Files"},
-    ["F"] = {"<cmd>Telescope live_grep theme=ivy<cr>", "Find Text"},
-    ["b"] = {"<cmd>Telescope buffers<cr>", "Buffers"},
+    ["f"] = { "<cmd>Telescope find_files<cr>", "Find Files" },
+    ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
+    ["b"] = { "<cmd>Telescope buffers<cr>", "Buffers" },
 
     s = {
         name = "Search",
-        c = {"<cmd>Telescope colorscheme<cr>", "Colorscheme"},
-        h = {"<cmd>Telescope help_tags<cr>", "Find Help"},
-        M = {"<cmd>Telescope man_pages<cr>", "Man Pages"},
-        R = {"<cmd>Telescope registers<cr>", "Registers"},
-        k = {"<cmd>Telescope keymaps<cr>", "Keymaps"},
-        C = {"<cmd>Telescope commands<cr>", "Commands"},
-        g = {"<cmd>Telescope git_files<cr>", "Find Git Files"},
-        w = {"<cmd>Telescope grep_string<cr>", "Find Current Word"},
-        ["?"] = {"<cmd>Telescope oldfiles<cr>", "Open Recent File"},
-        ["/"] = {"<cmd>Telescope current_buffer_fuzzy_find<cr>", "Fuzzily search in current buffer"}
+        c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
+        h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
+        M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
+        R = { "<cmd>Telescope registers<cr>", "Registers" },
+        k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
+        C = { "<cmd>Telescope commands<cr>", "Commands" },
+        g = { "<cmd>Telescope git_files<cr>", "Find Git Files" },
+        w = { "<cmd>Telescope grep_string<cr>", "Find Current Word" },
+        ["?"] = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
+        ["/"] = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Fuzzily search in current buffer" }
     },
 
     p = {
         name = "Packer",
-        c = {"<cmd>PackerCompile<cr>", "Compile"},
-        i = {"<cmd>PackerInstall<cr>", "Install"},
-        s = {"<cmd>PackerSync<cr>", "Sync"},
-        S = {"<cmd>PackerStatus<cr>", "Status"},
-        u = {"<cmd>PackerUpdate<cr>", "Update"}
+        c = { "<cmd>PackerCompile<cr>", "Compile" },
+        i = { "<cmd>PackerInstall<cr>", "Install" },
+        s = { "<cmd>PackerSync<cr>", "Sync" },
+        S = { "<cmd>PackerStatus<cr>", "Status" },
+        u = { "<cmd>PackerUpdate<cr>", "Update" }
     },
 
     G = {
         name = "Git",
-        j = {"<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk"},
-        k = {"<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk"},
-        l = {"<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame"},
-        p = {"<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk"},
-        r = {"<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk"},
-        R = {"<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer"},
-        s = {"<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk"},
-        u = {"<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk"},
-        o = {"<cmd>Telescope git_status<cr>", "Open changed file"},
-        b = {"<cmd>Telescope git_branches<cr>", "Checkout branch"},
-        c = {"<cmd>Telescope git_commits<cr>", "Checkout commit"},
-        d = {"<cmd>Gitsigns diffthis HEAD<cr>", "Diff"}
+        j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
+        k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
+        l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
+        p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
+        r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
+        R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
+        s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
+        u = { "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
+        o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
+        b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
+        c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
+        d = { "<cmd>Gitsigns diffthis HEAD<cr>", "Diff" }
     },
 
     l = {
         name = "LSP",
-        a = {"<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action"},
-        r = {"<cmd>lua vim.lsp.buf.rename()<cr>", "Rename"},
-        d = {"<cmd>lua vim.lsp.buf.definition()<cr>", "Jumps to the definition of the symbol under the cursor"},
-        s = {"<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols"},
-        S = {"<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols"},
-        f = {"<cmd>LspZeroFormat<cr>", "Format"},
-        j = {"<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", "Next Diagnostic"},
-        k = {"<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", "Prev Diagnostic"},
-        l = {"<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action"},
-        q = {"<cmd>lua vim.diagnostic.setloclist()<cr>", "Quickfix"},
-        D = {"<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics"},
-        w = {"<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics"},
-        i = {"<cmd>LspInfo<cr>", "Info"},
-        I = {"<cmd>LspInstallInfo<cr>", "Installer Info"}
+        a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+        r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+        d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Jumps to the definition of the symbol under the cursor" },
+        s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
+        S = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols" },
+        f = { "<cmd>LspZeroFormat<cr>", "Format" },
+        j = { "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", "Next Diagnostic" },
+        k = { "<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>", "Prev Diagnostic" },
+        l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
+        q = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Quickfix" },
+        D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
+        w = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
+        i = { "<cmd>LspInfo<cr>", "Info" },
+        I = { "<cmd>LspInstallInfo<cr>", "Installer Info" }
     },
 
     t = {
         name = "Terminal",
-        f = {"<cmd>ToggleTerm direction=float<cr>", "Float"},
-        h = {"<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal"},
-        v = {"<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical"}
+        f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
+        h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
+        v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" }
     },
 
     x = {
         name = "Trouble",
-        x = {"<cmd>TroubleToggle<cr>", "Open Trouble List"},
-        w = {"<cmd>TroubleToggle workspace_diagnostics<cr>", "Document Diagnostics"},
-        d = {"<cmd>TroubleToggle document_diagnostics<cr>", "Workspace Diagnostics"},
-        l = {"<cmd>TroubleToggle loclist<cr>", "Items from the Location List"},
-        q = {"<cmd>TroubleToggle quickfix<cr>", "Quickfix"}
+        x = { "<cmd>TroubleToggle<cr>", "Open Trouble List" },
+        w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "Document Diagnostics" },
+        d = { "<cmd>TroubleToggle document_diagnostics<cr>", "Workspace Diagnostics" },
+        l = { "<cmd>TroubleToggle loclist<cr>", "Items from the Location List" },
+        q = { "<cmd>TroubleToggle quickfix<cr>", "Quickfix" }
     }
 }
 
 which_key.setup(setup)
 which_key.register(mappings, opts)
 
-local status_ok, hop = pcall(require, "hop")
-if status_ok then
-    local directions = require('hop.hint').HintDirection
+local hop_status_ok, hop = pcall(require, "hop")
+if hop_status_ok then
 
     which_key.register({
         h = {
