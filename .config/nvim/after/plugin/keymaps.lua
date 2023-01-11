@@ -8,12 +8,12 @@ local default_opts = {
 keymap("n", "<ESC>", ":nohlsearch<Bar>:echo<CR>", default_opts)
 
 -- Move selected lines
-keymap("v", "<C-Down>", ":m '>+1<cr>gv=gv", default_opts)
-keymap("v", "<C-Up>", ":m '<-2<cr>gv=gv", default_opts)
+keymap("v", "<S-Down>", ":m '>+1<cr>gv=gv", default_opts)
+keymap("v", "<S-Up>", ":m '<-2<cr>gv=gv", default_opts)
 
 -- Move current lines
-keymap("n", "<C-Down>", ":m .+1<cr>==", default_opts)
-keymap("n", "<C-Up>", ":m .-2<cr>==", default_opts)
+keymap("n", "<S-Down>", ":m .+1<cr>==", default_opts)
+keymap("n", "<S-Up>", ":m .-2<cr>==", default_opts)
 
 -- Append the bottom line to the current line
 keymap("n", "J", "mzJ`z", default_opts)
