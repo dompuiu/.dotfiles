@@ -184,19 +184,11 @@ local hop_status_ok, hop = pcall(require, "hop")
 if hop_status_ok then
 
     which_key.register({
-        h = {
-            name = "Hop",
-            c = {function()
-                hop.hint_char1({
-                    current_line_only = true
-                })
-            end, "Hop to any word on the current line"},
-            h = {function()
-                hop.hint_words({
-                    current_line_only = true
-                })
-            end, "Hop to any char on the current line"}
-        }
+        h = { function()
+            hop.hint_char1({
+                current_line_only = true
+            })
+        end, "Hop to any char on the current line" }
     }, {
         prefix = "<leader>"
     })
