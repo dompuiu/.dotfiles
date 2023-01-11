@@ -4,7 +4,7 @@ if not status_ok then
 end
 
 lsp.preset("recommended")
-lsp.ensure_installed({"tsserver", "eslint", "sumneko_lua", "rust_analyzer"})
+lsp.ensure_installed({ "tsserver", "eslint", "sumneko_lua", "rust_analyzer" })
 
 lsp.configure("tsserver", {
     on_attach = function(client, bufnr)
@@ -18,7 +18,7 @@ lsp.configure("sumneko_lua", {
     settings = {
         Lua = {
             diagnostics = {
-                globals = {"vim"}
+                globals = { "vim" }
             }
         }
     }
@@ -35,13 +35,8 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
         }
     },
     on_attach = function(_, bufnr)
-        -- Hover actions
-        vim.keymap.set("n", "<Leader>a", rt.hover_actions.hover_actions, {
-            buffer = bufnr
-        })
-
         -- Code action groups
-        vim.keymap.set("n", "<Leader>A", rt.code_action_group.code_action_group, {
+        vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, {
             buffer = bufnr
         })
 
@@ -52,8 +47,7 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
         local status_ok, which_key = pcall(require, "which-key")
         if status_ok then
             which_key.register({
-                ["a"] = "Rust Hover Actions",
-                ["A"] = "Rust Code Actions"
+                ["a"] = "Rust Code Actions"
             }, {
                 prefix = "<leader>"
             })
@@ -73,7 +67,7 @@ vim.diagnostic.config({
 })
 
 require("null-ls").setup({
-    sources = {require("null-ls").builtins.formatting.prettier -- javascript formatting
+    sources = { require("null-ls").builtins.formatting.prettier -- javascript formatting
     }
 })
 
