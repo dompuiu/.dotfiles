@@ -15,7 +15,7 @@ return require("packer").startup(function(use)
 
     use {
         "nvim-telescope/telescope.nvim",
-        requires = {{"nvim-lua/plenary.nvim"}}
+        requires = { { "nvim-lua/plenary.nvim" } }
     }
 
     use("nvim-telescope/telescope-fzf-native.nvim", {
@@ -38,7 +38,7 @@ return require("packer").startup(function(use)
 
     use {
         "nvim-lualine/lualine.nvim",
-        requires = {"nvim-tree/nvim-web-devicons"}
+        requires = { "nvim-tree/nvim-web-devicons" }
     }
 
     use {
@@ -59,26 +59,14 @@ return require("packer").startup(function(use)
     use {
         "VonHeikemen/lsp-zero.nvim",
         requires = { -- LSP Support
-        {"neovim/nvim-lspconfig"}, {"williamboman/mason.nvim"}, {"williamboman/mason-lspconfig.nvim"},
+            { "neovim/nvim-lspconfig" }, { "williamboman/mason.nvim" }, { "williamboman/mason-lspconfig.nvim" },
 
-        -- Autocompletion
-        {"hrsh7th/nvim-cmp"}, {"hrsh7th/cmp-buffer"}, {"hrsh7th/cmp-path"}, {"saadparwaiz1/cmp_luasnip"},
-        {"hrsh7th/cmp-nvim-lsp"}, {"hrsh7th/cmp-nvim-lua"}, -- Snippets
-        {"L3MON4D3/LuaSnip"}, {"rafamadriz/friendly-snippets"}}
+            -- Autocompletion
+            { "hrsh7th/nvim-cmp" }, { "hrsh7th/cmp-buffer" }, { "hrsh7th/cmp-path" }, { "saadparwaiz1/cmp_luasnip" },
+            { "hrsh7th/cmp-nvim-lsp" }, { "hrsh7th/cmp-nvim-lua" }, -- Snippets
+            { "L3MON4D3/LuaSnip" }, { "rafamadriz/friendly-snippets" } }
     }
     use "jose-elias-alvarez/null-ls.nvim"
-
-    use {
-        "folke/trouble.nvim",
-        requires = "nvim-tree/nvim-web-devicons",
-        config = function()
-            require("trouble").setup {
-                -- your configuration comes here
-                -- or leave it empty to use the default settings
-                -- refer to the configuration section below
-            }
-        end
-    }
 
     use "tpope/vim-commentary"
 
@@ -111,7 +99,7 @@ return require("packer").startup(function(use)
         branch = 'v2', -- optional but strongly recommended
         config = function()
             -- you can configure Hop the way you like here; see :h hop-config
-            require'hop'.setup {
+            require 'hop'.setup {
                 keys = 'etovxqpdygfblzhckisuran'
             }
         end
