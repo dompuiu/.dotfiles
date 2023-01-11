@@ -113,6 +113,7 @@ local mappings = {
         C = { "<cmd>Telescope commands<cr>", "Commands" },
         g = { "<cmd>Telescope git_files<cr>", "Find Git Files" },
         w = { "<cmd>Telescope grep_string<cr>", "Find Current Word" },
+        f = { "<cmd>Telescope find_files find_command=fd,-I<cr>", "Find All Files (ignore .gitignore)" },
         ["?"] = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
         ["/"] = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Fuzzily search in current buffer" }
     },
