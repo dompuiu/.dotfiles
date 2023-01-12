@@ -35,6 +35,11 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
         }
     },
     on_attach = function(_, bufnr)
+        -- Hover actions
+        vim.keymap.set("n", "<Leader>A", rt.hover_actions.hover_actions, {
+            buffer = bufnr
+        })
+
         -- Code action groups
         vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, {
             buffer = bufnr
@@ -47,7 +52,8 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
         local which_key_status_ok, which_key = pcall(require, "which-key")
         if which_key_status_ok then
             which_key.register({
-                ["a"] = "Rust Code Actions"
+                ["a"] = "Rust Code Actions",
+                ["A"] = "Rust Hover Actions",
             }, {
                 prefix = "<leader>"
             })
