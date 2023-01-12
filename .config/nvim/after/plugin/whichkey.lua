@@ -152,7 +152,7 @@ local mappings = {
         s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
         S = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols" },
         q = { "<cmd>lua vim.diagnostic.setloclist()<cr>", "Quickfix" },
-        D = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
+        d = { "<cmd>Telescope diagnostics bufnr=0<cr>", "Document Diagnostics" },
         w = { "<cmd>Telescope diagnostics<cr>", "Workspace Diagnostics" },
         i = { "<cmd>LspInfo<cr>", "Info" }
     },
