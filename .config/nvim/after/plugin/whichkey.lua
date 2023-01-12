@@ -146,7 +146,6 @@ local mappings = {
 
     l = {
         name = "LSP",
-        a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
         f = { "<cmd>LspZeroFormat<cr>", "Format" },
         l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
         r = { "<cmd>lua vim.lsp.codelens.refresh()<cr>", "CodeLens Refresh" },
