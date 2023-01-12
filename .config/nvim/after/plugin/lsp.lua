@@ -44,8 +44,8 @@ local rust_lsp = lsp.build_options('rust_analyzer', {
         vim.keymap.set("n", "<C-S-Up>", "<cmd>lua require'rust-tools'.move_item.move_item(true)<cr>")
         vim.keymap.set("n", "<C-S-Down>", "<cmd>lua require'rust-tools'.move_item.move_item(false)<cr>")
 
-        local status_ok, which_key = pcall(require, "which-key")
-        if status_ok then
+        local which_key_status_ok, which_key = pcall(require, "which-key")
+        if which_key_status_ok then
             which_key.register({
                 ["a"] = "Rust Code Actions"
             }, {
