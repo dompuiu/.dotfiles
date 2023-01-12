@@ -149,7 +149,6 @@ local mappings = {
         a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
         r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
         f = { "<cmd>LspZeroFormat<cr>", "Format" },
-        d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Jumps to the definition of the symbol under the cursor" },
         s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
         S = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols" },
         l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
