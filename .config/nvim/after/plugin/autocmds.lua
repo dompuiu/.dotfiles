@@ -27,6 +27,10 @@ autocmd("VimEnter", {
 local fmtGroup = augroup('FormatOnSave', {})
 autocmd({ "BufWritePre" }, {
     pattern = "*",
-    command = "LspZeroFormat",
+    callback = function()
+        if vim.fn.exists(":LspZeroFormat") > 0 then
+            vim.cmd("LspZeroFormat")
+        end
+    end,
     group = fmtGroup
 })
