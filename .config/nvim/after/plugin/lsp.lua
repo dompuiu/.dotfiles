@@ -8,6 +8,7 @@ lsp.ensure_installed({ "tsserver", "eslint", "sumneko_lua", "rust_analyzer" })
 
 lsp.configure("tsserver", {
     on_attach = function(client, bufnr)
+        -- JS formatting will be done by Prettier via null-ls.
         client.server_capabilities.documentFormattingProvider = false
         client.server_capabilities.documentRangeFormattingProvider = false
     end
@@ -78,5 +79,8 @@ require("null-ls").setup({
 })
 
 rt.setup({
-    server = rust_lsp
+    server = rust_lsp,
+    hover_actions = {
+        auto_focus = true
+    }
 })
