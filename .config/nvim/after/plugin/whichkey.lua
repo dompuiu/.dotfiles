@@ -119,7 +119,7 @@ local mappings = {
         ["/"] = { "<cmd>Telescope current_buffer_fuzzy_find<cr>", "Fuzzily search in current buffer" }
     },
 
-    p = {
+    ["\\"] = {
         name = "Packer",
         c = { "<cmd>PackerCompile<cr>", "Compile" },
         i = { "<cmd>PackerInstall<cr>", "Install" },

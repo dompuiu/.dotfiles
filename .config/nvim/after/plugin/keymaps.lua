@@ -29,6 +29,11 @@ keymap("n", "<C-u>", "<C-u>zz", default_opts)
 -- Replace the word under cursor
 keymap("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
--- Always paste from register 0.
-keymap("n", "p", "\"0p", default_opts)
+-- greatest remap ever
+keymap("x", "<leader>p", [["_dP]])
 
+-- next greatest remap ever : asbjornHaland
+keymap({ "n", "v" }, "<leader>y", [["+y]])
+keymap("n", "<leader>Y", [["+Y]])
+
+keymap({ "n", "v" }, "<leader>d", [["_d]])

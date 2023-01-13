@@ -62,5 +62,3 @@ vim.opt.listchars = {
     extends = ">",
     precedes = "<"
 }
-
-vim.opt.clipboard = "unnamedplus"
