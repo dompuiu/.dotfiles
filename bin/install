@@ -5,7 +5,7 @@ files_dir=$(realpath "$(dirname $(readlink -f ${BASH_SOURCE[0]}))/../")
 
 while IFS= read -r line; do
     files+=("$line")
-done < <( find $files_dir -type f -not -path "*.git*" -not -path "*bin*" -not -path "*README*" )
+done < <( find $files_dir -type f -not -path "*.git/*" -not -path "*bin*" -not -path "*README*" )
 # printf '%s\n' "${files[@]}"
 
 for source in "${files[@]}"
