@@ -32,8 +32,4 @@ keymap("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 -- greatest remap ever
 keymap("x", "<leader>p", [["_dP]])
 
--- next greatest remap ever : asbjornHaland
-keymap({ "n", "v" }, "<leader>y", [["+y]])
-keymap("n", "<leader>Y", [["+Y]])
-
 keymap({ "n", "v" }, "<leader>d", [["_d]])
