@@ -34,3 +34,10 @@ autocmd({ "BufWritePre" }, {
     end,
     group = fmtGroup
 })
+
+local ThePrimeagenGroup = augroup('ThePrimeagen', {})
+autocmd({ "BufWritePre" }, {
+    group = ThePrimeagenGroup,
+    pattern = "*",
+    command = "%s/\\s\\+$//e"
+})
