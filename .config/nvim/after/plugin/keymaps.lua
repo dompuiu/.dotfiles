@@ -36,3 +36,5 @@ keymap({ "n", "v" }, "d", [["_d]])
 keymap({ "n", "v" }, "D", [["_D]])
 keymap({ "n", "v" }, "c", [["_c]])
 keymap({ "n", "v" }, "C", [["_C]])
+
+keymap({ "n" }, "<CR>", "m`o<Esc>")
