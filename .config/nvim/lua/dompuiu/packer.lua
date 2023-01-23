@@ -22,6 +22,8 @@ return require("packer").startup(function(use)
         run = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build"
     })
 
+    use { "nvim-telescope/telescope-file-browser.nvim" }
+
     use "sainnhe/sonokai" -- Color Theme
     use "folke/tokyonight.nvim" -- Color Theme
 

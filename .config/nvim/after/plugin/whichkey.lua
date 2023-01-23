@@ -94,7 +94,7 @@ local opts = {
 }
 
 local mappings = {
-    ["e"] = { "<cmd>Ex<cr>", "Explorer" },
+    ["e"] = { "<cmd>Telescope file_browser<cr>", "Explorer" },
     ["w"] = { "<cmd>w!<CR>", "Save" },
     ["W"] = { "<cmd>noautocmd w!<CR>", "Save without running autocommands" },
     ["q"] = { "<cmd>q!<CR>", "Quit" },
