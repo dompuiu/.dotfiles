@@ -37,4 +37,4 @@ keymap({ "n", "v" }, "<leader>D", [["_D]])
 keymap({ "n", "v" }, "<leader>c", [["_c]])
 keymap({ "n", "v" }, "<leader>C", [["_C]])
 
-keymap({ "n" }, "<CR>", "m`o<Esc>")
+keymap({ "n" }, "<CR>", "m`i<CR><Esc>")
