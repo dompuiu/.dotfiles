@@ -74,7 +74,8 @@ vim.diagnostic.config({
 })
 
 require("null-ls").setup({
-    sources = { require("null-ls").builtins.formatting.prettier -- javascript formatting
+    sources = {
+        require("null-ls").builtins.formatting.prettier -- javascript formatting
     }
 })
 
