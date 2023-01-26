@@ -1,4 +1,3 @@
-print("st_1 appears as :")
 local status_ok, telescope = pcall(require, "telescope")
 if not status_ok then
     return
