@@ -1,20 +1,23 @@
 #!/bin/bash
 
 force=$(if [[ $1 == "--force" ]]; then echo true; else echo false; fi)
-files_dir=$(realpath "$(dirname $(readlink -f ${BASH_SOURCE[0]}))/../")
+bin_dir=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
+files_dir=$(realpath "$bin_dir/../")
 
 while IFS= read -r line; do
     files+=("$line")
 done < <( find $files_dir -type f -not -path "*.git/*" -not -path "*bin*" -not -path "*README*" )
 # printf '%s\n' "${files[@]}"
 
+# Run clean script when force flag is given.
+[[ $force ]] && "$bin_dir/clean"
+
 for source in "${files[@]}"
 do
   destination="$HOME${source/$files_dir/}"
   directory=$(dirname ${destination})
   mkdir_cmd="mkdir -p $directory"
-  symlink_flags=$(if [[ $force == "true" ]]; then echo "-sf"; else echo "-s"; fi)
-  symlink_cmd="ln $symlink_flags $source $destination"
+  symlink_cmd="ln -s $source $destination"
 
   if [[ ! -d $directory ]]
   then
