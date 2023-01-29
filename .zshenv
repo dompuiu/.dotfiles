@@ -14,4 +14,7 @@ export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 
 export IGNOREEOF=1 # Emulate the Bash behavior of being able to specify the number of Ctrl+D sequences before exiting the shell.
 
+export ASDF_DIR=/opt/asdf
+export ASDF_DATA_DIR=/opt/asdf
+
 [[ ! -f ~/.zshenv.local ]] || source ~/.zshenv.local
