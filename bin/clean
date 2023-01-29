@@ -4,30 +4,30 @@ files_dir=$(realpath "$(dirname $(readlink -f ${BASH_SOURCE[0]}))/../")
 
 # Find all the files from the .dotfiles repository
 while IFS= read -r line; do
-    files+=("$line")
+  files+=("$line")
 done < <( find $files_dir -type f -not -path "*.git/*" -not -path "*bin*" -not -path "*README*" )
 
 # Find symlinks that might not exists anymore in the ~/.config folder.
 while IFS= read -r line; do
-    files_to_delete+=("$line")
+  files_to_delete+=("$line")
 done < <( find ~/.config -xtype l )
 
 # Find symlinks that still point to the current files
 for source in "${files[@]}"
 do
-    destination="$HOME${source/$files_dir/}"
-    if [[ -e ${destination} ]]
-    then
-        files_to_delete+=("$destination")
-    fi
+  destination="$HOME${source/$files_dir/}"
+  if [[ -e ${destination} ]]
+  then
+    files_to_delete+=("$destination")
+  fi
 done
 
 # printf '%s\n' "${files_to_delete[@]}"
 
 for source in "${files_to_delete[@]}"
 do
-    echo "Deleting file $source..."
-    rm $source
-    [[ $? -ne 0 ]] && echo "Failed deleting file $source." && exit $?
+  echo "Deleting file $source..."
+  rm $source
+  [[ $? -ne 0 ]] && echo "Failed deleting file $source." && exit $?
 done
 
