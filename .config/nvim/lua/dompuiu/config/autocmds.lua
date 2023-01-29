@@ -1,10 +1,6 @@
-local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
 
-local yankGroup = augroup('HighlightYank', {})
-
 autocmd('TextYankPost', {
-    group = yankGroup,
     pattern = '*',
     callback = function()
         vim.highlight.on_yank({
@@ -14,7 +10,6 @@ autocmd('TextYankPost', {
     end
 })
 
-local fmtGroup = augroup('FormatOnSave', {})
 autocmd({ "BufWritePre" }, {
     pattern = "*",
     callback = function()
@@ -22,12 +17,9 @@ autocmd({ "BufWritePre" }, {
             vim.cmd("LspZeroFormat")
         end
     end,
-    group = fmtGroup
 })
 
-local ThePrimeagenGroup = augroup('ThePrimeagen', {})
 autocmd({ "BufWritePre" }, {
-    group = ThePrimeagenGroup,
     pattern = "*",
     command = "%s/\\s\\+$//e"
 })
