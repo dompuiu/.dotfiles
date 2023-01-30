@@ -31,3 +31,9 @@ do
   [[ $? -ne 0 ]] && echo "Failed deleting file $source." && exit $?
 done
 
+# Find directories that are empty and delete them.
+while IFS= read -r directory; do
+  echo "Deleting directory $directory..."
+  rm -r $directory
+  [[ $? -ne 0 ]] && echo "Failed deleting directory $directory." && exit $?
+done < <( find ~/.config/nvim -type d -empty )
