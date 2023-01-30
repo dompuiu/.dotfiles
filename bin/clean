@@ -10,7 +10,7 @@ done < <( find $files_dir -type f -not -path "*.git/*" -not -path "*bin*" -not -
 # Find symlinks that might not exists anymore in the ~/.config folder.
 while IFS= read -r line; do
   files_to_delete+=("$line")
-done < <( find ~/.config -xtype l )
+done < <( find ~/.config/nvim -type l ! -exec test -e {} \; -print )
 
 # Find symlinks that still point to the current files
 for source in "${files[@]}"
