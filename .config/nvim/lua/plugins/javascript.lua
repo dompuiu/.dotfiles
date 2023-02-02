@@ -10,7 +10,6 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
-    dependencies = { "simrat39/rust-tools.nvim" },
     ---@class PluginLspOpts
     opts = {
       setup = {
