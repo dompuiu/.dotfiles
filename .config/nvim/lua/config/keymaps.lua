@@ -24,3 +24,10 @@ keymap("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
 -- Press enter to create a new row.
 keymap({ "n" }, "<CR>", "m`i<CR><Esc>")
+
+-- greatest remap ever
+keymap("x", "<leader>p", [["_dP]])
+
+-- next greatest remap ever : asbjornHaland
+keymap({ "n", "v" }, "<leader>y", [["+y]])
+keymap("n", "<leader>Y", [["+Y]])
