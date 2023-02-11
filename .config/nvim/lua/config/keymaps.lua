@@ -27,7 +27,3 @@ keymap({ "n" }, "<CR>", "m`i<CR><Esc>")
 
 -- greatest remap ever
 keymap("x", "<leader>p", [["_dP]])
-
--- next greatest remap ever : asbjornHaland
-keymap({ "n", "v" }, "<leader>y", [["+y]])
-keymap("n", "<leader>Y", [["+Y]])
