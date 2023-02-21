@@ -62,6 +62,7 @@ checkIfFileExists ~/.p10k.zsh || source ~/.p10k.zsh
 checkIfFileExists ${HOME}/.iterm2_shell_integration.zsh || source "${HOME}/.iterm2_shell_integration.zsh"
 
 checkIfCommandExists "cola" && alias mycola="(cola &> /dev/null &)"
+alias v="fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim"
 
 # Bash like ctrl-d wrapper for IGNOREEOF
 setopt ignore_eof
