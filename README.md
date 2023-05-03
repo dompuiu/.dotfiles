@@ -10,3 +10,4 @@
 - [ripgrep (rg)](https://github.com/BurntSushi/ripgrep)
 - [zoxide](https://github.com/ajeetdsouza/zoxide)
 - [lazygit](https://github.com/jesseduffield/lazygit)
+- [tmux-sessionizer](https://github.com/jrmoulton/tmux-sessionizer)
