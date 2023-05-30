@@ -20,7 +20,7 @@ keymap("n", "<C-d>", "<C-d>zz", default_opts)
 keymap("n", "<C-u>", "<C-u>zz", default_opts)
 
 -- Replace the word under cursor.
-keymap("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+keymap("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Replace word under cursor" })
 
 -- Press enter to create a new row.
 keymap({ "n" }, "<CR>", "m`i<CR><Esc>")
