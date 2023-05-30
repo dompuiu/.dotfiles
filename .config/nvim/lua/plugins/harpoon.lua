@@ -6,6 +6,7 @@ return {
   {
     "ThePrimeagen/harpoon",
     keys = {
+      { "<leader>h", desc = "Harpoon" },
       { "<leader>hh", ':lua require("harpoon.ui").toggle_quick_menu()<cr>', desc = "Open Harpoon Quick Menu" },
       { "<leader>ha", ':lua require("harpoon.mark").add_file()<cr>', desc = "Add Mark to Harpoon" },
       { "<leader>hj", ':lua require("harpoon.ui").nav_prev()<cr>', desc = "Go to next file" },
