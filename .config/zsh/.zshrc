@@ -68,3 +68,6 @@ alias v="fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvi
 setopt ignore_eof
 zle -N bash-ctrl-d
 bindkey "^d" bash-ctrl-d
+
+[[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
+
