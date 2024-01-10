@@ -16,10 +16,11 @@ fi
 PERSONAL=$XDG_CONFIG_HOME/personal
 source $PERSONAL/env.zsh
 
-addToPath "$HOME/.local/bin"
-addToPath "/snap/bin"
-addToPath "$PNPM_HOME"
-addToPath "/opt/homebrew/bin"
+addToPathFront "$HOME/.local/bin"
+addToPathFront "/snap/bin"
+addToPathFront "$PNPM_HOME"
+addToPathFront "/opt/homebrew/bin"
+addToPathFront "/opt/homebrew/sbin"
 
 if type brew &>/dev/null
 then
