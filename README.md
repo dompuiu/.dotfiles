@@ -1,5 +1,8 @@
 # .dotfiles
 
+## Prerequisites
+- [Homebrew](https://brew.sh/)
+
 ## NVIM Config
 - [LazyVim](https://www.lazyvim.org/installation)
 
