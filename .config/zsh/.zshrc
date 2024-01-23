@@ -40,7 +40,7 @@ zi snippet OMZP::asdf/asdf.plugin.zsh
 zi snippet OMZP::fzf/fzf.plugin.zsh
 
 if [[ `uname` == "Darwin" ]]; then
-  zi ice svn; zi snippet OMZP::macos
+  # zi ice svn; zi snippet OMZP::macos
 fi
 
 zi ice blockf; zi light zsh-users/zsh-completions
