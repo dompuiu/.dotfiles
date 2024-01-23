@@ -2,6 +2,7 @@
 
 ## Prerequisites
 - [Homebrew](https://brew.sh/)
+- MesloLGM Nerd Font form [NerdFonts](https://www.nerdfonts.com/font-downloads)
 
 ## NVIM Config
 - [LazyVim](https://www.lazyvim.org/installation)
