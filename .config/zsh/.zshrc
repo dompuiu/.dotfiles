@@ -45,7 +45,7 @@ fi
 
 zi ice blockf; zi light zsh-users/zsh-completions
 zi ice wait lucid atload'_zsh_autosuggest_start'; zi light zsh-users/zsh-autosuggestions
-zi light zsh-users/zsh-syntax-highlighting
+zi light z-shell/F-Sy-H # alternative to ---> zi light zsh-users/zsh-syntax-highlighting
 zi light Aloxaf/fzf-tab
 zi light wfxr/forgit
 zi ice depth=1; zi light romkatv/powerlevel10k
