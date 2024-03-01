@@ -16,12 +16,6 @@ fi
 PERSONAL=$XDG_CONFIG_HOME/personal
 source $PERSONAL/env.zsh
 
-addToPathFront "$HOME/.local/bin"
-addToPathFront "/snap/bin"
-addToPathFront "$PNPM_HOME"
-addToPathFront "/opt/homebrew/bin"
-addToPathFront "/opt/homebrew/sbin"
-
 if type brew &>/dev/null
 then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
@@ -70,4 +64,6 @@ zle -N bash-ctrl-d
 bindkey "^d" bash-ctrl-d
 
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
+
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PNPM_HOME:/snap/bin:$HOME/.local/bin:$PATH"
 
