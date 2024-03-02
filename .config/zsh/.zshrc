@@ -21,6 +21,8 @@ then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fi
 
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PNPM_HOME:/snap/bin:$HOME/.local/bin:$PATH"
+
 source "$HOME/.zi/bin/zi.zsh"
 autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
@@ -64,6 +66,4 @@ zle -N bash-ctrl-d
 bindkey "^d" bash-ctrl-d
 
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
-
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PNPM_HOME:/snap/bin:$HOME/.local/bin:$PATH"
 
