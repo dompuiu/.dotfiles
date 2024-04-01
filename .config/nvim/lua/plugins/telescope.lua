@@ -1,12 +1,38 @@
 return {
-  -- add telescope-fzf-native
   {
-    "telescope.nvim",
+    "molecule-man/telescope-menufacture",
     keys = {
       {
-        "<leader>fa",
-        "<cmd>Telescope find_files find_command=fd,-I<cr>",
-        desc = "Find in all files (ignore .gitignore)",
+        "<leader>fm",
+        desc = "Menufacture",
+      },
+      {
+        "<leader>fmg",
+        function()
+          require("telescope").extensions.menufacture.live_grep()
+        end,
+        desc = "Live Grep",
+      },
+      {
+        "<leader>fma",
+        function()
+          require("telescope").extensions.menufacture.find_files()
+        end,
+        desc = "Find Files",
+      },
+      {
+        "<leader>fmw",
+        function()
+          require("telescope").extensions.menufacture.grep_string()
+        end,
+        desc = "Grep String",
+      },
+      {
+        "<leader>fmf",
+        function()
+          require("telescope").extensions.menufacture.git_files()
+        end,
+        desc = "Git Files",
       },
     },
   },
