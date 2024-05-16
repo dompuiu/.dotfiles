@@ -27,7 +27,6 @@ addPath() {
 
 addPathToFront() {
     if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-      echo $1
       PATH="$1${PATH:+":$PATH"}"
     fi
 }
