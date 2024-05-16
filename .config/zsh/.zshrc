@@ -21,7 +21,12 @@ then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fi
 
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PNPM_HOME:/snap/bin:$HOME/.local/bin:$PATH"
+addPathToFront $HOME/.local/bin
+addPathToFront $HOME/.local/share/bob/nvim-bin
+addPathToFront /snap/bin
+addPathToFront $PNPM_HOME
+addPathToFront /opt/homebrew/bin
+addPathToFront /opt/homebrew/sbin
 
 source "$HOME/.zi/bin/zi.zsh"
 autoload -Uz _zi
