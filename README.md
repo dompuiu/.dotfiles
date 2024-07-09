@@ -1,14 +1,17 @@
 # .dotfiles
 
 ## Prerequisites
+
 - [Homebrew](https://brew.sh/)
-- MesloLGM Nerd Font form [NerdFonts](https://www.nerdfonts.com/font-downloads)
+- FiraCode Nerd Font form [NerdFonts](https://www.nerdfonts.com/font-downloads)
 
 ## NVIM Config
+
 - [LazyVim](https://www.lazyvim.org/installation)
 
 ## Tools
 
+- [zsh][https://www.zsh.org/]
 - [fd](https://github.com/sharkdp/fd)
 - [fzf](https://github.com/junegunn/fzf)
 - [ripgrep (rg)](https://github.com/BurntSushi/ripgrep)
