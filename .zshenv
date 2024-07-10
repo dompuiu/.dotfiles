@@ -12,6 +12,8 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export RIPGREP_CONFIG_PATH="$XDG_CONFIG_HOME/ripgrep/ripgreprc"
 export PNPM_HOME="$XDG_DATA_HOME/pnpm"
 
+export ZSH_TMUX_AUTOSTART=true
+
 export IGNOREEOF=1 # Emulate the Bash behavior of being able to specify the number of Ctrl+D sequences before exiting the shell.
 
 [[ ! -f ~/.zshenv.local ]] || source ~/.zshenv.local
