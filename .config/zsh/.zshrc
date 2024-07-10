@@ -63,6 +63,7 @@ checkIfCommandExists "zoxide" && eval "$(zoxide init zsh --cmd cd)"
 checkIfFileExists ~/.p10k.zsh || source ~/.p10k.zsh
 checkIfFileExists ${HOME}/.iterm2_shell_integration.zsh || source "${HOME}/.iterm2_shell_integration.zsh"
 checkIfCommandExists "cola" && alias mycola="(cola &> /dev/null &)"
+! checkIfCommandExists "fd" && alias fd="fdfind"
 alias v="fd --type f --hidden --exclude .git | fzf-tmux -p --reverse | xargs nvim"
 alias ls='ls --color=auto'
 
