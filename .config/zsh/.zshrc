@@ -27,6 +27,7 @@ addPathToFront /snap/bin
 addPathToFront $PNPM_HOME
 addPathToFront /opt/homebrew/bin
 addPathToFront /opt/homebrew/sbin
+addPath $HOME/.cargo/bin
 
 source "$HOME/.zi/bin/zi.zsh"
 autoload -Uz _zi
