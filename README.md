@@ -11,7 +11,7 @@
 
 ## Tools
 
-- [zsh][https://www.zsh.org/]
+- [zsh](https://www.zsh.org/)
 - [fd](https://github.com/sharkdp/fd)
 - [fzf](https://github.com/junegunn/fzf)
 - [ripgrep (rg)](https://github.com/BurntSushi/ripgrep)
