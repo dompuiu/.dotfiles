@@ -23,7 +23,6 @@ fi
 
 addPathToFront $HOME/.local/bin
 addPathToFront $HOME/.local/share/bob/nvim-bin
-addPathToFront /snap/bin
 addPathToFront $PNPM_HOME
 addPathToFront /opt/homebrew/bin
 addPathToFront /opt/homebrew/sbin
