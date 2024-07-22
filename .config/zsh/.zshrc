@@ -39,7 +39,6 @@ zi snippet OMZL::history.zsh
 zi snippet OMZL::functions.zsh
 zi snippet OMZP::asdf/asdf.plugin.zsh
 zi snippet OMZP::fzf/fzf.plugin.zsh
-zi snippet OMZP::tmux/tmux.plugin.zsh
 
 if [[ `uname` == "Darwin" ]]; then
   # zi ice svn; zi snippet OMZP::macos
