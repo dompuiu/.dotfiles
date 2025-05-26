@@ -5,27 +5,24 @@ files_dir=$(realpath "$(dirname $(readlink -f ${BASH_SOURCE[0]}))/../")
 # Find all the files from the .dotfiles repository
 while IFS= read -r line; do
   files+=("$line")
-done < <( find $files_dir -type f -not -path "*.git/*" -not -path "*bin*" -not -path "*README*" )
+done < <(find $files_dir -type f -not -path "*.git/*" -not -path "*/bin/*" -not -path "*README*")
 
 # Find symlinks that might not exists anymore in the ~/.config folder.
 while IFS= read -r line; do
   files_to_delete+=("$line")
-done < <( find ~/.config/nvim -type l ! -exec test -e {} \; -print )
+done < <(find ~/.config/nvim -type l ! -exec test -e {} \; -print)
 
 # Find symlinks that still point to the current files
-for source in "${files[@]}"
-do
+for source in "${files[@]}"; do
   destination="$HOME${source/$files_dir/}"
-  if [[ -e ${destination} ]]
-  then
+  if [[ -e ${destination} ]]; then
     files_to_delete+=("$destination")
   fi
 done
 
 # printf '%s\n' "${files_to_delete[@]}"
 
-for source in "${files_to_delete[@]}"
-do
+for source in "${files_to_delete[@]}"; do
   echo "Deleting file $source..."
   rm $source
   [[ $? -ne 0 ]] && echo "Failed deleting file $source." && exit $?
@@ -36,4 +33,4 @@ while IFS= read -r directory; do
   echo "Deleting directory $directory..."
   rm -r $directory
   [[ $? -ne 0 ]] && echo "Failed deleting directory $directory." && exit $?
-done < <( find ~/.config/nvim -type d -empty )
+done < <(find ~/.config/nvim -type d -empty)

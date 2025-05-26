@@ -6,21 +6,19 @@ files_dir=$(realpath "$bin_dir/../")
 
 while IFS= read -r line; do
   files+=("$line")
-done < <( find $files_dir -type f -not -path "*.git/*" -not -path "*bin*" -not -path "*README*" )
+done < <(find $files_dir -type f -not -path "*.git/*" -not -path "*/bin/*" -not -path "*README*")
 # printf '%s\n' "${files[@]}"
 
 # Run clean script when force flag is given.
 [[ $force ]] && "$bin_dir/clean"
 
-for source in "${files[@]}"
-do
+for source in "${files[@]}"; do
   destination="$HOME${source/$files_dir/}"
   directory=$(dirname ${destination})
   mkdir_cmd="mkdir -p $directory"
   symlink_cmd="ln -s $source $destination"
 
-  if [[ ! -d $directory ]]
-  then
+  if [[ ! -d $directory ]]; then
     echo "Creating directory $directory..."
     $mkdir_cmd
     [[ $? -ne 0 ]] && echo "Failed creating directory $directory." && exit $?
