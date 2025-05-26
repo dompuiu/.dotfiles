@@ -15,7 +15,7 @@
   - [zsh](https://www.zsh.org/)
   - [fish](https://fishshell.com/)
   - [nushell](https://www.nushell.sh/)
-- [oh-my-posh](oh-my-posh) - Prompt theme engine
+- [starship](https://starship.rs/) - Prompt theme engine
 - Tools
   - [fd](https://github.com/sharkdp/fd)
   - [fzf](https://github.com/junegunn/fzf)

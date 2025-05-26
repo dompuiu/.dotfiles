@@ -57,8 +57,8 @@ setopt ignore_eof
 zle -N bash-ctrl-d
 bindkey "^d" bash-ctrl-d
 
-# Init oh-my-posh
-eval "$(oh-my-posh init zsh --config '~/.dotfiles/.config/oh-my-posh/capr4n.omp.json')"
+# Init starship
+eval "$(starship init zsh)"
 
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
 
