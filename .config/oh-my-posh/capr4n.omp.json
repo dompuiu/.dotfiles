@@ -66,14 +66,10 @@
       "alignment": "right",
       "segments": [
         {
-          "background_templates": [
-            "{{ if .Error }}p:c-project-generic-error{{ else }}p:c-project-lua{{ end }}"
-          ],
-          "foreground": "p:c-badge-text",
-          "leading_diamond": "\uE0B6",
-          "style": "diamond",
-          "template": "{{ if eq \"False\" (title (default \"False\" .Env.DISABLE_SEGMENT_PROJECT_LUA)) }}\uE620 {{ if or (.Error) (empty .Full) }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}{{ end }}",
-          "trailing_diamond": "\uE0B4 ",
+          "background": "#6CA35E",
+          "foreground": "#ffffff",
+          "style": "plain",
+          "template": " {{ if eq \"False\" (title (default \"False\" .Env.DISABLE_SEGMENT_PROJECT_LUA)) }}\uE620 {{ if or (.Error) (empty .Full) }}{{ .Error }}{{ else }}{{ .Full }}{{ end }}{{ end }} ",
           "type": "lua"
         },
         {
