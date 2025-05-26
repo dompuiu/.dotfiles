@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
   print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
   command mkdir -p "$HOME/.zi" && command chmod go-rwX "$HOME/.zi"
@@ -49,7 +42,6 @@ zi ice wait lucid atload'_zsh_autosuggest_start'; zi light zsh-users/zsh-autosug
 zi light z-shell/F-Sy-H # alternative to ---> zi light zsh-users/zsh-syntax-highlighting
 zi light Aloxaf/fzf-tab
 zi light wfxr/forgit
-zi ice depth=1; zi light romkatv/powerlevel10k
 
 # examples here -> https://wiki.zshell.dev/ecosystem/category/-annexes
 zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
@@ -58,8 +50,6 @@ zicdreplay -q
 # Zoxide. The OPZP plugin doesn't let you provide flags to the init command.
 checkIfCommandExists "zoxide" && eval "$(zoxide init zsh --cmd cd)"
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-checkIfFileExists ~/.p10k.zsh || source ~/.p10k.zsh
 checkIfFileExists ${HOME}/.iterm2_shell_integration.zsh || source "${HOME}/.iterm2_shell_integration.zsh"
 checkIfCommandExists "cola" && alias mycola="(cola &> /dev/null &)"
 ! checkIfCommandExists "fd" && alias fd="fdfind"
@@ -70,6 +60,9 @@ alias ls='ls --color=auto'
 setopt ignore_eof
 zle -N bash-ctrl-d
 bindkey "^d" bash-ctrl-d
+
+# Init oh-my-posh
+eval "$(oh-my-posh init zsh --config '~/.dotfiles/.config/fish/capr4n.omp.json')"
 
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
 
