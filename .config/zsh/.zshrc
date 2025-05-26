@@ -33,10 +33,6 @@ zi snippet OMZL::functions.zsh
 zi snippet OMZP::asdf/asdf.plugin.zsh
 zi snippet OMZP::fzf/fzf.plugin.zsh
 
-if [[ `uname` == "Darwin" ]]; then
-  # zi ice svn; zi snippet OMZP::macos
-fi
-
 zi ice blockf; zi light zsh-users/zsh-completions
 zi ice wait lucid atload'_zsh_autosuggest_start'; zi light zsh-users/zsh-autosuggestions
 zi light z-shell/F-Sy-H # alternative to ---> zi light zsh-users/zsh-syntax-highlighting
