@@ -49,6 +49,7 @@ checkIfCommandExists "zoxide" && eval "$(zoxide init zsh --cmd cd)"
 checkIfFileExists ${HOME}/.iterm2_shell_integration.zsh || source "${HOME}/.iterm2_shell_integration.zsh"
 checkIfCommandExists "cola" && alias mycola="(cola &> /dev/null &)"
 ! checkIfCommandExists "fd" && checkIfCommandExists "fdfind" && alias fd="fdfind"
+checkIfCommandExists "bat" && alias cat="bat --paging=never"
 alias ls='ls --color=auto'
 
 # Bash like ctrl-d wrapper for IGNOREEOF
