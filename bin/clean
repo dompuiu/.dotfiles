@@ -5,7 +5,16 @@ files_dir=$(realpath "$(dirname $(readlink -f ${BASH_SOURCE[0]}))/../")
 # Find all the files from the .dotfiles repository
 while IFS= read -r line; do
   files+=("$line")
-done < <(find $files_dir -type f -not -path "*.git/*" -not -path "*/bin/*" -not -path "*README*")
+done < <(find $files_dir -type f -not -path "*.git/*" -not -path "*/bin/*" -not -path "*README*" -not -path "*/.config/fish/*")
+
+# For Fish we do add special paths manually
+files+=("$files_dir/.config/fish/functions")
+files+=("$files_dir/.config/fish/completions")
+files+=("$files_dir/.config/fish/conf.d")
+files+=("$files_dir/.config/fish/themes")
+files+=("$files_dir/.config/fish/config.fish")
+files+=("$files_dir/.config/fish/environment.fish")
+files+=("$files_dir/.config/fish/fish_plugins")
 
 # Find symlinks that might not exists anymore in the ~/.config folder.
 while IFS= read -r line; do
@@ -24,7 +33,7 @@ done
 
 for source in "${files_to_delete[@]}"; do
   echo "Deleting file $source..."
-  rm $source
+  rm -r $source
   [[ $? -ne 0 ]] && echo "Failed deleting file $source." && exit $?
 done
 
