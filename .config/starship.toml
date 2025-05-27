@@ -4,6 +4,7 @@ format = """
 [█](red)\
 $os\
 $username\
+$shell\
 [](bg:peach fg:red)\
 $directory\
 [](bg:yellow fg:peach)\
@@ -167,6 +168,17 @@ style = "bg:lavender"
 disabled = false
 show_notifications = true
 min_time_to_notify = 45000
+
+[shell]
+fish_indicator = '󰈺'
+powershell_indicator = '󰨊'
+zsh_indicator = 'ζ'
+bash_indicator = '󰟔'
+nu_indicator = '󰟆'
+unknown_indicator = '󰞷 '
+style = "bg:red fg:crust"
+format = '[$indicator ]($style)'
+disabled = false
 
 [palettes.catppuccin_mocha]
 rosewater = "#f5e0dc"
