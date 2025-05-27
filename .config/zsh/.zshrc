@@ -48,9 +48,16 @@ checkIfCommandExists "zoxide" && eval "$(zoxide init zsh --cmd cd)"
 
 checkIfFileExists ${HOME}/.iterm2_shell_integration.zsh || source "${HOME}/.iterm2_shell_integration.zsh"
 checkIfCommandExists "cola" && alias mycola="(cola &> /dev/null &)"
+
 ! checkIfCommandExists "fd" && checkIfCommandExists "fdfind" && alias fd="fdfind"
+alias realfind="/usr/bin/find"
+checkIfCommandExists "fd" && alias find="fd"
+
+alias realcat="/bin/cat"
 checkIfCommandExists "bat" && alias cat="bat --paging=never"
-alias ls='ls --color=auto'
+
+alias realls='/bin/ls --color=auto'
+checkIfCommandExists "eza" && alias ls="eza"
 
 # Bash like ctrl-d wrapper for IGNOREEOF
 setopt ignore_eof
