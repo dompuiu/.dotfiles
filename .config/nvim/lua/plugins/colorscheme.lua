@@ -3,7 +3,7 @@ return {
     "folke/tokyonight.nvim",
     lazy = true,
     opts = {
-      style = "storm",
+      style = "moon",
       -- on_colors = function(colors)
       --   print(vim.inspect(colors))
       -- end,

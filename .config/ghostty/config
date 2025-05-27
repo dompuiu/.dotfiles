@@ -42,3 +42,5 @@ command = /opt/homebrew/bin/fish
 
 font-family = FiraCode Nerd Font Mono
 font-size = 13
+
+theme = dark:tokyonight_moon,light:tokyonight-day
