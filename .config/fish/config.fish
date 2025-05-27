@@ -1,4 +1,5 @@
 source ~/.config/fish/environment.fish
+source ~/.config/fish/themes/tokyonight_moon.fish
 
 # Source local environment file if it exists
 if test -f ~/environment.local.fish
