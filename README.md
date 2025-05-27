@@ -14,6 +14,7 @@
 - Shells
   - [zsh](https://www.zsh.org/)
   - [fish](https://fishshell.com/)
+    - [fisher](https://github.com/jorgebucaran/fisher)
   - [nushell](https://www.nushell.sh/)
 - [starship](https://starship.rs/) - Prompt theme engine
 - Tools
@@ -21,6 +22,7 @@
   - [fzf](https://github.com/junegunn/fzf)
   - [ripgrep (rg)](https://github.com/BurntSushi/ripgrep)
   - [bat](https://github.com/sharkdp/bat)
+  - [eza](https://github.com/eza-community/eza)
 - [zoxide](https://github.com/ajeetdsouza/zoxide)
 - [lazygit](https://github.com/jesseduffield/lazygit)
 - [tmux-sessionizer](https://github.com/jrmoulton/tmux-sessionizer)
