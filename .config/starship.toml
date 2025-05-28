@@ -17,6 +17,7 @@ $line_break\
 $character"""
 
 right_format = """
+$cmd_duration\
 $c\
 $rust\
 $golang\
@@ -27,7 +28,6 @@ $kotlin\
 $haskell\
 $python\
 $time\
-$cmd_duration\
 """
 
 palette = 'catppuccin_mocha'
