@@ -1,6 +1,8 @@
 return {
   {
     "gitsigns.nvim",
+    lazy = true,
+    event = "VeryLazy",
     keys = {
       {
         "<leader>gb",
