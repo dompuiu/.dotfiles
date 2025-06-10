@@ -17,10 +17,11 @@ return {
       ---@diagnostic disable-next-line: missing-fields
       require("avante").setup({
         provider = "copilot",
-        copilot = {
-          model = "claude-3.7-sonnet",
+        providers = {
+          copilot = {
+            model = "claude-3.7-sonnet",
+          },
         },
-
         web_search_engine = {
           provider = "brave",
         },
