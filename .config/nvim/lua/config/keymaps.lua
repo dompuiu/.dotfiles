@@ -27,3 +27,11 @@ keymap({ "n" }, "<CR>", "m`i<CR><Esc>")
 
 -- greatest remap ever
 keymap("x", "<leader>p", [["_dP]])
+
+-- Move Lines
+keymap("n", "<C-A-j>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
+keymap("n", "<C-A-k>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
+keymap("i", "<C-A-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move line down" })
+keymap("i", "<C-A-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move line up" })
+keymap("v", "<C-A-j>", ":m '>+1<cr>gv=gv", { desc = "Move selection down" })
+keymap("v", "<C-A-k>", ":m '<-2<cr>gv=gv", { desc = "Move selection up" })
