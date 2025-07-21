@@ -39,6 +39,8 @@ zi light z-shell/F-Sy-H # alternative to ---> zi light zsh-users/zsh-syntax-high
 zi light Aloxaf/fzf-tab
 zi light wfxr/forgit
 
+checkIfCommandExists "zellij" && zellij setup --generate-completion zsh > ~/.zi/completions/_zellij
+
 # examples here -> https://wiki.zshell.dev/ecosystem/category/-annexes
 zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
 zicdreplay -q
