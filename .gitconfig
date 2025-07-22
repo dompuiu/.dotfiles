@@ -27,8 +27,6 @@
   autosetuprebase = always
 [color]
   ui = auto
-[core]
-  excludesfile = ~/.gitignore
 [help]
   autocorrect = 10
 [interactive]
