@@ -28,6 +28,21 @@ keymap({ "n" }, "<CR>", "m`i<CR><Esc>")
 -- greatest remap ever
 keymap("x", "<leader>p", [["_dP]])
 
+-- Copy buffer paths
+keymap("n", "<leader>fy", function()
+  local path = vim.fn.expand("%")
+  vim.fn.setreg("+", path)
+  vim.fn.setreg('"', path)
+  print("Copied to clipboard: " .. path)
+end, { desc = "Copy relative buffer path" })
+
+keymap("n", "<leader>fY", function()
+  local path = vim.fn.expand("%:p")
+  vim.fn.setreg("+", path)
+  vim.fn.setreg('"', path)
+  print("Copied to clipboard: " .. path)
+end, { desc = "Copy buffer path" })
+
 -- Move Lines
 keymap("n", "<C-A-j>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
 keymap("n", "<C-A-k>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
