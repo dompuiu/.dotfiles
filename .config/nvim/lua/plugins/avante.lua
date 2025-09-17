@@ -55,7 +55,7 @@ return {
       --- The below dependencies are optional,
       "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
       "ibhagwan/fzf-lua", -- for file_selector provider fzf
-      "echasnovski/mini.icons", -- or echasnovski/mini.icons
+      "nvim-mini/mini.icons", -- or echasnovski/mini.icons
       "zbirenbaum/copilot.lua", -- for providers='copilot'
       {
         -- support for image pasting

@@ -8,6 +8,7 @@
 ## NVIM Config
 
 - [LazyVim](https://www.lazyvim.org/installation)
+- [tree-sitter-cli](https://www.npmjs.com/package/tree-sitter-cli)
 
 ## Tools
 
