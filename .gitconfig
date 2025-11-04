@@ -23,6 +23,7 @@
   snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
   recent = for-each-ref --sort=-committerdate --count=10 --format='%(refname:short)' refs/heads/ # https://twitter.com/djm_/status/961289486721339392
   glog = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all
+  gclean = !git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D
 [branch]
   autosetuprebase = always
 [color]
