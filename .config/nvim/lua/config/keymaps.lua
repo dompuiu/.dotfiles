@@ -42,11 +42,3 @@ keymap("n", "<leader>fY", function()
   vim.fn.setreg('"', path)
   print("Copied to clipboard: " .. path)
 end, { desc = "Copy buffer path" })
-
--- Move Lines
-keymap("n", "<C-S-j>", "<cmd>m .+1<cr>==", { desc = "Move line down" })
-keymap("n", "<C-S-k>", "<cmd>m .-2<cr>==", { desc = "Move line up" })
-keymap("i", "<C-S-j>", "<esc><cmd>m .+1<cr>==gi", { desc = "Move line down" })
-keymap("i", "<C-S-k>", "<esc><cmd>m .-2<cr>==gi", { desc = "Move line up" })
-keymap("v", "<C-S-j>", ":m '>+1<cr>gv=gv", { desc = "Move selection down" })
-keymap("v", "<C-S-k>", ":m '<-2<cr>gv=gv", { desc = "Move selection up" })
