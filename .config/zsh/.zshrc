@@ -20,6 +20,7 @@ addPathToFront $PNPM_HOME
 addPathToFront /opt/homebrew/bin
 addPathToFront /opt/homebrew/sbin
 addPath $HOME/.cargo/bin
+addPath /usr/local/cuda/bin
 
 source "$HOME/.zi/bin/zi.zsh"
 autoload -Uz _zi
@@ -30,7 +31,7 @@ zi snippet OMZL::completion.zsh
 zi snippet OMZL::key-bindings.zsh
 zi snippet OMZL::history.zsh
 zi snippet OMZL::functions.zsh
-zi snippet OMZP::asdf/asdf.plugin.zsh
+zi snippet OMZP::mise/mise.plugin.zsh
 zi snippet OMZP::fzf/fzf.plugin.zsh
 
 zi ice blockf; zi light zsh-users/zsh-completions
