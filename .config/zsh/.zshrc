@@ -50,7 +50,6 @@ zicdreplay -q
 checkIfCommandExists "zoxide" && eval "$(zoxide init zsh --cmd cd)"
 
 checkIfFileExists ${HOME}/.iterm2_shell_integration.zsh || source "${HOME}/.iterm2_shell_integration.zsh"
-checkIfCommandExists "cola" && alias mycola="(cola &> /dev/null &)"
 
 ! checkIfCommandExists "fd" && checkIfCommandExists "fdfind" && alias fd="fdfind"
 alias realfind="/usr/bin/find"
