@@ -43,6 +43,9 @@ zi light wfxr/forgit
 checkIfCommandExists "zellij" && zellij setup --generate-completion zsh > ~/.zi/completions/_zellij
 
 # examples here -> https://wiki.zshell.dev/ecosystem/category/-annexes
+if [[ -d "$HOME/.zi/completions" ]]; then
+  command find "$HOME/.zi/completions" -xtype l -delete 2>/dev/null
+fi
 zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
 zicdreplay -q
 
@@ -70,4 +73,3 @@ bindkey "^d" bash-ctrl-d
 eval "$(starship init zsh)"
 
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
-
