@@ -37,6 +37,7 @@ zi snippet OMZP::fzf/fzf.plugin.zsh
 zi ice blockf; zi light zsh-users/zsh-completions
 zi ice wait lucid atload'_zsh_autosuggest_start'; zi light zsh-users/zsh-autosuggestions
 zi light z-shell/F-Sy-H # alternative to ---> zi light zsh-users/zsh-syntax-highlighting
+zi light MichaelAquilina/zsh-autoswitch-virtualenv
 zi light Aloxaf/fzf-tab
 zi light wfxr/forgit
 
