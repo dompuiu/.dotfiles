@@ -45,7 +45,9 @@ checkIfCommandExists "zellij" && zellij setup --generate-completion zsh > ~/.zi/
 
 # examples here -> https://wiki.zshell.dev/ecosystem/category/-annexes
 if [[ -d "$HOME/.zi/completions" ]]; then
-  command find "$HOME/.zi/completions" -xtype l -delete 2>/dev/null
+  for link in "$HOME/.zi/completions"/*(N@); do
+    [[ -e "$link" ]] || command rm -f "$link"
+  done
 fi
 zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
 zicdreplay -q
