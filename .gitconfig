@@ -26,25 +26,45 @@
   gclean = !git fetch -p && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D
   wl = worktree list
   wr = worktree remove
+
 [branch]
   autosetuprebase = always
+
 [color]
   ui = auto
+
 [help]
   autocorrect = 10
+
 [interactive]
   singlekey = true
+  diffFilter = delta --color-only
+
 [push]
   default = tracking
   autoSetupRemote = true
+
 [rebase]
   autosquash = true
+
 [diff]
   algorithm = patience
+
 [include]
   path = ~/.gitconfig.local
+
 [fetch]
   prune = true
+
 [init]
   defaultBranch = main
 
+[core]
+    pager = delta
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+    dark = true      # or light = true, or omit for auto-detection
+
+[merge]
+    conflictStyle = zdiff3
