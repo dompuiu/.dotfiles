@@ -38,7 +38,9 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
-command = /opt/homebrew/bin/fish
+
+#command = /opt/homebrew/bin/fish
+command = /opt/homebrew/bin/zsh
 
 font-family = FiraCode Nerd Font Mono
 font-size = 13
