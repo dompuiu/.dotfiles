@@ -14,9 +14,9 @@ then
   FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fi
 
-addPathToFront $HOME/.local/bin
 addPathToFront $HOME/.local/share/bob/nvim-bin
 addPathToFront $PNPM_HOME
+addPathToFront $HOME/.local/bin
 addPathToFront /opt/homebrew/bin
 addPathToFront /opt/homebrew/sbin
 addPath $HOME/.cargo/bin
