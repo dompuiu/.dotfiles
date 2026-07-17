@@ -15,7 +15,7 @@ then
 fi
 
 addPathToFront $HOME/.local/share/bob/nvim-bin
-addPathToFront $PNPM_HOME
+addPathToFront $PNPM_HOME/bin
 addPathToFront $HOME/.local/bin
 addPathToFront /opt/homebrew/bin
 addPathToFront /opt/homebrew/sbin
