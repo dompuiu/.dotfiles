@@ -47,3 +47,6 @@ font-size = 13
 
 theme = dark:TokyoNight Moon,light:TokyoNight Day
 
+cursor-style = block
+cursor-style-blink = false
+shell-integration-features = no-cursor
