@@ -40,13 +40,18 @@
 
 
 #command = /opt/homebrew/bin/fish
+
+# Shell
 command = /opt/homebrew/bin/zsh
 
+# Font
 font-family = FiraCode Nerd Font Mono
 font-size = 13
 
+# Theme
 theme = dark:TokyoNight Moon,light:TokyoNight Day
 
+# Cursor style
 cursor-style = block
 cursor-style-blink = false
 shell-integration-features = no-cursor
