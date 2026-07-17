@@ -26,7 +26,9 @@ addPath() {
 }
 
 addPathToFront() {
-    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
-      PATH="$1${PATH:+":$PATH"}"
-    fi
+    [ -d "$1" ] || return
+    PATH=":$PATH:"
+    PATH="${PATH//:$1:/:}"   # strip existing occurrence
+    PATH="${PATH#:}"; PATH="${PATH%:}"
+    PATH="$1${PATH:+":$PATH"}"
 }
