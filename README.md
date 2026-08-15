@@ -28,3 +28,4 @@
   - [lazygit](https://github.com/jesseduffield/lazygit)
   - [tmux-sessionizer](https://github.com/jrmoulton/tmux-sessionizer)
   - [delta](https://github.com/dandavison/delta)
+  - [hammerspoon](https://www.hammerspoon.org/)
