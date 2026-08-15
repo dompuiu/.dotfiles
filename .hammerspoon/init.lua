@@ -50,3 +50,13 @@ hs.hotkey.bind(hyper, "up", function()
 		win:setFrame(f)
 	end)
 end)
+
+-- Move window to next display and maximize it there
+hs.hotkey.bind(hyper, "down", function()
+	local win = hs.window.focusedWindow()
+	if not win then return end
+
+	local nextScreen = win:screen():next()
+	win:moveToScreen(nextScreen)
+	win:setFrame(nextScreen:frame())
+end)
