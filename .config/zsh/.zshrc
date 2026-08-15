@@ -75,4 +75,7 @@ bindkey "^d" bash-ctrl-d
 # Init starship
 eval "$(starship init zsh)"
 
+# Complete tmux sessionizer
+source <(COMPLETE=zsh tms)
+
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
