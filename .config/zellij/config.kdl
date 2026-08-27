@@ -5,6 +5,18 @@
 keybinds clear-defaults=true {
     locked {
         bind "Ctrl z" { SwitchToMode "normal"; }
+        bind "Ctrl h" {
+            MessagePlugin "zellij-navigator" { name "move_focus"; payload "left"; }
+        }
+        bind "Ctrl j" {
+            MessagePlugin "zellij-navigator" { name "move_focus"; payload "down"; }
+        }
+        bind "Ctrl k" {
+            MessagePlugin "zellij-navigator" { name "move_focus"; payload "up"; }
+        }
+        bind "Ctrl l" {
+            MessagePlugin "zellij-navigator" { name "move_focus"; payload "right"; }
+        }
     }
     pane {
         bind "left" { MoveFocus "left"; }
@@ -278,6 +290,7 @@ plugins {
     status-bar location="zellij:status-bar"
     strider location="zellij:strider"
     tab-bar location="zellij:tab-bar"
+    zellij-navigator location="https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm"
     welcome-screen location="zellij:session-manager" {
         welcome_screen true
     }

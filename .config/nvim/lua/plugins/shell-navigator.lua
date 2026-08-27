@@ -103,7 +103,9 @@ return {
     },
 
     config = function()
-      require("smart-splits").setup()
+      require("smart-splits").setup({
+        multiplexer_integration = "zellij",
+      })
     end,
   },
 }
