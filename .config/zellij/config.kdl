@@ -17,6 +17,18 @@ keybinds clear-defaults=true {
         bind "Ctrl l" {
             MessagePlugin "zellij-navigator" { name "move_focus"; payload "right"; }
         }
+        bind "Ctrl Alt h" {
+            MessagePlugin "zellij-navigator" { name "resize"; payload "left"; resize_mod "ctrl+alt"; }
+        }
+        bind "Ctrl Alt j" {
+            MessagePlugin "zellij-navigator" { name "resize"; payload "down"; resize_mod "ctrl+alt"; }
+        }
+        bind "Ctrl Alt k" {
+            MessagePlugin "zellij-navigator" { name "resize"; payload "up"; resize_mod "ctrl+alt"; }
+        }
+        bind "Ctrl Alt l" {
+            MessagePlugin "zellij-navigator" { name "resize"; payload "right"; resize_mod "ctrl+alt"; }
+        }
     }
     pane {
         bind "left" { MoveFocus "left"; }
@@ -290,7 +302,7 @@ plugins {
     status-bar location="zellij:status-bar"
     strider location="zellij:strider"
     tab-bar location="zellij:tab-bar"
-    zellij-navigator location="https://github.com/hiasr/vim-zellij-navigator/releases/download/0.2.1/vim-zellij-navigator.wasm"
+    zellij-navigator location="https://github.com/hiasr/vim-zellij-navigator/releases/download/0.3.0/vim-zellij-navigator.wasm"
     welcome-screen location="zellij:session-manager" {
         welcome_screen true
     }
