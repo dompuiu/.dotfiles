@@ -41,6 +41,9 @@
 
 #command = /opt/homebrew/bin/fish
 
+# Terminal Settings
+term = xterm-ghostty
+
 # Shell
 command = /opt/homebrew/bin/zsh
 
