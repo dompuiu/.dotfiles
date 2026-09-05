@@ -3,7 +3,6 @@
 .vscode
 .DS_Store
 .tool-versions
-AGENTS.md
 .cursor
 
 **/.claude/settings.local.json
