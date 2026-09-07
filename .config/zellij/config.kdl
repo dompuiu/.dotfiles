@@ -38,6 +38,8 @@ keybinds clear-defaults=true {
         bind "%" { NewPane "right"; SwitchToMode "locked"; }
         bind "!" { BreakPane; SwitchToMode "locked"; }
         bind "z" { ToggleTab; SwitchToMode "locked"; }
+        bind "Ctrl z" { ToggleFocusFullscreen; SwitchToMode "locked"; }
+        bind "esc" { SwitchToMode "locked"; }
     }
     pane {
         bind "left" { MoveFocus "left"; }
@@ -214,6 +216,8 @@ keybinds clear-defaults=true {
         bind "Alt p" { TogglePaneInGroup; }
         bind "Alt Shift p" { ToggleGroupMarking; }
         bind "Ctrl q" { Quit; }
+    }
+    shared_except "locked" "normal" {
         bind "Ctrl z" { SwitchToMode "locked"; }
     }
     shared_except "locked" "move" {
