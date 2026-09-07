@@ -30,6 +30,15 @@ keybinds clear-defaults=true {
             MessagePlugin "zellij-navigator" { name "resize"; payload "right"; resize_mod "ctrl+alt"; }
         }
     }
+    normal {
+        bind "c" { NewTab; SwitchToMode "locked"; }
+        bind "n" { GoToNextTab; SwitchToMode "locked"; }
+        bind "p" { GoToPreviousTab; SwitchToMode "locked"; }
+        bind "\"" { NewPane "down"; SwitchToMode "locked"; }
+        bind "%" { NewPane "right"; SwitchToMode "locked"; }
+        bind "!" { BreakPane; SwitchToMode "locked"; }
+        bind "z" { ToggleTab; SwitchToMode "locked"; }
+    }
     pane {
         bind "left" { MoveFocus "left"; }
         bind "down" { MoveFocus "down"; }
@@ -149,8 +158,8 @@ keybinds clear-defaults=true {
                 floating true
                 move_to_focused_tab true
                 cwd "/"
-                root_dirs "/Users/stancu/Development/activation"
-                individual_dirs "/Users/stancu/Development/noteharbor;/Users/stancu/.dotfiles"
+                root_dirs "/Users/stancu/Development/activation;/home/dompuiu/Development"
+                individual_dirs "/Users/stancu/Development/noteharbor;"
             }
             SwitchToMode "locked"
         }
@@ -281,6 +290,7 @@ keybinds clear-defaults=true {
         bind "up" { MoveFocus "up"; SwitchToMode "locked"; }
         bind "right" { MoveFocus "right"; SwitchToMode "locked"; }
         bind "space" { NextSwapLayout; }
+        bind "!" { BreakPane; SwitchToMode "locked"; }
         bind "\"" { NewPane "down"; SwitchToMode "locked"; }
         bind "%" { NewPane "right"; SwitchToMode "locked"; }
         bind "," { SwitchToMode "renametab"; }
@@ -309,7 +319,7 @@ plugins {
     }
     plugin-manager location="zellij:plugin-manager"
     session-manager location="zellij:session-manager"
-    sessionizer location="file:/Users/stancu/.config/zellij/plugins/zellij-sessionizer.wasm"
+    sessionizer location="file:~/.config/zellij/plugins/zellij-sessionizer.wasm"
     status-bar location="zellij:status-bar"
     strider location="zellij:strider"
     tab-bar location="zellij:tab-bar"
