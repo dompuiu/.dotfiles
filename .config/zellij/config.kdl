@@ -39,6 +39,8 @@ keybinds clear-defaults=true {
         bind "!" { BreakPane; SwitchToMode "locked"; }
         bind "z" { ToggleTab; SwitchToMode "locked"; }
         bind "Ctrl z" { ToggleFocusFullscreen; SwitchToMode "locked"; }
+        bind "{" { MovePane "left"; SwitchToMode "locked"; }
+        bind "}" { MovePane "right"; SwitchToMode "locked"; }
         bind "esc" { SwitchToMode "locked"; }
     }
     pane {
