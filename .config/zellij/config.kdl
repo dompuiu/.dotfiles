@@ -162,8 +162,8 @@ keybinds clear-defaults=true {
                 floating true
                 move_to_focused_tab true
                 cwd "/"
-                root_dirs "/Users/stancu/Development/activation;/home/dompuiu/Development"
-                individual_dirs "/Users/stancu/Development/noteharbor;"
+                root_dirs "/Users/stancu/Development/activation;/User/stancu/Development;/home/dompuiu/Development"
+                individual_dirs ""
             }
             SwitchToMode "locked"
         }
