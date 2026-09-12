@@ -67,7 +67,14 @@ checkIfCommandExists "bat" && alias cat="bat --paging=never"
 alias realls='/bin/ls --color=auto'
 checkIfCommandExists "eza" && alias ls="eza"
 
-alias z='zellij delete-all-sessions -y -f && zellij'
+z() {
+  if [ -z "$1" ]; then
+    zellij delete-all-sessions -y -f && zellij
+  else
+    zellij --layout "$1"
+  fi
+}
+
 alias ze='zellij edit'
 alias zr='zellij run --'
 
