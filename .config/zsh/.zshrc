@@ -67,6 +67,10 @@ checkIfCommandExists "bat" && alias cat="bat --paging=never"
 alias realls='/bin/ls --color=auto'
 checkIfCommandExists "eza" && alias ls="eza"
 
+alias z='zellij delete-all-sessions -y -f && zellij'
+alias ze='zellij edit'
+alias zr='zellij run --'
+
 # Bash like ctrl-d wrapper for IGNOREEOF
 setopt ignore_eof
 zle -N bash-ctrl-d
