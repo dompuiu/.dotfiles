@@ -68,11 +68,20 @@ alias realls='/bin/ls --color=auto'
 checkIfCommandExists "eza" && alias ls="eza"
 
 z() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     zellij delete-all-sessions -y -f && zellij
-  else
-    zellij --layout "$1"
+    return
   fi
+
+  case "$1" in
+    action|attach|a|edit|e|run|r|list-sessions|ls|kill-session|k|kill-all-sessions|ka|delete-session|delete-all-sessions|options|setup|plugin|pipe|-* )
+      zellij "$@"
+      ;;
+    *)
+      # assume layout name
+      zellij delete-all-sessions -y -f && zellij --layout "$@"
+      ;;
+  esac
 }
 
 alias ze='zellij edit'
