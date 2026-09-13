@@ -1,0 +1,50 @@
+# herdr config – mirrors .config/zellij/config.kdl + .config/tmux/tmux.conf
+# Prefix is ctrl+z everywhere (zellij locked Ctrl+z -> normal, tmux prefix C-z).
+onboarding = false
+
+[keys]
+prefix = "ctrl+z"
+
+# Tabs: zellij normal c/n/p, tmux prefix c/n/p
+new_tab = "prefix+c"
+next_tab = "prefix+n"
+previous_tab = "prefix+p"
+switch_tab = "prefix+1..9" # zellij tab 1..9
+rename_tab = "prefix+shift+t" # zellij tmux , (renametab)
+close_tab = "prefix+shift+x" # zellij tab x
+
+# Panes: zellij normal % (right) / " (down), tmux prefix % / "
+split_vertical = ["prefix+v", "prefix+%"]
+split_horizontal = ["prefix+minus", "prefix+\""]
+close_pane = "prefix+x" # zellij tmux/pane x
+zoom = "prefix+z" # zellij normal Ctrl+z fullscreen
+copy_mode = "prefix+["
+edit_scrollback = "prefix+e"
+swap_pane_left = "prefix+{"
+swap_pane_right = "prefix+}"
+cycle_pane_next = "prefix+tab"
+
+# Direct focus, no prefix: zellij locked Ctrl+h/j/k/l (navigator plugin).
+# Note: shells/editors also see these; use prefix+h/j/k/l on conflict.
+focus_pane_left = ["prefix+h", "ctrl+h"]
+focus_pane_down = ["prefix+j", "ctrl+j"]
+focus_pane_up = ["prefix+k", "ctrl+k"]
+focus_pane_right = ["prefix+l", "ctrl+l"]
+
+# Direct resize, no resize-mode: zellij locked Ctrl+Alt+h/j/k/l.
+resize_pane_left = "ctrl+alt+h"
+resize_pane_down = "ctrl+alt+j"
+resize_pane_up = "ctrl+alt+k"
+resize_pane_right = "ctrl+alt+l"
+resize_mode = "prefix+r"
+
+# Sessions/workspaces: tmux-ish
+detach = "prefix+q"
+workspace_picker = "prefix+w"
+goto = "prefix+g"
+reload_config = "prefix+shift+r"
+toggle_sidebar = "prefix+b"
+
+# Agents: one-shot jumps (no persistent picker mode in herdr)
+next_agent = "prefix+a"
+previous_agent = "prefix+shift+a"
