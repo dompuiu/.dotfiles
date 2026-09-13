@@ -37,8 +37,8 @@ keybinds clear-defaults=true {
         bind "\"" { NewPane "down"; SwitchToMode "locked"; }
         bind "%" { NewPane "right"; SwitchToMode "locked"; }
         bind "!" { BreakPane; SwitchToMode "locked"; }
-        bind "z" { ToggleTab; SwitchToMode "locked"; }
-        bind "Ctrl z" { ToggleFocusFullscreen; SwitchToMode "locked"; }
+        bind "z" { ToggleFocusFullscreen; SwitchToMode "locked"; }
+        bind "Ctrl z" { ToggleTab; SwitchToMode "locked"; }
         bind "{" { MovePane "left"; SwitchToMode "locked"; }
         bind "}" { MovePane "right"; SwitchToMode "locked"; }
         bind "esc" { SwitchToMode "locked"; }
