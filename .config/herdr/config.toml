@@ -48,3 +48,9 @@ toggle_sidebar = "prefix+b"
 # Agents: one-shot jumps (no persistent picker mode in herdr)
 next_agent = "prefix+a"
 previous_agent = "prefix+shift+a"
+
+[[keys.command]]
+key = "prefix+!"
+type = "shell"
+command = "tab_id=$(\"$HERDR_BIN_PATH\" pane move \"$HERDR_ACTIVE_PANE_ID\" --new-tab --focus | jq -er '.result.move_result.created_tab.tab_id') && \"$HERDR_BIN_PATH\" tab focus \"$tab_id\""
+description = "move pane to new tab"
