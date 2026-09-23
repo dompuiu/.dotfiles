@@ -2,6 +2,9 @@
 # Prefix is ctrl+z everywhere (zellij locked Ctrl+z -> normal, tmux prefix C-z).
 onboarding = false
 
+[ui]
+mouse_capture=true
+
 [keys]
 prefix = "ctrl+z"
 
