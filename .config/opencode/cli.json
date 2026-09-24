@@ -14,5 +14,8 @@
   "animations": true,
   "tabs": {
     "enabled": false
+  },
+  "terminal": {
+    "copy": "select"
   }
 }
