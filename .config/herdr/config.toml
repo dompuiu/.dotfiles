@@ -3,7 +3,7 @@
 onboarding = false
 
 [ui]
-mouse_capture=true
+mouse_capture = true
 
 [keys]
 prefix = "ctrl+z"
@@ -17,8 +17,8 @@ rename_tab = "prefix+shift+t" # zellij tmux , (renametab)
 close_tab = "prefix+shift+x" # zellij tab x
 
 # Panes: zellij normal % (right) / " (down), tmux prefix % / "
-split_vertical = ["prefix+v", "prefix+%"]
-split_horizontal = ["prefix+minus", "prefix+\""]
+split_vertical = ["prefix+%"]
+split_horizontal = ["prefix+\""]
 close_pane = "prefix+x" # zellij tmux/pane x
 zoom = "prefix+z" # zellij normal Ctrl+z fullscreen
 copy_mode = "prefix+["
@@ -59,7 +59,7 @@ command = "tab_id=$(\"$HERDR_BIN_PATH\" pane move \"$HERDR_ACTIVE_PANE_ID\" --ne
 description = "move pane to new tab"
 
 [[keys.command]]
-key = "cmd+shift+n"
+key = "prefix+v"
 type = "plugin_action"
 command = "chmarax.herdr-nvim.toggle"
 description = "nvim sidebar"
@@ -71,17 +71,17 @@ command = "chmarax.herdr-nvim.pick-file"
 description = "open file from agent output"
 
 
-[[keys.command]]              # picker in a split
-key = "cmd+g"
+[[keys.command]] # picker in a split
+key = "prefix+i"
 type = "shell"
 command = "herdr plugin action invoke open-hunk-picker --plugin herdr-hunk"
 
-[[keys.command]]              # picker in its own tab
-key = "cmd+shift+g"
+[[keys.command]] # picker in its own tab
+key = "prefix+shift+i"
 type = "shell"
 command = "herdr plugin action invoke open-hunk-picker-tab --plugin herdr-hunk"
 
-[[keys.command]]              # autodiff on/off
+[[keys.command]] # autodiff on/off
 key = "ctrl+alt+a"
 type = "shell"
 command = "herdr plugin action invoke toggle-autodiff --plugin herdr-hunk"
