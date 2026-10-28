@@ -30,10 +30,25 @@ function Get-TargetCwd {
   return $HOME
 }
 
+$cwd = Get-TargetCwd
+
+# Re-pressing the key in split mode: close any existing hunk pane in the
+# focused tab so the picker starts fresh instead of stacking splits.
+if ($placement -eq 'split') {
+  try {
+    $panes = ((& $herdrBin pane list 2>$null) | ConvertFrom-Json -ErrorAction Stop).result.panes
+    $focused = $panes | Where-Object { $_.focused } | Select-Object -First 1
+    if ($focused) {
+      $panes | Where-Object { $_.label -eq 'hunk' -and $_.tab_id -eq $focused.tab_id -and $_.pane_id } |
+        ForEach-Object { & $herdrBin pane close $_.pane_id 2>$null | Out-Null }
+    }
+  } catch {}
+}
+
 $openArgs = @('plugin', 'pane', 'open',
   '--plugin', 'herdr-hunk', '--entrypoint', 'hunk-picker-win',
   '--placement', $placement, '--focus',
-  '--cwd', (Get-TargetCwd))
+  '--cwd', $cwd)
 if ($placement -eq 'split') { $openArgs += @('--direction', 'right') }
 
 $openOut = (& $herdrBin @openArgs 2>$null | Out-String)

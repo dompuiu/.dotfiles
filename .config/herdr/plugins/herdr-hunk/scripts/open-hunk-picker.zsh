@@ -23,10 +23,25 @@ target_cwd() {
   print -r -- "$cwd"
 }
 
+cwd="$(target_cwd)"
+
+# Re-pressing the key in split mode: close any existing hunk pane in the
+# focused tab so the picker starts fresh instead of stacking splits.
+if [[ "$placement" == split ]]; then
+  "$herdr_bin" pane list 2>/dev/null | jq -r '
+    (.result.panes // []) as $panes
+    | ($panes | map(select(.focused == true)) | first) as $f
+    | if $f == null then empty
+      else $panes[] | select(.label == "hunk" and .tab_id == $f.tab_id) | .pane_id // empty
+      end' 2>/dev/null | while read -r old_id; do
+    [[ -n "$old_id" ]] && "$herdr_bin" pane close "$old_id" >/dev/null 2>&1
+  done
+fi
+
 open_args=(plugin pane open
   --plugin herdr-hunk --entrypoint hunk-picker
   --placement "$placement" --focus
-  --cwd "$(target_cwd)")
+  --cwd "$cwd")
 [[ "$placement" == split ]] && open_args+=(--direction right)
 
 open_out="$("$herdr_bin" "${open_args[@]}" 2>/dev/null)"
