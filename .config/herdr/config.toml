@@ -71,20 +71,25 @@ command = "chmarax.herdr-nvim.pick-file"
 description = "open file from agent output"
 
 
-[[keys.command]] # picker in a split
+[[keys.command]] # hunk picker in a split (fzf: working tree / staged / commit / range / stash)
 key = "prefix+i"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-picker --plugin herdr-hunk"
+command = "herdr plugin action invoke open-hunk-picker --plugin herdr-hunk || herdr plugin action invoke open-hunk-picker --plugin herdr-hunk-win"
 
-[[keys.command]] # picker in its own tab
+[[keys.command]] # hunk picker in its own tab
 key = "prefix+shift+i"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-picker-tab --plugin herdr-hunk"
+command = "herdr plugin action invoke open-hunk-picker-tab --plugin herdr-hunk || herdr plugin action invoke open-hunk-picker-tab --plugin herdr-hunk-win"
 
-[[keys.command]] # autodiff on/off
+[[keys.command]] # live hunk diff in a split (open / focus / close)
+key = "prefix+d"
+type = "shell"
+command = "herdr plugin action invoke open-hunk-watch --plugin herdr-hunk || herdr plugin action invoke open-hunk-watch --plugin herdr-hunk-win"
+
+[[keys.command]] # autodiff on/off (Windows port fallback)
 key = "ctrl+alt+a"
 type = "shell"
-command = "herdr plugin action invoke toggle-autodiff --plugin herdr-hunk"
+command = "herdr plugin action invoke toggle-autodiff --plugin herdr-hunk || herdr plugin action invoke toggle-autodiff --plugin herdr-hunk-win"
 
 [[keys.command]]
 key = "prefix+t"
