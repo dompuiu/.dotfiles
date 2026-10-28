@@ -26,14 +26,9 @@ if ($LASTEXITCODE -ne 0 -or -not $repoRoot) { Stop-WithMessage "not a git reposi
 $repoRoot = "$repoRoot".Trim()
 try { $repoRoot = (Resolve-Path -LiteralPath $repoRoot -ErrorAction Stop).Path } catch {}
 
-# Session-aware: if a hunk viewer is already open for this repo, reload it
-# with the chosen view instead of opening a second one; else run hunk.
+# Always open hunk in this pane: the launcher already closed any old hunk
+# pane in this tab, and reloading a session elsewhere would be invisible.
 function Invoke-HunkView([string[]]$HunkArgs) {
-  hunk session get --repo $repoRoot 2>$null | Out-Null
-  if ($LASTEXITCODE -eq 0) {
-    hunk session reload --repo $repoRoot -- @HunkArgs 2>$null | Out-Null
-    if ($LASTEXITCODE -eq 0) { exit 0 }
-  }
   & hunk @HunkArgs @themeArgs
   exit $LASTEXITCODE
 }
@@ -58,11 +53,6 @@ $choice = "$choice".Trim()
 
 switch ($choice) {
   'Working tree (live)' {
-    hunk session get --repo $repoRoot 2>$null | Out-Null
-    if ($LASTEXITCODE -eq 0) {
-      hunk session reload --repo $repoRoot -- diff 2>$null | Out-Null
-      if ($LASTEXITCODE -eq 0) { exit 0 }
-    }
     & hunk diff --watch @themeArgs
     exit $LASTEXITCODE
   }

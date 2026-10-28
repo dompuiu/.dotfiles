@@ -19,12 +19,9 @@ die() {
 repo_root="$(git rev-parse --show-toplevel 2>/dev/null)" || die "not a git repository: $PWD"
 repo_root="${repo_root:A}"
 
-# Session-aware: if a hunk viewer is already open for this repo, reload it
-# with the chosen view instead of opening a second one; else run hunk.
+# Always open hunk in this pane: the launcher already closed any old hunk
+# pane in this tab, and reloading a session elsewhere would be invisible.
 hunk_view() {
-  if hunk session get --repo "$repo_root" >/dev/null 2>&1; then
-    hunk session reload --repo "$repo_root" -- "$@" >/dev/null 2>&1 && exit 0
-  fi
   exec hunk "$@" "${theme_args[@]}"
 }
 
@@ -50,9 +47,6 @@ choice="$(print -l \
 
 case "$choice" in
   'Working tree (live)')
-    if hunk session get --repo "$repo_root" >/dev/null 2>&1; then
-      hunk session reload --repo "$repo_root" -- diff >/dev/null 2>&1 && exit 0
-    fi
     exec hunk diff --watch "${theme_args[@]}"
     ;;
   'Staged')
