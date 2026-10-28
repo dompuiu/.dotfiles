@@ -88,5 +88,5 @@ command = "herdr plugin action invoke toggle-autodiff --plugin herdr-hunk"
 
 [[keys.command]]
 key = "prefix+t"
-type = "plugin_action"
-command = "herdr-tsk.open-board"
+type = "shell"
+command = "herdr plugin action invoke open-board-windows --plugin herdr-tsk || herdr plugin action invoke open-board --plugin herdr-tsk"
