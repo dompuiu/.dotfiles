@@ -61,14 +61,8 @@ description = "move pane to new tab"
 [[keys.command]]
 key = "prefix+v"
 type = "plugin_action"
-command = "chmarax.herdr-nvim.toggle"
-description = "nvim sidebar"
-
-[[keys.command]]
-key = "prefix+o"
-type = "plugin_action"
-command = "chmarax.herdr-nvim.pick-file"
-description = "open file from agent output"
+command = "herdr-nvim.open"
+description = "nvim side pane"
 
 
 [[keys.command]] # hunk picker in a split (fzf: working tree / staged / commit / range / stash)

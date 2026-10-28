@@ -1,0 +1,21 @@
+id = "herdr-nvim"
+name = "herdr-nvim"
+version = "0.1.0"
+description = "Open nvim in a right split at the focused pane's cwd; the pane closes when nvim exits."
+min_herdr_version = "0.7.0"
+platforms = ["linux", "macos", "windows"]
+
+# nvim is the pane's own process, so :q closes the pane. No shell wrapper.
+[[panes]]
+id = "nvim"
+title = "nvim"
+placement = "split"
+command = ["nvim"]
+
+# The launcher runs in headless nvim with --clean (no user config/plugins), so
+# one Lua script covers every platform and needs nothing beyond herdr + nvim.
+[[actions]]
+id = "open"
+title = "nvim side pane"
+description = "Open nvim in a right split at the focused pane's cwd, or focus the existing one."
+command = ["nvim", "--clean", "--headless", "-l", "scripts/open.lua"]
