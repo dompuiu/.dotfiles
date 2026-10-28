@@ -13,5 +13,29 @@ config.font = wezterm.font("FiraCode Nerd Font Mono", { weight = "Regular" })
 config.font_size = 13.0
 config.freetype_load_target = "Light"
 
+-- Windows-only settings (WSL default domain, local launch menu).
+if wezterm.target_triple:find("windows") then
+  config.default_domain = "WSL:Ubuntu-24.04"
+
+  config.launch_menu = {
+    {
+      label = "PowerShell",
+      args = { "powershell.exe", "-NoLogo" },
+      domain = { DomainName = "local" },
+    },
+    {
+      label = "CMD",
+      args = { "cmd.exe" },
+      domain = { DomainName = "local" },
+    },
+  }
+
+  config.font_size = 11
+
+  wezterm.on("mux-is-process-stateful", function(proc)
+    return false
+  end)
+end
+
 -- and finally, return the configuration to wezterm
 return config
