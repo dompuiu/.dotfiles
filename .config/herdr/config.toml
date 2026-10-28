@@ -74,22 +74,22 @@ description = "open file from agent output"
 [[keys.command]] # hunk picker in a split (fzf: working tree / staged / commit / range / stash)
 key = "prefix+i"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-picker --plugin herdr-hunk || herdr plugin action invoke open-hunk-picker --plugin herdr-hunk-win"
+command = "herdr plugin action invoke open-hunk-picker --plugin herdr-hunk || herdr plugin action invoke open-hunk-picker-win --plugin herdr-hunk"
 
 [[keys.command]] # hunk picker in its own tab
 key = "prefix+shift+i"
 type = "shell"
-command = "before=$(herdr tab list | jq -c '[.. | .tab_id? // empty]') && { herdr plugin action invoke open-hunk-picker-tab --plugin herdr-hunk || herdr plugin action invoke open-hunk-picker-tab --plugin herdr-hunk-win; } && for _ in 1 2 3 4 5 6 7 8 9 10; do tab_id=$(herdr tab list | jq -r --argjson b \"$before\" '[.. | .tab_id? // empty] - $b | .[0] // empty'); [ -n \"$tab_id\" ] && { herdr tab focus \"$tab_id\"; break; }; sleep 0.2; done"
+command = "herdr plugin action invoke open-hunk-picker-tab --plugin herdr-hunk || herdr plugin action invoke open-hunk-picker-tab-win --plugin herdr-hunk"
 
 [[keys.command]] # live hunk diff in a split (open / focus / close)
 key = "prefix+d"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-watch --plugin herdr-hunk || herdr plugin action invoke open-hunk-watch --plugin herdr-hunk-win"
+command = "herdr plugin action invoke open-hunk-watch --plugin herdr-hunk || herdr plugin action invoke open-hunk-watch-win --plugin herdr-hunk"
 
-[[keys.command]] # autodiff on/off (Windows port fallback)
+[[keys.command]] # autodiff on/off
 key = "ctrl+alt+a"
 type = "shell"
-command = "herdr plugin action invoke toggle-autodiff --plugin herdr-hunk || herdr plugin action invoke toggle-autodiff --plugin herdr-hunk-win"
+command = "herdr plugin action invoke toggle-autodiff --plugin herdr-hunk || herdr plugin action invoke toggle-autodiff-win --plugin herdr-hunk"
 
 [[keys.command]]
 key = "prefix+t"

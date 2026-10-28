@@ -1,5 +1,5 @@
 # Runs INSIDE the herdr pane (has a TTY, cwd = invoking pane's project).
-# Equivalent of herdr-hunk scripts/picker.sh "Working tree (live)" path,
+# Same as picker.ps1 "Working tree (live)" path,
 # without fzf: just become a live hunk watcher. Quitting hunk closes the pane.
 # Native tools (git/hunk) legitimately exit non-zero (no session, clean repo).
 # Like bash `set -uo pipefail` (no -e): keep going, check $LASTEXITCODE explicitly.

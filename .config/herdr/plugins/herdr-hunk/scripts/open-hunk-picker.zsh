@@ -1,0 +1,49 @@
+#!/usr/bin/env zsh
+# Action launcher (runs detached, no TTY): open the picker pane in the
+# invoking pane's project. Usage: open-hunk-picker.zsh [split|tab]
+setopt pipe_fail no_unset
+
+herdr_bin="${HERDR_BIN_PATH:-herdr}"
+placement="${1:-split}"
+
+(( $+commands[jq] )) || { "$herdr_bin" notification show 'herdr-hunk: jq not found on PATH' --position top-right; exit 1; }
+
+# Root the picker at the invoking pane's directory, not the plugin install
+# dir. Context JSON is injected by herdr on action invoke; fall back to the
+# focused pane's cwd, then HOME.
+target_cwd() {
+  local cwd
+  cwd="$(print -r -- "${HERDR_PLUGIN_CONTEXT_JSON:-}" | jq -r \
+    '.focused_pane_cwd // .workspace_cwd // .cwd // empty' 2>/dev/null)"
+  if [[ ! -d "$cwd" ]]; then
+    cwd="$("$herdr_bin" pane list 2>/dev/null | jq -r \
+      '[.result.panes[]? | select(.focused == true)][0].cwd // empty' 2>/dev/null)"
+  fi
+  [[ -d "$cwd" ]] || cwd="$HOME"
+  print -r -- "$cwd"
+}
+
+open_args=(plugin pane open
+  --plugin herdr-hunk --entrypoint hunk-picker
+  --placement "$placement" --focus
+  --cwd "$(target_cwd)")
+[[ "$placement" == split ]] && open_args+=(--direction right)
+
+open_out="$("$herdr_bin" "${open_args[@]}" 2>/dev/null)"
+open_exit=$?
+[[ -n "$open_out" ]] && print -r -- "$open_out"
+(( open_exit == 0 )) || exit $open_exit
+
+# --focus updates server focus but does not navigate attached clients.
+# Explicit `tab focus` does, so pull the new tab id from the open response.
+[[ "$placement" == tab ]] || exit 0
+tab_id="$(print -r -- "$open_out" | jq -r '
+  (.result.plugin_pane // .result) as $p
+  | $p.pane.tab_id // $p.tab_id // .result.tab.tab_id // empty' 2>/dev/null)"
+if [[ -z "$tab_id" ]]; then
+  pane_id="$(print -r -- "$open_out" | jq -r '
+    (.result.plugin_pane // .result) as $p | $p.pane.pane_id // $p.pane_id // empty' 2>/dev/null)"
+  [[ -n "$pane_id" ]] && tab_id="$("$herdr_bin" pane get "$pane_id" 2>/dev/null | jq -r '.result.pane.tab_id // empty' 2>/dev/null)"
+fi
+[[ -n "$tab_id" ]] || exit 0
+"$herdr_bin" tab focus "$tab_id" >/dev/null

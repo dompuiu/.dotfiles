@@ -1,6 +1,6 @@
 # Toggle a live hunk diff in a split pane: OPEN if absent in the focused tab,
 # FOCUS if present but unfocused, CLOSE if it is the focused pane.
-# Port of herdr-hunk scripts/open-hunk-watch.sh for Windows.
+# Windows counterpart of open-hunk-watch.zsh.
 # Like bash `set -uo pipefail` (no -e): herdr/git calls may fail;
 # check $LASTEXITCODE explicitly instead of aborting.
 $ErrorActionPreference = 'Continue'
@@ -30,7 +30,7 @@ function Get-TargetCwd {
 
 function Open-Pane {
   & $herdrBin plugin pane open `
-    --plugin herdr-hunk-win --entrypoint hunk-diff `
+    --plugin herdr-hunk --entrypoint hunk-diff-win `
     --placement split --direction right --focus `
     --cwd (Get-TargetCwd)
   exit $LASTEXITCODE

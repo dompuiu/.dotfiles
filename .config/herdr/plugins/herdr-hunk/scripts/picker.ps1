@@ -1,6 +1,6 @@
 # Runs INSIDE the herdr pane (has a TTY, cwd = the invoking pane's project).
 # fzf menu -> hunk viewer. Quitting hunk closes the pane.
-# Port of herdr-hunk scripts/picker.sh for Windows (no awk/sed/shasum).
+# Windows counterpart of picker.zsh.
 $ErrorActionPreference = 'Continue'
 $PSNativeCommandUseErrorActionPreference = $false
 

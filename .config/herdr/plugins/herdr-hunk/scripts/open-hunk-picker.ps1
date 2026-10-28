@@ -1,6 +1,6 @@
 # Action launcher (runs detached, no TTY): open the picker pane in the
 # invoking pane's project. Usage: open-hunk-picker.ps1 [split|tab]
-# Port of herdr-hunk scripts/open-hunk-picker.sh for Windows.
+# Windows counterpart of open-hunk-picker.zsh.
 $ErrorActionPreference = 'Continue'
 $PSNativeCommandUseErrorActionPreference = $false
 
@@ -31,7 +31,7 @@ function Get-TargetCwd {
 }
 
 $openArgs = @('plugin', 'pane', 'open',
-  '--plugin', 'herdr-hunk-win', '--entrypoint', 'hunk-picker',
+  '--plugin', 'herdr-hunk', '--entrypoint', 'hunk-picker-win',
   '--placement', $placement, '--focus',
   '--cwd', (Get-TargetCwd))
 if ($placement -eq 'split') { $openArgs += @('--direction', 'right') }

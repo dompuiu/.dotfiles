@@ -1,7 +1,7 @@
 # Event hook for pane.agent_status_changed: when an agent goes idle with
 # uncommitted changes, open a live hunk diff split beside its pane (unfocused).
-# Opt out: create "$(herdr plugin config-dir herdr-hunk-win)/autodiff-off"
-# Port of herdr-hunk scripts/autodiff.sh for Windows (no jq/bash/shasum).
+# Opt out: create "$(herdr plugin config-dir herdr-hunk)/autodiff-off"
+# Windows counterpart of autodiff.zsh.
 $ErrorActionPreference = 'Continue'
 $PSNativeCommandUseErrorActionPreference = $false
 
@@ -11,7 +11,7 @@ $herdrBin = if ($env:HERDR_BIN_PATH) { $env:HERDR_BIN_PATH } else { 'herdr' }
 
 $cfgDir = $env:HERDR_PLUGIN_CONFIG_DIR
 if (-not $cfgDir) {
-  $cfgDir = (& $herdrBin plugin config-dir herdr-hunk-win 2>$null | Select-Object -Last 1).Trim()
+  $cfgDir = (& $herdrBin plugin config-dir herdr-hunk 2>$null | Select-Object -Last 1).Trim()
 }
 if ($cfgDir -and (Test-Path -LiteralPath (Join-Path $cfgDir 'autodiff-off')) ) {
   Write-Skip 'autodiff off'
@@ -95,7 +95,7 @@ $sha = [System.Security.Cryptography.SHA256]::Create()
 $sig = ([BitConverter]::ToString($sha.ComputeHash($bytes)) -replace '-', '').ToLower()
 
 $stateDir = $env:HERDR_PLUGIN_STATE_DIR
-if (-not $stateDir) { $stateDir = Join-Path $HOME '.cache/herdr-hunk-win' }
+if (-not $stateDir) { $stateDir = Join-Path $HOME '.cache/herdr-hunk' }
 New-Item -ItemType Directory -Force -Path $stateDir 2>$null | Out-Null
 $rootHashBytes = [System.Text.Encoding]::UTF8.GetBytes($root.ToLower())
 $rootKey = ([BitConverter]::ToString($sha.ComputeHash($rootHashBytes)) -replace '-', '').ToLower()
@@ -108,7 +108,7 @@ try { Set-Content -LiteralPath $keyFile -Value $sig -NoNewline -ErrorAction Stop
 
 Write-Output "OPENING beside $paneId in $root"
 & $herdrBin plugin pane open `
-  --plugin herdr-hunk-win --entrypoint hunk-diff `
+  --plugin herdr-hunk --entrypoint hunk-diff-win `
   --placement split --direction right --no-focus `
   --target-pane $paneId `
   --cwd $root

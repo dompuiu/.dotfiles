@@ -6,7 +6,7 @@ $PSNativeCommandUseErrorActionPreference = $false
 $herdrBin = if ($env:HERDR_BIN_PATH) { $env:HERDR_BIN_PATH } else { 'herdr' }
 $cfgDir = $env:HERDR_PLUGIN_CONFIG_DIR
 if (-not $cfgDir) {
-  $cfgDir = (& $herdrBin plugin config-dir herdr-hunk-win 2>$null | Select-Object -Last 1).Trim()
+  $cfgDir = (& $herdrBin plugin config-dir herdr-hunk 2>$null | Select-Object -Last 1).Trim()
 }
 if (-not $cfgDir) { exit 1 }
 New-Item -ItemType Directory -Force -Path $cfgDir 2>$null | Out-Null
