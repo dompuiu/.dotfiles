@@ -16,15 +16,45 @@ files+=("$files_dir/.config/fish/config.fish")
 files+=("$files_dir/.config/fish/environment.fish")
 files+=("$files_dir/.config/fish/fish_plugins")
 
-# Find symlinks that might not exists anymore in the ~/.config folder.
+# Find broken symlinks in the ~/.config folder that point into the repo.
 while IFS= read -r line; do
-  files_to_delete+=("$line")
-done < <(find ~/.config/nvim -type l ! -exec test -e {} \; -print)
+  target=$(readlink "$line")
+  [[ $target != /* ]] && target="$(dirname "$line")/$target"
+  [[ $target == "$files_dir"/* ]] && files_to_delete+=("$line")
+done < <(find ~/.config -type l ! -exec test -e {} \; -print)
 
 # Find symlinks that still point to the current files
 for source in "${files[@]}"; do
   destination="$HOME${source/$files_dir/}"
-  if [[ -e ${destination} ]]; then
+
+  # If a parent directory is itself a symlink (e.g. ~/.config/opencode -> repo),
+  # remove that directory link instead of deleting repo files through it.
+  linked_parent=""
+  relative="${destination#"$HOME"/}"
+  current="$HOME"
+  IFS='/' read -ra parts <<< "$(dirname "$relative")"
+  for part in "${parts[@]}"; do
+    [[ -z $part || $part == "." ]] && continue
+    current="$current/$part"
+    if [[ -L $current ]]; then
+      linked_parent="$current"
+      break
+    fi
+  done
+
+  if [[ -n $linked_parent ]]; then
+    if [[ $(readlink -f "$linked_parent") == "$files_dir"/* ]]; then
+      already_added=false
+      for existing in "${files_to_delete[@]}"; do
+        [[ $existing == "$linked_parent" ]] && already_added=true && break
+      done
+      $already_added || files_to_delete+=("$linked_parent")
+    fi
+    continue
+  fi
+
+  # Only delete symlinks pointing into the repo.
+  if [[ -L $destination && $(readlink -f "$destination") == "$files_dir"/* ]]; then
     files_to_delete+=("$destination")
   fi
 done
@@ -33,13 +63,19 @@ done
 
 for source in "${files_to_delete[@]}"; do
   echo "Deleting file $source..."
-  rm -r $source
-  [[ $? -ne 0 ]] && echo "Failed deleting file $source." && exit $?
+  rm -r "$source"
+  rc=$?
+  [[ $rc -ne 0 ]] && echo "Failed deleting file $source." && exit $rc
 done
 
-# Find directories that are empty and delete them.
-while IFS= read -r directory; do
-  echo "Deleting directory $directory..."
-  rm -r $directory
-  [[ $? -ne 0 ]] && echo "Failed deleting directory $directory." && exit $?
-done < <(find ~/.config/nvim -type d -empty)
+# Delete folders left empty by the removals above, walking up until a folder
+# still has contents. rmdir only ever removes empty folders.
+for source in "${files_to_delete[@]}"; do
+  directory=$(dirname "$source")
+  while [[ $directory == "$HOME"/* && $directory != "$HOME/.config" && -d $directory && ! -L $directory ]]; do
+    [[ -n $(ls -A "$directory") ]] && break
+    echo "Deleting directory $directory..."
+    rmdir "$directory" || break
+    directory=$(dirname "$directory")
+  done
+done
