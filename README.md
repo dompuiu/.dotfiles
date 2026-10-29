@@ -94,6 +94,7 @@ loaded when present and are not part of the repo.
 | `.config/tmux/tmux.conf` | [tmux](https://github.com/tmux/tmux)           | Prefix `ctrl+z`. `prefix ctrl+o` opens tmux-sessionizer.                        |
 | `.config/zellij`         | [zellij](https://zellij.dev/)                  | Starts locked. Layouts: `oc` (opencode + lazygit) and `cc` (claude + lazygit). Includes a sessionizer plugin. |
 | `.config/herdr`          | [herdr](https://herdr.dev/)                    | Terminal workspace manager and its plugins. See [Herdr](#herdr).                |
+| `.config/tuios`          | [tuios](https://tuios.dev/)                    | herdr's keys on top of the tuios defaults; runs the herdr plugins unchanged.   |
 
 ### Git and CLI tools
 
@@ -151,9 +152,9 @@ The script links every directory with a `herdr-plugin.toml`, prints `linked <nam
 
 | Plugin                                                                                                | Keys                                                   | Requires      | Optional    |
 | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------- | ----------- |
-| `herdr-sesh` - workspace picker (open workspaces, saved sessions, zoxide) and previous-workspace jump | `prefix+o`, `prefix+;`                                 | fzf 0.65+, jq | zoxide, eza |
-| `herdr-hunk` - hunk diff picker, live diff and agent-idle autodiff                                    | `prefix+i`, `prefix+shift+i`, `prefix+d`, `ctrl+alt+a` | hunk, fzf, jq |             |
-| `herdr-nvim` - nvim side pane                                                                         | `prefix+v`                                             | nvim          |             |
+| `herdr-sesh` - workspace picker (open workspaces, saved sessions, zoxide) and previous-workspace jump | `prefix+alt+o`, `prefix+;`                                 | fzf 0.65+, jq | zoxide, eza |
+| `herdr-hunk` - hunk diff picker, live diff and agent-idle autodiff                                    | `prefix+alt+i`, `prefix+alt+shift+i`, `prefix+alt+d`, `ctrl+alt+a` | hunk, fzf, jq |             |
+| `herdr-nvim` - nvim side pane                                                                         | `prefix+alt+v`                                             | nvim          |             |
 
 Plugin scripts use zsh on macOS/Linux and
 [PowerShell 7](https://github.com/PowerShell/PowerShell) (`pwsh`) on Windows;

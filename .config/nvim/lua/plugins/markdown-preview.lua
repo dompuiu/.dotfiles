@@ -1,6 +1,6 @@
 return {
-  -- Replaced by live-preview.nvim (pure Lua, no node build step).
   { "iamcco/markdown-preview.nvim", enabled = false },
+  -- Replaced by live-preview.nvim (pure Lua, no node build step).
   {
     "brianhuster/live-preview.nvim",
     dependencies = { "folke/snacks.nvim" },

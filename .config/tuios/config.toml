@@ -1,0 +1,130 @@
+# tuios config – adds the keys from .config/herdr/config.toml on top of the
+# tuios defaults, which are all left as they are.
+# Keys that collide with a tuios default are left out; plugin keys are
+# prefix+alt+<herdr letter>.
+#
+# Model: herdr workspace = tuios session, herdr tab = tuios workspace,
+#        herdr pane = tuios window.
+#
+# The herdr plugins in .config/herdr/plugins run unchanged in tuios. Enable
+# them once, from a terminal OUTSIDE tuios:
+#   tuios plugins enable herdr-hunk herdr-sesh herdr-nvim herdr-tsk
+#
+# Check keys with: tuios keybinds doctor
+
+[startup]
+tiled = true
+daemon = true
+
+[keybindings]
+leader_key = "ctrl+z"
+
+[keybindings.prefix_mode]
+# herdr keys that don't collide with a tuios default. Defaults are untouched.
+prefix_split_vertical = ["%"]
+prefix_split_horizontal = ["\""]
+break_pane = ["!"]
+next_workspace = ["n"]
+new_workspace = ["c"]
+prefix_new_window = []                        # c moved to new_workspace; use % / " or window-mode n
+prev_workspace = ["p"]
+prefix_next_window = []                  # n moved to next_workspace
+prefix_prev_window = []            # p moved to prev_workspace
+swap_left = ["{"]                             # tmux swap-pane -U
+swap_right = ["}"]                            # tmux swap-pane -D
+close_workspace = ["shift+x"]                 # delete tab (asks first)
+prefix_close_session = ["shift+d"]            # delete session (was X)
+prefix_debug = []                             # was D; taken by prefix_close_session
+
+# prefix+digit switches tab (workspace), not pane. tuios has no workspace 0.
+prefix_select_0 = []
+prefix_select_1 = []
+prefix_select_2 = []
+prefix_select_3 = []
+prefix_select_4 = []
+prefix_select_5 = []
+prefix_select_6 = []
+prefix_select_7 = []
+prefix_select_8 = []
+prefix_select_9 = []
+switch_workspace_1 = ["1"]
+switch_workspace_2 = ["2"]
+switch_workspace_3 = ["3"]
+switch_workspace_4 = ["4"]
+switch_workspace_5 = ["5"]
+switch_workspace_6 = ["6"]
+switch_workspace_7 = ["7"]
+switch_workspace_8 = ["8"]
+switch_workspace_9 = ["9"]
+
+# Direct focus / resize without prefix (zellij locked ctrl+h/j/k/l and
+# ctrl+alt+h/j/k/l). Shells/editors also see ctrl+h/j/k/l.
+[keybindings.terminal_mode]
+terminal_focus_left = ["alt+left", "ctrl+h"]
+terminal_focus_down = ["alt+down", "ctrl+j"]
+terminal_focus_up = ["alt+up", "ctrl+k"]
+terminal_focus_right = ["alt+right", "ctrl+l"]
+resize_pane_left_5 = ["ctrl+alt+h"]
+resize_pane_down_5 = ["ctrl+alt+j"]
+resize_pane_up_5 = ["ctrl+alt+k"]
+resize_pane_right_5 = ["ctrl+alt+l"]
+
+# --- herdr plugins ---------------------------------------------------------
+
+[[keybindings.command]]
+key = "prefix+alt+v"
+type = "plugin_action"
+command = "herdr-nvim.open"
+description = "nvim side pane"
+
+[[keybindings.command]] # hunk picker in a split
+key = "prefix+alt+i"
+type = "plugin_action"
+command = "herdr-hunk.open-hunk-picker"
+description = "hunk picker"
+
+[[keybindings.command]] # hunk picker in its own tab
+key = "prefix+alt+shift+i"
+type = "plugin_action"
+command = "herdr-hunk.open-hunk-picker-tab"
+description = "hunk picker (tab)"
+
+[[keybindings.command]] # live hunk diff in a split (open / focus / close)
+key = "prefix+alt+d"
+type = "plugin_action"
+command = "herdr-hunk.open-hunk-watch"
+description = "hunk live diff"
+
+[[keybindings.command]]
+key = "ctrl+alt+a"
+type = "plugin_action"
+command = "herdr-hunk.toggle-autodiff"
+description = "hunk autodiff on/off"
+
+[[keybindings.command]] # sesh picker: open sessions / saved sessions / zoxide
+key = "prefix+alt+o"
+type = "plugin_action"
+command = "herdr-sesh.open-picker"
+description = "sesh picker"
+
+[[keybindings.command]] # previous session
+key = "prefix+;"
+type = "plugin_action"
+command = "herdr-sesh.last"
+description = "previous session"
+
+[[keybindings.command]]
+key = "prefix+alt+t"
+type = "plugin_action"
+command = "herdr-tsk.open-board"
+description = "tsk board"
+
+[plugins]
+enabled = ["herdr-nvim", "herdr-hunk", "herdr-sesh", "herdr-tsk"]
+
+[spotlight]
+enabled = false
+
+[appearance]
+theme = "tokyo_night_storm"
+nvim_navigation = true                        # alt+arrows cross nvim splits (tuios-nvim-navigator)

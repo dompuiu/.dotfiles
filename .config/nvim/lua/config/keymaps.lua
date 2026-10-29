@@ -42,3 +42,11 @@ keymap("n", "<leader>fY", function()
   vim.fn.setreg('"', path)
   print("Copied to clipboard: " .. path)
 end, { desc = "Copy buffer path" })
+
+-- ctrl+h/j/k/l: nvim splits, then the next tuios pane (tuios-navigator.lua).
+-- Set here because LazyVim maps these keys after the plugin loads.
+for key, direction in pairs({ h = "left", j = "down", k = "up", l = "right" }) do
+  keymap("n", "<C-" .. key .. ">", function()
+    require("tuios-nvim-navigator").navigate(direction)
+  end, { silent = true, desc = "Navigate " .. direction .. " through TUIOS" })
+end
