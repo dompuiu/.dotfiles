@@ -1,5 +1,5 @@
-id = "herdr-hunk"
-name = "herdr-hunk"
+id = "hunk"
+name = "hunk"
 version = "0.2.0"
 description = "fzf picker for hunk diffs plus auto-open live diff when an agent goes idle. zsh on Linux/macOS, pwsh on Windows."
 min_herdr_version = "0.7.0"

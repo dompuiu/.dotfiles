@@ -1,13 +1,16 @@
-# Shared helpers for herdr-sesh zsh scripts. Source, don't execute.
+# Shared helpers for sesh zsh scripts. Source, don't execute.
 setopt pipe_fail no_unset extended_glob
 
 # herdr runs hooks/actions with a minimal PATH.
 path=(/opt/homebrew/bin /usr/local/bin "$HOME/.local/bin" "$HOME/.cargo/bin" $path)
 
 herdr_bin="${HERDR_BIN_PATH:-herdr}"
-plugin_id="${HERDR_PLUGIN_ID:-herdr-sesh}"
+plugin_id="${HERDR_PLUGIN_ID:-sesh}"
 
-toast() { "$herdr_bin" notification show "herdr-sesh: $1" --position top-right >/dev/null 2>&1; }
+# tuios runs herdr plugins through a herdr-compatible CLI of its own.
+in_tuios() { [[ -n "${TUIOS_PLUGIN_ID:-}${TUIOS_SOCKET:-}" || "$herdr_bin" == *tuios* ]]; }
+
+toast() { "$herdr_bin" notification show "sesh: $1" --position top-right >/dev/null 2>&1; }
 
 need() {
   local cmd
@@ -17,7 +20,7 @@ need() {
 }
 
 state_dir() {
-  local dir="${HERDR_PLUGIN_STATE_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/herdr-sesh}"
+  local dir="${HERDR_PLUGIN_STATE_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/sesh}"
   mkdir -p "$dir"
   print -r -- "$dir"
 }
@@ -40,8 +43,8 @@ list_workspaces() {
     ($panes.result.panes // []) as $p
     | .result.workspaces[]?
     | . as $w
-    | ($w.worktree.checkout_path
-        // ([$p[] | select(.workspace_id == $w.workspace_id) | .cwd] | first)
+    | (([$p[] | select(.workspace_id == $w.workspace_id) | .cwd] | first)
+        // $w.worktree.checkout_path
         // "") as $cwd
     | [$w.workspace_id, ($w.label // ""), ($w.focused | tostring), $cwd,
        ($w.agent_status // ""), (($w.worktree.is_linked_worktree // false) | tostring),

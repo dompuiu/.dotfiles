@@ -1,5 +1,5 @@
-id = "herdr-sesh"
-name = "herdr-sesh"
+id = "sesh"
+name = "sesh"
 version = "0.1.0"
 description = "Sesh-style fzf workspace picker (open workspaces, saved sessions, zoxide) plus previous-workspace jump. zsh on Linux/macOS, pwsh on Windows."
 min_herdr_version = "0.8.2"

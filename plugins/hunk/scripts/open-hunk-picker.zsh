@@ -3,10 +3,10 @@
 # invoking pane's project. Usage: open-hunk-picker.zsh [split|tab]
 setopt pipe_fail no_unset
 
-herdr_bin="${HERDR_BIN_PATH:-herdr}"
+source "${0:A:h}/lib.zsh"
 placement="${1:-split}"
 
-(( $+commands[jq] )) || { "$herdr_bin" notification show 'herdr-hunk: jq not found on PATH' --position top-right; exit 1; }
+(( $+commands[jq] )) || { "$herdr_bin" notification show 'hunk: jq not found on PATH' --position top-right; exit 1; }
 
 # Root the picker at the invoking pane's directory, not the plugin install
 # dir. Context JSON is injected by herdr on action invoke; fall back to the
@@ -38,8 +38,13 @@ if [[ "$placement" == split ]]; then
   done
 fi
 
+if [[ "$placement" == split ]] && in_tuios; then
+  anchor="$(focused_pane_id)"
+  [[ -n "$anchor" ]] && tuios_split_right "$anchor" "$cwd" --focus picker.zsh && exit 0
+fi
+
 open_args=(plugin pane open
-  --plugin herdr-hunk --entrypoint hunk-picker
+  --plugin hunk --entrypoint hunk-picker
   --placement "$placement" --focus
   --cwd "$cwd")
 [[ "$placement" == split ]] && open_args+=(--direction right)

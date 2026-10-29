@@ -4,7 +4,7 @@
 $ErrorActionPreference = 'Continue'
 $PSNativeCommandUseErrorActionPreference = $false
 
-$herdrBin = if ($env:HERDR_BIN_PATH) { $env:HERDR_BIN_PATH } else { 'herdr' }
+. (Join-Path $PSScriptRoot 'lib.ps1')
 $placement = if ($args.Count -ge 1 -and $args[0]) { $args[0] } else { 'split' }
 
 # Root the picker at the invoking pane's directory, not the plugin install
@@ -45,8 +45,13 @@ if ($placement -eq 'split') {
   } catch {}
 }
 
+if ($placement -eq 'split' -and (Test-Tuios)) {
+  $anchor = Get-FocusedPaneId
+  if ($anchor -and (Invoke-TuiosSplitRight $anchor $cwd '--focus' 'picker.ps1')) { exit 0 }
+}
+
 $openArgs = @('plugin', 'pane', 'open',
-  '--plugin', 'herdr-hunk', '--entrypoint', 'hunk-picker-win',
+  '--plugin', 'hunk', '--entrypoint', 'hunk-picker-win',
   '--placement', $placement, '--focus',
   '--cwd', $cwd)
 if ($placement -eq 'split') { $openArgs += @('--direction', 'right') }

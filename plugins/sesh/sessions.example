@@ -1,4 +1,4 @@
-# Copy to "$(herdr plugin config-dir herdr-sesh)/sessions".
+# Copy to "$(herdr plugin config-dir sesh)/sessions".
 # One session per line:  name | path | startup command (optional)
 # ~ and $VARS are expanded in the path. A session whose name matches an
 # open workspace label is focused instead of recreated.

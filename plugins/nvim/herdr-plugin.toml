@@ -1,5 +1,5 @@
-id = "herdr-nvim"
-name = "herdr-nvim"
+id = "nvim"
+name = "nvim"
 version = "0.1.0"
 description = "Open nvim in a right split at the focused pane's cwd; the pane closes when nvim exits."
 min_herdr_version = "0.7.0"

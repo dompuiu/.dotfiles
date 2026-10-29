@@ -24,6 +24,7 @@ function Get-DotfileSources {
         $rel = [IO.Path]::GetRelativePath($Root, $item.FullName).Replace('\', '/')
         if ($rel -eq '.git' -or $rel.StartsWith('.git/')) { continue }
         if ($rel -eq 'bin' -or $rel.StartsWith('bin/')) { continue }
+        if ($rel -eq 'plugins' -or $rel.StartsWith('plugins/')) { continue }
         if ($item.Name -like 'README*') { continue }
         $sources.Add($item.FullName)
     }

@@ -26,7 +26,7 @@ edit_scrollback = "prefix+e"
 swap_pane_left = "prefix+{"
 swap_pane_right = "prefix+}"
 cycle_pane_next = "prefix+tab"
-open_notification_target = "prefix+shift+o" # prefix+alt+o -> herdr-sesh picker
+open_notification_target = "prefix+shift+o" # prefix+alt+o -> sesh picker
 
 # Direct focus, no prefix: zellij locked Ctrl+h/j/k/l (navigator plugin).
 # Note: shells/editors also see these; use prefix+h/j/k/l on conflict.
@@ -62,39 +62,39 @@ description = "move pane to new tab"
 [[keys.command]]
 key = "prefix+alt+v"
 type = "plugin_action"
-command = "herdr-nvim.open"
+command = "nvim.open"
 description = "nvim side pane"
 
 
 [[keys.command]] # hunk picker in a split (fzf: working tree / staged / commit / range / stash)
 key = "prefix+alt+i"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-picker --plugin herdr-hunk || herdr plugin action invoke open-hunk-picker-win --plugin herdr-hunk"
+command = "herdr plugin action invoke open-hunk-picker --plugin hunk || herdr plugin action invoke open-hunk-picker-win --plugin hunk"
 
 [[keys.command]] # hunk picker in its own tab
 key = "prefix+alt+shift+i"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-picker-tab --plugin herdr-hunk || herdr plugin action invoke open-hunk-picker-tab-win --plugin herdr-hunk"
+command = "herdr plugin action invoke open-hunk-picker-tab --plugin hunk || herdr plugin action invoke open-hunk-picker-tab-win --plugin hunk"
 
 [[keys.command]] # live hunk diff in a split (open / focus / close)
 key = "prefix+alt+d"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-watch --plugin herdr-hunk || herdr plugin action invoke open-hunk-watch-win --plugin herdr-hunk"
+command = "herdr plugin action invoke open-hunk-watch --plugin hunk || herdr plugin action invoke open-hunk-watch-win --plugin hunk"
 
 [[keys.command]] # autodiff on/off
 key = "ctrl+alt+a"
 type = "shell"
-command = "herdr plugin action invoke toggle-autodiff --plugin herdr-hunk || herdr plugin action invoke toggle-autodiff-win --plugin herdr-hunk"
+command = "herdr plugin action invoke toggle-autodiff --plugin hunk || herdr plugin action invoke toggle-autodiff-win --plugin hunk"
 
 [[keys.command]] # sesh picker: open workspaces / saved sessions / zoxide
 key = "prefix+alt+o"
 type = "shell"
-command = "herdr plugin action invoke open-picker --plugin herdr-sesh || herdr plugin action invoke open-picker-win --plugin herdr-sesh"
+command = "herdr plugin action invoke open-picker --plugin sesh || herdr plugin action invoke open-picker-win --plugin sesh"
 
 [[keys.command]] # previous workspace
 key = "prefix+;"
 type = "shell"
-command = "herdr plugin action invoke last --plugin herdr-sesh || herdr plugin action invoke last-win --plugin herdr-sesh"
+command = "herdr plugin action invoke last --plugin sesh || herdr plugin action invoke last-win --plugin sesh"
 
 [[keys.command]]
 key = "prefix+alt+t"

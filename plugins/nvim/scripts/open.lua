@@ -12,7 +12,7 @@ local function run(args)
 end
 
 local function notify(msg)
-  run({ "notification", "show", "herdr-nvim: " .. msg, "--position", "top-right" })
+  run({ "notification", "show", "nvim: " .. msg, "--position", "top-right" })
 end
 
 local function decode(s)
@@ -61,9 +61,49 @@ for _, c in ipairs({
 end
 cwd = cwd or vim.uv.os_homedir()
 
+-- tuios runs herdr plugins through a herdr-compatible CLI of its own. It
+-- ignores --direction on `plugin pane open`, and on `pane split` as soon as
+-- --cwd or --env is passed. So split the rightmost pane plain, label it like
+-- herdr does, then cd and exec nvim in its shell.
+local function in_tuios()
+  return os.getenv("TUIOS_PLUGIN_ID") or os.getenv("TUIOS_SOCKET") or herdr:find("tuios", 1, true)
+end
+
+local function rightmost(pane_id)
+  local layout = decode(run({ "pane", "layout", "--pane", pane_id }).stdout)
+  local best, best_edge, best_h
+  for _, p in ipairs(layout and layout.result and layout.result.layout and layout.result.layout.panes or {}) do
+    if p.rect then
+      local edge, h = p.rect.x + p.rect.width, p.rect.height
+      if not best or edge > best_edge or (edge == best_edge and h > best_h) then
+        best, best_edge, best_h = p.pane_id, edge, h
+      end
+    end
+  end
+  return best
+end
+
+local function quote(s)
+  if vim.fn.has("win32") == 1 then return "'" .. s:gsub("'", "''") .. "'" end
+  return vim.fn.shellescape(s)
+end
+
+if in_tuios() and focused then
+  local target = rightmost(focused.pane_id) or focused.pane_id
+  local split = decode(run({ "pane", "split", "--pane", target, "--direction", "right", "--focus" }).stdout)
+  local id = split and split.result and split.result.pane and split.result.pane.pane_id
+  if id then
+    run({ "pane", "rename", id, "nvim" })
+    local cmd = vim.fn.has("win32") == 1
+        and ("Set-Location -LiteralPath " .. quote(cwd) .. "; nvim; exit")
+        or ("cd -- " .. quote(cwd) .. " && exec nvim")
+    os.exit(run({ "pane", "run", id, cmd }).code)
+  end
+end
+
 local open = run({
   "plugin", "pane", "open",
-  "--plugin", "herdr-nvim", "--entrypoint", "nvim",
+  "--plugin", "nvim", "--entrypoint", "nvim",
   "--placement", "split", "--direction", "right", "--focus",
   "--cwd", cwd,
 })

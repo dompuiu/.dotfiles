@@ -1,12 +1,17 @@
-# Shared helpers for herdr-sesh pwsh scripts. Dot-source, don't execute.
+# Shared helpers for sesh pwsh scripts. Dot-source, don't execute.
 $ErrorActionPreference = 'Continue'
 $PSNativeCommandUseErrorActionPreference = $false
 
 $script:HerdrBin = if ($env:HERDR_BIN_PATH) { $env:HERDR_BIN_PATH } else { 'herdr' }
-$script:PluginId = if ($env:HERDR_PLUGIN_ID) { $env:HERDR_PLUGIN_ID } else { 'herdr-sesh' }
+$script:PluginId = if ($env:HERDR_PLUGIN_ID) { $env:HERDR_PLUGIN_ID } else { 'sesh' }
+
+# tuios runs herdr plugins through a herdr-compatible CLI of its own.
+function Test-Tuios {
+  [bool]($env:TUIOS_PLUGIN_ID -or $env:TUIOS_SOCKET -or $script:HerdrBin -like '*tuios*')
+}
 
 function Show-Toast([string]$Message) {
-  & $script:HerdrBin notification show "herdr-sesh: $Message" --position top-right 2>$null | Out-Null
+  & $script:HerdrBin notification show "sesh: $Message" --position top-right 2>$null | Out-Null
 }
 
 function Assert-Command([string[]]$Names) {
@@ -21,7 +26,7 @@ function Assert-Command([string[]]$Names) {
 
 function Get-StateDir {
   $dir = $env:HERDR_PLUGIN_STATE_DIR
-  if (-not $dir) { $dir = Join-Path $env:LOCALAPPDATA 'herdr-sesh' }
+  if (-not $dir) { $dir = Join-Path $env:LOCALAPPDATA 'sesh' }
   New-Item -ItemType Directory -Force -Path $dir | Out-Null
   return $dir
 }

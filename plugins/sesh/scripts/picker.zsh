@@ -10,6 +10,7 @@ e=$'\e'
 c_reset="${e}[0m" c_dim="${e}[2m" c_herdr="${e}[1;35m" c_zox="${e}[1;32m" c_ses="${e}[1;33m"
 c_ok="${e}[32m" c_work="${e}[33m" c_block="${e}[31m" c_tree="${e}[90m"
 i_ws='󰆍' i_tree='↳' i_dir='' i_ses=''
+host='herdr'; in_tuios && host='tuios'
 
 home_short() { print -r -- "${1/#$HOME/~}"; }
 # Pad/truncate to a fixed display width.
@@ -31,8 +32,10 @@ current=''
 while IFS=$'\t' read -r id label focused cwd agent linked repo; do
   [[ -n "$id" ]] || continue
   ws_by_label[$label]="$id"; ws_label[$id]="$label"; ws_cwd[$id]="$cwd"
-  [[ "$focused" == true ]] && current="$id"
-  [[ -n "$cwd" ]] && seen_dirs+=("${cwd:A}")
+  # The current workspace's dir stays pickable from zoxide.
+  if [[ "$focused" == true ]]; then current="$id"
+  elif [[ -n "$cwd" ]]; then seen_dirs+=("${cwd:A}")
+  fi
   ws_rows+=("$id"$'\t'"$label"$'\t'"$cwd"$'\t'"$agent"$'\t'"$linked"$'\t'"$repo")
 done < <(list_workspaces)
 
@@ -77,7 +80,7 @@ for (( k = 1; k <= n; k++ )); do
     icon="$i_ws" name="$(fit "$label" 29)"
   fi
   [[ "$id" == "$current" ]] && name="${e}[1m${name}${c_reset}"
-  lines+=("ws"$'\t'"$id"$'\t'"$cwd"$'\t'"$(status_icon "$agent") ${c_herdr}${icon} herdr ${c_reset}  ${name}  ${c_dim}$(home_short "$cwd")${c_reset}")
+  lines+=("ws"$'\t'"$id"$'\t'"$cwd"$'\t'"$(status_icon "$agent") ${c_herdr}${icon} ${(r:5:)host} ${c_reset}  ${name}  ${c_dim}$(home_short "$cwd")${c_reset}")
 done
 
 # Saved sessions: "name | path | startup command"
@@ -117,7 +120,7 @@ footer="enter select · ctrl+j/k move · ctrl+/ preview · esc back"
 choice="$(print -rl -- "${lines[@]}" | fzf \
   --delimiter=$'\t' --with-nth=4 --ansi --no-sort --layout=reverse \
   --border=rounded --border-label=" ${c_herdr}Sesh Picker${c_reset} " --border-label-pos=3 \
-  --header="${c_herdr}herdr / sesh${c_reset}   ${c_dim}${#ws_rows} workspaces${c_reset}" --header-border=bottom \
+  --header="${c_herdr}${host} / sesh${c_reset}   ${c_dim}${#ws_rows} workspaces${c_reset}" --header-border=bottom \
   --footer="$footer" --footer-border=top \
   --prompt="Sesh> " --pointer='▌' --marker='+' --gutter=' ' \
   --info=inline-right --ghost='Filter workspaces' \

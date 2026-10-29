@@ -1,19 +1,19 @@
 #!/usr/bin/env zsh
 # Event hook for pane.agent_status_changed: when an agent goes idle with
 # uncommitted changes, open a live hunk diff split beside its pane (unfocused).
-# Opt out: touch "$(herdr plugin config-dir herdr-hunk)/autodiff-off"
+# Opt out: touch "$(herdr plugin config-dir hunk)/autodiff-off"
 setopt pipe_fail no_unset
 
 # Skip reasons go to stdout -> visible via `herdr plugin log`.
 skip() { print -r -- "skip: $1"; exit 0; }
 
-herdr_bin="${HERDR_BIN_PATH:-herdr}"
+source "${0:A:h}/lib.zsh"
 
 # herdr runs hooks with a minimal PATH.
 path=(/opt/homebrew/bin /usr/local/bin "$HOME/.local/bin" $path)
 
 cfg_dir="${HERDR_PLUGIN_CONFIG_DIR:-}"
-[[ -n "$cfg_dir" ]] || cfg_dir="$("$herdr_bin" plugin config-dir herdr-hunk 2>/dev/null | tail -n 1)"
+[[ -n "$cfg_dir" ]] || cfg_dir="$("$herdr_bin" plugin config-dir hunk 2>/dev/null | tail -n 1)"
 [[ -n "$cfg_dir" && -e "$cfg_dir/autodiff-off" ]] && skip 'autodiff off'
 
 (( $+commands[jq] )) || skip 'no jq on PATH'
@@ -65,15 +65,18 @@ sig="$( {
   done
 } | sha256 | cut -d' ' -f1)"
 
-state_dir="${HERDR_PLUGIN_STATE_DIR:-$HOME/.cache/herdr-hunk}"
+state_dir="${HERDR_PLUGIN_STATE_DIR:-$HOME/.cache/hunk}"
 mkdir -p "$state_dir" 2>/dev/null
 key_file="$state_dir/$(print -rn -- "${root:l}" | sha256 | cut -d' ' -f1).sig"
 [[ -f "$key_file" && "$(<"$key_file")" == "$sig" ]] && skip 'same sig'
 print -rn -- "$sig" >"$key_file" 2>/dev/null
 
 print -r -- "OPENING beside $pane_id in $root"
+if in_tuios; then
+  tuios_split_right "$pane_id" "$root" --no-focus hunk-diff.zsh && exit 0
+fi
 exec "$herdr_bin" plugin pane open \
-  --plugin herdr-hunk --entrypoint hunk-diff \
+  --plugin hunk --entrypoint hunk-diff \
   --placement split --direction right --no-focus \
   --target-pane "$pane_id" \
   --cwd "$root"

@@ -3,9 +3,9 @@
 # FOCUS if present but unfocused, CLOSE if it is the focused pane.
 setopt pipe_fail no_unset
 
-herdr_bin="${HERDR_BIN_PATH:-herdr}"
+source "${0:A:h}/lib.zsh"
 
-(( $+commands[jq] )) || { "$herdr_bin" notification show 'herdr-hunk: jq not found on PATH' --position top-right; exit 1; }
+(( $+commands[jq] )) || { "$herdr_bin" notification show 'hunk: jq not found on PATH' --position top-right; exit 1; }
 
 target_cwd() {
   local cwd
@@ -20,8 +20,14 @@ target_cwd() {
 }
 
 open_pane() {
+  local anchor cwd
+  if in_tuios; then
+    anchor="$(focused_pane_id)"
+    cwd="$(target_cwd)"
+    [[ -n "$anchor" ]] && tuios_split_right "$anchor" "$cwd" --focus hunk-diff.zsh && exit 0
+  fi
   exec "$herdr_bin" plugin pane open \
-    --plugin herdr-hunk --entrypoint hunk-diff \
+    --plugin hunk --entrypoint hunk-diff \
     --placement split --direction right --focus \
     --cwd "$(target_cwd)"
 }

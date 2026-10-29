@@ -14,7 +14,7 @@ path under `$HOME`, so editing a config in `~/.config` edits the repo:
 ~/.dotfiles/.zshenv                ->  ~/.zshenv
 ```
 
-`bin/` and `README.md` are not linked.
+`bin/`, `plugins/` and `README.md` are not linked.
 
 ## Install
 
@@ -32,7 +32,7 @@ path under `$HOME`, so editing a config in `~/.config` edits the repo:
 
 4. Open a new terminal. On first start zsh installs its plugin manager
    ([zi](https://github.com/z-shell/zi)) and plugins by itself.
-5. Optional: [link the herdr plugins](#herdr).
+5. Optional: [link the herdr/tuios plugins](#plugins).
 
 New files added to the repo are not linked automatically; run the install
 script again.
@@ -45,7 +45,7 @@ script again.
 | `bin/install.ps1`            | Windows version. Skips files that already exist unless `-Force`. Also sets `XDG_CONFIG_HOME` to `~\.config` (`-SkipXdg` to opt out). |
 | `bin/clean`                  | Removes the links `install` created. See below.                                                                  |
 | `bin/clean.ps1`              | Windows version of `clean`. Supports `-WhatIf` for a dry run.                                                    |
-| `bin/herdr-link-plugins`     | Links the herdr plugins in `.config/herdr/plugins` (`.ps1` for Windows).                                         |
+| `bin/link-plugins`           | Links the plugins in `plugins/` into herdr and/or tuios, whichever is installed, and unlinks stale ones (`.ps1` for Windows). |
 
 ### What `clean` removes
 
@@ -93,8 +93,8 @@ loaded when present and are not part of the repo.
 | `.wezterm.lua`           | [WezTerm](https://wezterm.org/)                | Alternative terminal. On Windows it opens WSL (Ubuntu 24.04) by default.        |
 | `.config/tmux/tmux.conf` | [tmux](https://github.com/tmux/tmux)           | Prefix `ctrl+z`. `prefix ctrl+o` opens tmux-sessionizer.                        |
 | `.config/zellij`         | [zellij](https://zellij.dev/)                  | Starts locked. Layouts: `oc` (opencode + lazygit) and `cc` (claude + lazygit). Includes a sessionizer plugin. |
-| `.config/herdr`          | [herdr](https://herdr.dev/)                    | Terminal workspace manager and its plugins. See [Herdr](#herdr).                |
-| `.config/tuios`          | [tuios](https://tuios.dev/)                    | herdr's keys on top of the tuios defaults; runs the herdr plugins unchanged.   |
+| `.config/herdr`          | [herdr](https://herdr.dev/)                    | Terminal workspace manager. See [Herdr and tuios](#herdr-and-tuios).                |
+| `.config/tuios`          | [tuios](https://tuios.dev/)                    | herdr's keys on top of the tuios defaults; runs the [plugins](#plugins) unchanged. |
 
 ### Git and CLI tools
 
@@ -130,36 +130,50 @@ loaded when present and are not part of the repo.
   [bob](https://github.com/MordechaiHadad/bob) (Neovim versions), pnpm, Rust (`~/.cargo/bin`).
 - The terminal, multiplexer and macOS tools you want from the tables above.
 
-## Herdr
+## Herdr and tuios
 
 - [herdr](https://herdr.dev/) 0.8.2+ - terminal workspace manager (`.config/herdr`)
-- [hunk](https://hunk.dev/) - diff viewer for `herdr-hunk`
+- [tuios](https://tuios.dev/) - terminal window manager (`.config/tuios`); runs herdr plugins as they are
+- [hunk](https://hunk.dev/) - diff viewer for the `hunk` plugin
 
 ### Plugins
 
-Local plugins live in `.config/herdr/plugins`. Link them all so
-herdr loads them straight from the repo:
+Local plugins live in `plugins/`, outside `.config`, because both herdr and
+tuios load them. Link them all so they load straight from the repo:
 
 ```sh
-bin/herdr-link-plugins          # macOS / Linux
+bin/link-plugins          # macOS / Linux
 ```
 
 ```powershell
-bin/herdr-link-plugins.ps1      # Windows
+bin/link-plugins.ps1      # Windows
 ```
 
-The script links every directory with a `herdr-plugin.toml`, prints `linked <name>` or `failed <name>` for each one, and is safe to re-run after adding a plugin.
+The script checks which of herdr and tuios is on `PATH` and skips the missing
+one. With herdr it runs `herdr plugin link` for every directory with a
+`herdr-plugin.toml`. tuios also reads herdr's plugin list, so with both present
+it only enables the plugins in tuios; with tuios alone it runs
+`tuios plugins link --enable`. It prints `<host>: linked <name>` or
+`<host>: failed <name>` per plugin and is safe to re-run after adding one.
+
+Before linking, it removes plugins that point into this repo but no longer
+match a folder in `plugins/` (renamed, moved or deleted), e.g. the old
+`herdr-sesh` links from `.config/herdr/plugins`. In tuios it turns them off
+first, then unlinks them from herdr. Plugins from elsewhere, like `herdr-tsk`,
+are left alone. Run it from a terminal outside tuios, and again after moving
+the repo.
 
 | Plugin                                                                                                | Keys                                                   | Requires      | Optional    |
 | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------- | ----------- |
-| `herdr-sesh` - workspace picker (open workspaces, saved sessions, zoxide) and previous-workspace jump | `prefix+alt+o`, `prefix+;`                                 | fzf 0.65+, jq | zoxide, eza |
-| `herdr-hunk` - hunk diff picker, live diff and agent-idle autodiff                                    | `prefix+alt+i`, `prefix+alt+shift+i`, `prefix+alt+d`, `ctrl+alt+a` | hunk, fzf, jq |             |
-| `herdr-nvim` - nvim side pane                                                                         | `prefix+alt+v`                                             | nvim          |             |
+| `sesh` - workspace picker (open workspaces, saved sessions, zoxide) and previous-workspace jump | `prefix+alt+o`, `prefix+;`                                 | fzf 0.65+, jq | zoxide, eza |
+| `hunk` - hunk diff picker, live diff and agent-idle autodiff                                    | `prefix+alt+i`, `prefix+alt+shift+i`, `prefix+alt+d`, `ctrl+alt+a` | hunk, fzf, jq |             |
+| `nvim` - nvim side pane                                                                         | `prefix+alt+v`                                             | nvim          |             |
 
 Plugin scripts use zsh on macOS/Linux and
 [PowerShell 7](https://github.com/PowerShell/PowerShell) (`pwsh`) on Windows;
 jq is not needed on Windows. A Nerd Font is needed for the picker icons.
 
-`herdr-sesh` saved sessions go in `$(herdr plugin config-dir herdr-sesh)/sessions`,
+`sesh` saved sessions go in `$(herdr plugin config-dir sesh)/sessions`,
 one `name | path | startup command` per line;
-see `.config/herdr/plugins/herdr-sesh/sessions.example`.
+see `plugins/sesh/sessions.example`. In tuios the picker labels open
+sessions `tuios` and in herdr it labels them `herdr`.

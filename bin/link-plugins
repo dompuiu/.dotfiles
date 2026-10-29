@@ -1,0 +1,90 @@
+#!/bin/bash
+# Link every plugin kept in .dotfiles/plugins (any dir with a herdr-plugin.toml)
+# into herdr and/or tuios, whichever is installed, so they load straight from
+# the repo. tuios also reads herdr's plugin list, so when herdr is present the
+# plugins are only enabled in tuios; otherwise tuios links them itself.
+# Plugins linked from this repo that no longer exist here (renamed, moved or
+# deleted) are unlinked first. Run from a terminal outside tuios.
+
+files_dir=$(realpath "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/../")
+plugins_dir="$files_dir/plugins"
+
+has_herdr=false has_tuios=false
+command -v herdr >/dev/null 2>&1 && has_herdr=true
+command -v tuios >/dev/null 2>&1 && has_tuios=true
+if ! $has_herdr && ! $has_tuios; then
+  echo "neither herdr nor tuios found on PATH" >&2
+  exit 1
+fi
+$has_herdr || echo "herdr not found, skipping it"
+$has_tuios || echo "tuios not found, skipping it"
+
+status=0
+run() { # run <host> <verb> <name> <cmd...>
+  local host=$1 verb=$2 name=$3 out
+  shift 3
+  if out=$("$@" 2>&1) && ! grep -qi '"error"' <<<"$out"; then
+    echo "$host: $verb $name"
+  else
+    echo "$host: failed to $verb $name: $out" >&2
+    status=1
+  fi
+}
+
+# "id<TAB>dir" for every plugin in the repo.
+current=()
+for manifest in "$plugins_dir"/*/herdr-plugin.toml; do
+  [ -f "$manifest" ] || continue
+  id=$(sed -nE 's/^id[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' "$manifest" | head -n 1)
+  current+=("$id"$'\t'"$(dirname "$manifest")")
+done
+
+# A linked plugin is stale when it points into this repo but its id and folder
+# don't match a plugin that is in the repo now.
+is_stale() { # is_stale <id> <dir>
+  local entry
+  [[ $2 == "$files_dir"/* ]] || return 1
+  for entry in "${current[@]}"; do
+    [[ $entry == "$1"$'\t'"$2" ]] && return 1
+  done
+  return 0
+}
+
+# Handle tuios first: plugins it reads from herdr vanish once herdr unlinks them.
+tuios_stale=()
+if $has_tuios && command -v jq >/dev/null 2>&1; then
+  while IFS=$'\t' read -r id origin manifest; do
+    [ -n "$id" ] || continue
+    is_stale "$id" "$(dirname "$manifest")" && tuios_stale+=("$id"$'\t'"$origin")
+  done < <(tuios plugins list --json 2>/dev/null |
+    jq -r '.[] | [.plugin_id, .origin, .manifest_path] | @tsv')
+fi
+
+for entry in "${tuios_stale[@]}"; do
+  id=${entry%%$'\t'*} origin=${entry#*$'\t'}
+  if [[ $origin == herdr ]]; then
+    run tuios disabled "$id" tuios plugins disable "$id"
+  else
+    run tuios unlinked "$id" tuios plugins unlink "$id"
+  fi
+done
+
+if $has_herdr; then
+  while read -r id dir; do
+    is_stale "$id" "$dir" && run herdr unlinked "$id" herdr plugin unlink "$id"
+  done < <(herdr plugin list 2>/dev/null | sed -nE 's/^- ([^ ]+) .*\[local:(.*)\]$/\1 \2/p')
+fi
+
+for entry in "${current[@]}"; do
+  id=${entry%%$'\t'*} dir=${entry#*$'\t'}
+  $has_herdr && run herdr linked "$id" herdr plugin link "$dir"
+  if $has_tuios; then
+    if $has_herdr; then
+      run tuios enabled "$id" tuios plugins enable "$id"
+    else
+      run tuios linked "$id" tuios plugins link "$dir" --enable
+    fi
+  fi
+done
+
+exit $status

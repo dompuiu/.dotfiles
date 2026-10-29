@@ -6,7 +6,7 @@
 $ErrorActionPreference = 'Continue'
 $PSNativeCommandUseErrorActionPreference = $false
 
-$herdrBin = if ($env:HERDR_BIN_PATH) { $env:HERDR_BIN_PATH } else { 'herdr' }
+. (Join-Path $PSScriptRoot 'lib.ps1')
 
 function Get-TargetCwd {
   $ctxRaw = $env:HERDR_PLUGIN_CONTEXT_JSON
@@ -29,8 +29,12 @@ function Get-TargetCwd {
 }
 
 function Open-Pane {
+  if (Test-Tuios) {
+    $anchor = Get-FocusedPaneId
+    if ($anchor -and (Invoke-TuiosSplitRight $anchor (Get-TargetCwd) '--focus' 'hunk-diff.ps1')) { exit 0 }
+  }
   & $herdrBin plugin pane open `
-    --plugin herdr-hunk --entrypoint hunk-diff-win `
+    --plugin hunk --entrypoint hunk-diff-win `
     --placement split --direction right --focus `
     --cwd (Get-TargetCwd)
   exit $LASTEXITCODE
