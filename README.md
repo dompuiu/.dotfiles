@@ -14,9 +14,6 @@
 
 - Shells
   - [zsh](https://www.zsh.org/)
-  - [fish](https://fishshell.com/)
-    - [fisher](https://github.com/jorgebucaran/fisher)
-  - [nushell](https://www.nushell.sh/)
 - [starship](https://starship.rs/) - Prompt theme engine
 - Tools
   - [fd](https://github.com/sharkdp/fd)

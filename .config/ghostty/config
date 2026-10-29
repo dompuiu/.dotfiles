@@ -38,9 +38,6 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 
-
-#command = /opt/homebrew/bin/fish
-
 # Terminal Settings
 term = xterm-ghostty
 

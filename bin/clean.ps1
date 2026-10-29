@@ -25,16 +25,7 @@ function Get-DotfileSources {
         if ($rel -eq '.git' -or $rel.StartsWith('.git/')) { continue }
         if ($rel -eq 'bin' -or $rel.StartsWith('bin/')) { continue }
         if ($item.Name -like 'README*') { continue }
-        if ($rel.StartsWith('.config/fish/')) { continue }
         $sources.Add($item.FullName)
-    }
-    foreach ($p in @(
-        '.config/fish/functions', '.config/fish/completions', '.config/fish/conf.d',
-        '.config/fish/themes', '.config/fish/config.fish', '.config/fish/environment.fish',
-        '.config/fish/fish_plugins'
-    )) {
-        $full = Join-Path $Root $p
-        if (Test-Path $full) { $sources.Add((Get-Item $full).FullName) }
     }
     return $sources
 }
