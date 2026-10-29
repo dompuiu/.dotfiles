@@ -1,0 +1,82 @@
+id = "herdr-sesh"
+name = "herdr-sesh"
+version = "0.1.0"
+description = "Sesh-style fzf workspace picker (open workspaces, saved sessions, zoxide) plus previous-workspace jump. zsh on Linux/macOS, pwsh on Windows."
+min_herdr_version = "0.8.2"
+platforms = ["linux", "macos", "windows"]
+
+# herdr rejects duplicate ids even when platforms differ, so Windows entries
+# carry a "-win" suffix. Key bindings invoke the plain id and fall back to
+# the "-win" one.
+#
+# Pane script paths resolve via HERDR_PLUGIN_ROOT (pane cwd isn't the plugin root).
+
+# --- Linux / macOS (zsh) ---------------------------------------------------
+
+[[panes]]
+id = "picker"
+title = "sesh"
+placement = "overlay"
+platforms = ["linux", "macos"]
+command = ["zsh", "-c", "exec zsh \"$HERDR_PLUGIN_ROOT/scripts/picker.zsh\""]
+
+[[actions]]
+id = "open-picker"
+title = "Sesh picker"
+description = "fzf over open workspaces, saved sessions and zoxide dirs; focus or create."
+contexts = ["workspace", "pane"]
+platforms = ["linux", "macos"]
+command = ["zsh", "scripts/open-picker.zsh"]
+
+[[actions]]
+id = "last"
+title = "Previous workspace"
+description = "Jump to the most recently used workspace."
+contexts = ["workspace", "pane"]
+platforms = ["linux", "macos"]
+command = ["zsh", "scripts/last.zsh"]
+
+[[events]]
+on = "workspace.focused"
+platforms = ["linux", "macos"]
+command = ["zsh", "scripts/track.zsh"]
+
+[[events]]
+on = "workspace.closed"
+platforms = ["linux", "macos"]
+command = ["zsh", "scripts/track.zsh"]
+
+# --- Windows (pwsh) --------------------------------------------------------
+
+[[panes]]
+id = "picker-win"
+title = "sesh"
+placement = "overlay"
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "& (Join-Path $env:HERDR_PLUGIN_ROOT 'scripts/picker.ps1')"]
+
+[[actions]]
+id = "open-picker-win"
+title = "Sesh picker"
+description = "fzf over open workspaces, saved sessions and zoxide dirs; focus or create."
+contexts = ["workspace", "pane"]
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/open-picker.ps1"]
+
+[[actions]]
+id = "last-win"
+title = "Previous workspace"
+description = "Jump to the most recently used workspace."
+contexts = ["workspace", "pane"]
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/last.ps1"]
+
+[[events]]
+on = "workspace.focused"
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/track.ps1"]
+
+[[events]]
+on = "workspace.closed"
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/track.ps1"]

@@ -26,6 +26,7 @@ edit_scrollback = "prefix+e"
 swap_pane_left = "prefix+{"
 swap_pane_right = "prefix+}"
 cycle_pane_next = "prefix+tab"
+open_notification_target = "prefix+shift+o" # prefix+o -> herdr-sesh picker
 
 # Direct focus, no prefix: zellij locked Ctrl+h/j/k/l (navigator plugin).
 # Note: shells/editors also see these; use prefix+h/j/k/l on conflict.
@@ -84,6 +85,16 @@ command = "herdr plugin action invoke open-hunk-watch --plugin herdr-hunk || her
 key = "ctrl+alt+a"
 type = "shell"
 command = "herdr plugin action invoke toggle-autodiff --plugin herdr-hunk || herdr plugin action invoke toggle-autodiff-win --plugin herdr-hunk"
+
+[[keys.command]] # sesh picker: open workspaces / saved sessions / zoxide
+key = "prefix+o"
+type = "shell"
+command = "herdr plugin action invoke open-picker --plugin herdr-sesh || herdr plugin action invoke open-picker-win --plugin herdr-sesh"
+
+[[keys.command]] # previous workspace
+key = "prefix+;"
+type = "shell"
+command = "herdr plugin action invoke last --plugin herdr-sesh || herdr plugin action invoke last-win --plugin herdr-sesh"
 
 [[keys.command]]
 key = "prefix+t"
