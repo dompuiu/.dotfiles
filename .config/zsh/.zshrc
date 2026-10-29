@@ -55,8 +55,6 @@ zicdreplay -q
 # Zoxide. The OPZP plugin doesn't let you provide flags to the init command.
 checkIfCommandExists "zoxide" && eval "$(zoxide init zsh --cmd cd)"
 
-checkIfFileExists ${HOME}/.iterm2_shell_integration.zsh || source "${HOME}/.iterm2_shell_integration.zsh"
-
 ! checkIfCommandExists "fd" && checkIfCommandExists "fdfind" && alias fd="fdfind"
 alias realfind="/usr/bin/find"
 checkIfCommandExists "fd" && alias find="fd"
