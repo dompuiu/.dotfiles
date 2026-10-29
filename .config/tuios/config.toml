@@ -35,6 +35,7 @@ swap_right = ["}"]                            # tmux swap-pane -D
 close_workspace = ["shift+x"]                 # delete tab (asks first)
 prefix_close_session = ["shift+d"]            # delete session (was X)
 prefix_debug = []                             # was D; taken by prefix_close_session
+new_session = ["shift+n"]                     # new session (also N in window mode)
 
 # prefix+digit switches tab (workspace), not pane. tuios has no workspace 0.
 prefix_select_0 = []
