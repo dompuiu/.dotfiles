@@ -1,23 +1,25 @@
 return {
+  -- Replaced by live-preview.nvim (pure Lua, no node build step).
+  { "iamcco/markdown-preview.nvim", enabled = false },
   {
-    -- Install markdown preview, use npx if available.
-    "iamcco/markdown-preview.nvim",
-    lazy = true,
-    event = "VeryLazy",
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    ft = { "markdown" },
-    build = function(plugin)
-      if vim.fn.executable("npx") then
-        vim.cmd("!cd " .. plugin.dir .. " && cd app && npx --yes yarn install")
-      else
-        vim.cmd([[Lazy load markdown-preview.nvim]])
-        vim.fn["mkdp#util#install"]()
-      end
-    end,
-    init = function()
-      if vim.fn.executable("npx") then
-        vim.g.mkdp_filetypes = { "markdown" }
-      end
-    end,
+    "brianhuster/live-preview.nvim",
+    dependencies = { "folke/snacks.nvim" },
+    cmd = "LivePreview",
+    keys = {
+      {
+        "<leader>cp",
+        function()
+          if vim.g.live_preview_running then
+            vim.cmd("LivePreview close")
+            vim.g.live_preview_running = false
+          else
+            vim.cmd("LivePreview start")
+            vim.g.live_preview_running = true
+          end
+        end,
+        ft = "markdown",
+        desc = "Markdown Preview",
+      },
+    },
   },
 }
