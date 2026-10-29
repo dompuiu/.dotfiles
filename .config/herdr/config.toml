@@ -45,9 +45,10 @@ resize_mode = "prefix+r"
 # Sessions/workspaces: tmux-ish
 detach = "prefix+q"
 workspace_picker = "prefix+w"
-goto = "prefix+g"
+goto = "prefix+shift+g"
 reload_config = "prefix+shift+r"
 toggle_sidebar = "prefix+b"
+new_worktree = "prefix+shift+u"
 
 # Agents: one-shot jumps (no persistent picker mode in herdr)
 next_agent = "prefix+a"
