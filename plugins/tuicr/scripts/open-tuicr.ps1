@@ -7,6 +7,11 @@ $PSNativeCommandUseErrorActionPreference = $false
 . (Join-Path $PSScriptRoot 'lib.ps1')
 $placement = if ($args.Count -ge 1 -and $args[0]) { $args[0] } else { 'split' }
 
+if (-not (Get-TuicrPath)) {
+  & $herdrBin notification show 'tuicr not found: mise use -g github:agavra/tuicr@0.28.0, then restart herdr from an activated terminal' --position top-right 2>$null | Out-Null
+  exit 1
+}
+
 $cwd = Get-TargetCwd
 
 # Re-pressing the key in split mode: close any existing tuicr pane in the

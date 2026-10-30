@@ -67,3 +67,32 @@ function Get-TargetCwd {
   } catch {}
   return $HOME
 }
+
+# Resolve the tuicr binary. Panes run under `pwsh -NoProfile` with the herdr
+# server's PATH, so interactive-shell setup (e.g. `mise activate`, which puts
+# tuicr on PATH only in that session) never applies there. Check, in order:
+# PATH, `mise which tuicr`, the mise shims dir, and the mise install dirs.
+# Returns the full path, 'tuicr' when found on PATH, or $null.
+function Get-TuicrPath {
+  if (Get-Command tuicr -ErrorAction SilentlyContinue) { return 'tuicr' }
+  if (Get-Command mise -ErrorAction SilentlyContinue) {
+    try {
+      $p = (& mise which tuicr 2>$null | Select-Object -Last 1)
+      if ($p -and (Test-Path -LiteralPath $p -PathType Leaf)) { return $p }
+    } catch {}
+  }
+  $localAppData = $env:LOCALAPPDATA
+  if (-not $localAppData -and $HOME) { $localAppData = Join-Path $HOME 'AppData\Local' }
+  if ($localAppData) {
+    $shim = Join-Path $localAppData 'mise\shims\tuicr.exe'
+    if (Test-Path -LiteralPath $shim -PathType Leaf) { return $shim }
+    $toolDir = Join-Path $localAppData 'mise\installs\github-agavra-tuicr'
+    if (Test-Path -LiteralPath $toolDir -PathType Container) {
+      $best = Get-ChildItem -LiteralPath $toolDir -Directory -ErrorAction SilentlyContinue |
+        Where-Object { Test-Path -LiteralPath (Join-Path $_.FullName 'tuicr.exe') } |
+        Sort-Object Name -Descending | Select-Object -First 1
+      if ($best) { return (Join-Path $best.FullName 'tuicr.exe') }
+    }
+  }
+  return $null
+}

@@ -1,7 +1,18 @@
 # Shared helpers for tuicr zsh scripts. Source, don't execute.
 
+# herdr runs hooks/actions with a minimal PATH (same as sesh's lib.zsh):
+# pick up Homebrew, cargo, ~/.local/bin and mise shims.
+path=(/opt/homebrew/bin /usr/local/bin "$HOME/.local/bin" "$HOME/.cargo/bin" "$HOME/.local/share/mise/shims" $path)
+
 herdr_bin="${HERDR_BIN_PATH:-herdr}"
 plugin_root="${${(%):-%x}:A:h:h}"
+
+# tuicr counts as present only if it exists AND runs: a mise shim with no
+# version configured exists on PATH but fails (that exact failure hid behind
+# the old $+commands check). Status 0/1, prints nothing.
+have_tuicr() {
+  (( $+commands[tuicr] )) && tuicr --version >/dev/null 2>&1
+}
 
 # tuios runs herdr plugins through a herdr-compatible CLI of its own.
 in_tuios() { [[ -n "${TUIOS_PLUGIN_ID:-}${TUIOS_SOCKET:-}" || "$herdr_bin" == *tuios* ]]; }

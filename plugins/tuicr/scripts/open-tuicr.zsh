@@ -7,6 +7,7 @@ source "${0:A:h}/lib.zsh"
 placement="${1:-split}"
 
 (( $+commands[jq] )) || { "$herdr_bin" notification show 'tuicr: jq not found on PATH' --position top-right; exit 1; }
+have_tuicr || { "$herdr_bin" notification show 'tuicr: tuicr not found or broken (mise use -g github:agavra/tuicr@0.28.0)' --position top-right; exit 1; }
 
 cwd="$(target_cwd)"
 

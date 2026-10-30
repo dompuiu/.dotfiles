@@ -8,6 +8,11 @@ $PSNativeCommandUseErrorActionPreference = $false
 
 . (Join-Path $PSScriptRoot 'lib.ps1')
 
+if (-not (Get-TuicrPath)) {
+  & $herdrBin notification show 'tuicr not found: mise use -g github:agavra/tuicr@0.28.0, then restart herdr from an activated terminal' --position top-right 2>$null | Out-Null
+  exit 1
+}
+
 function Open-Pane {
   if (Test-Tuios) {
     $anchor = Get-FocusedPaneId

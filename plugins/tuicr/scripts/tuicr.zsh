@@ -9,6 +9,9 @@ die() {
   exit 1
 }
 
-(( $+commands[tuicr] )) || die 'tuicr not found on PATH (brew install tuicr)'
+# For the repaired PATH (herdr panes inherit the server's minimal PATH).
+source "${0:A:h}/lib.zsh"
+
+have_tuicr || die 'tuicr not found or broken (try: mise use -g github:agavra/tuicr@0.28.0, then restart herdr)'
 
 exec tuicr "$@"
