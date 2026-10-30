@@ -22,18 +22,20 @@ if not (entrypoint and label and mode and placement and cmd[1]) then
   os.exit(2)
 end
 
--- herdr starts panes with its own PATH, which on Windows lacks tools that
--- `mise activate` adds in $PROFILE. Fall back to the "-mise" pane variant.
-if vim.fn.executable(cmd[1]) == 0 then
-  local ok, res = pcall(function()
-    return vim.system({ "mise", "which", cmd[1] }, { text = true }):wait()
-  end)
-  if not (ok and res.code == 0) then
-    notify(cmd[1] .. " not found on PATH or in mise")
-    os.exit(1)
-  end
+-- A mise-managed program may be on this launcher's PATH (inherited from an
+-- activated shell) but not on the PATH herdr spawns panes with (Windows), so
+-- PATH can't be trusted for it: run it through the "-mise" pane variant.
+-- Anything else (brew, winget, cargo, ...) is run directly.
+local has_mise_variant = entrypoint == "tuicr" or entrypoint == "tuicr-worktree"
+local in_mise = has_mise_variant and pcall(function()
+  assert(vim.system({ "mise", "which", cmd[1] }, { text = true }):wait().code == 0)
+end)
+if in_mise then
   entrypoint = entrypoint .. "-mise"
   cmd = vim.list_extend({ "mise", "exec", "--" }, cmd)
+elseif vim.fn.executable(cmd[1]) == 0 then
+  notify(cmd[1] .. " not found on PATH or in mise")
+  os.exit(1)
 end
 
 local function decode(s)
