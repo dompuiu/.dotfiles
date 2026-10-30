@@ -7,4 +7,4 @@ need jq fzf
 placement=overlay
 in_tuios && placement=zoomed
 
-"$herdr_bin" plugin pane open --plugin "$plugin_id" --entrypoint picker --placement "$placement"
+"$herdr_bin" plugin pane open --plugin "$plugin_id" --entrypoint picker --placement "$placement" --focus

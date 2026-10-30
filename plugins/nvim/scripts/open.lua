@@ -96,7 +96,7 @@ if in_tuios() and focused then
     run({ "pane", "rename", id, "nvim" })
     local cmd = vim.fn.has("win32") == 1
         and ("Set-Location -LiteralPath " .. quote(cwd) .. "; nvim; exit")
-        or ("cd -- " .. quote(cwd) .. " && exec nvim")
+        or ("builtin cd -- " .. quote(cwd) .. " && exec nvim")
     os.exit(run({ "pane", "run", id, cmd }).code)
   end
 end

@@ -25,7 +25,7 @@ tuios_split_right() {
     | jq -r '.result.pane.pane_id // empty' 2>/dev/null)"
   [[ -n "$id" ]] || return 1
   "$herdr_bin" pane rename "$id" hunk >/dev/null 2>&1
-  "$herdr_bin" pane run "$id" "cd -- ${(q)cwd} && exec zsh ${(q)hunk_root}/scripts/${(q)script}" >/dev/null
+  "$herdr_bin" pane run "$id" "builtin cd -- ${(q)cwd} && exec zsh ${(q)hunk_root}/scripts/${(q)script}" >/dev/null
 }
 
 focused_pane_id() {
