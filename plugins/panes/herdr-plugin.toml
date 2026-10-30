@@ -13,17 +13,35 @@ title = "nvim"
 placement = "split"
 command = ["nvim"]
 
+# herdr rejects duplicate ids even when platforms differ, so Windows entries
+# carry a "-win" suffix. open.lua appends "-win" on Windows.
 [[panes]]
 id = "tuicr"
 title = "tuicr"
 placement = "split"
-command = ["tuicr"]
+platforms = ["linux", "macos"]
+command = ["zsh", "-c", "exec zsh \"$HERDR_PLUGIN_ROOT/scripts/tuicr.zsh\""]
+
+[[panes]]
+id = "tuicr-win"
+title = "tuicr"
+placement = "split"
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "& (Join-Path $env:HERDR_PLUGIN_ROOT 'scripts/tuicr.ps1')"]
 
 [[panes]]
 id = "tuicr-worktree"
 title = "tuicr"
 placement = "split"
-command = ["tuicr", "-w"]
+platforms = ["linux", "macos"]
+command = ["zsh", "-c", "exec zsh \"$HERDR_PLUGIN_ROOT/scripts/tuicr.zsh\" -w"]
+
+[[panes]]
+id = "tuicr-worktree-win"
+title = "tuicr"
+placement = "split"
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "& (Join-Path $env:HERDR_PLUGIN_ROOT 'scripts/tuicr.ps1') -w"]
 
 # The launcher runs in headless nvim with --clean (no user config/plugins), so
 # one Lua script covers every platform and needs nothing beyond herdr + nvim.

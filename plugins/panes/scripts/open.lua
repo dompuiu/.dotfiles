@@ -22,10 +22,101 @@ if not (entrypoint and label and mode and placement and cmd[1]) then
   os.exit(2)
 end
 
-if vim.fn.executable(cmd[1]) == 0 then
-  notify(cmd[1] .. " not found on PATH")
+-- <resolve-bin>
+-- Resolve a binary the way the old tuicr lib scripts did. Panes and actions
+-- run with the herdr server's PATH (pwsh -NoProfile / minimal PATH on Unix),
+-- so interactive-shell setup like `mise activate` never applies there.
+-- Search, in order: PATH, `mise which`, the mise shims dir, and the mise
+-- install dirs (Windows) / known tool dirs (Unix). For tuicr, a candidate
+-- counts only if it runs (--version succeeds): a stale mise shim exists on
+-- PATH but fails, which used to hide behind a bare existence check.
+-- Returns a usable path/name, or nil.
+local function usable_bin(path, sanity)
+  if not path or path == "" then return nil end
+  if vim.fn.executable(path) ~= 1 then return nil end
+  if sanity then
+    local ok, res = pcall(function()
+      return vim.system({ path, "--version" }, { text = true }):wait()
+    end)
+    if not ok or not res or res.code ~= 0 then return nil end
+  end
+  return path
+end
+
+local function last_nonempty_line(s)
+  local last
+  for line in (s .. "\n"):gmatch("([^\r\n]*)\r?\n") do
+    line = vim.trim(line):gsub('^"(.*)"$', "%1")
+    if line ~= "" then last = line end
+  end
+  return last
+end
+
+local function resolve_bin(name)
+  local is_win = vim.fn.has("win32") == 1
+  local sanity = name == "tuicr"
+  local found = usable_bin(name, sanity)
+  if found then return found end
+
+  if usable_bin("mise", false) then
+    local ok, res = pcall(function()
+      return vim.system({ "mise", "which", name }, { text = true }):wait()
+    end)
+    if ok and res and res.code == 0 and res.stdout then
+      found = usable_bin(last_nonempty_line(res.stdout), sanity)
+      if found then return found end
+    end
+  end
+
+  if is_win then
+    local localappdata = vim.uv.os_getenv("LOCALAPPDATA") or os.getenv("LOCALAPPDATA")
+    if (not localappdata or localappdata == "") and vim.uv.os_homedir() then
+      localappdata = vim.uv.os_homedir() .. "\\AppData\\Local"
+    end
+    if localappdata and localappdata ~= "" then
+      local base = localappdata:gsub("\\", "/")
+      found = usable_bin(base .. "/mise/shims/" .. name .. ".exe", sanity)
+      if found then return found end
+      if name == "tuicr" then
+        local tool_dir = base .. "/mise/installs/github-agavra-tuicr"
+        if vim.fn.isdirectory(tool_dir) == 1 then
+          local dirs = vim.fn.glob(tool_dir .. "/*", false, true)
+          table.sort(dirs, function(a, b) return a > b end)
+          for _, d in ipairs(dirs) do
+            found = usable_bin(d .. "/tuicr.exe", sanity)
+            if found then return found end
+          end
+        end
+      end
+    end
+  else
+    local home = vim.uv.os_homedir() or os.getenv("HOME") or ""
+    for _, d in ipairs({
+      home .. "/.local/share/mise/shims",
+      home .. "/.local/bin",
+      home .. "/.cargo/bin",
+      "/opt/homebrew/bin",
+      "/usr/local/bin",
+    }) do
+      found = usable_bin(d .. "/" .. name, sanity)
+      if found then return found end
+    end
+  end
+
+  return nil
+end
+-- </resolve-bin>
+
+local bin = resolve_bin(cmd[1])
+if not bin then
+  if cmd[1] == "tuicr" then
+    notify("tuicr not found: mise use -g github:agavra/tuicr@0.28.0, then restart herdr from an activated terminal")
+  else
+    notify(cmd[1] .. " not found on PATH")
+  end
   os.exit(1)
 end
+cmd[1] = bin
 
 local function decode(s)
   if not s or s == "" then return nil end
@@ -103,6 +194,15 @@ end
 
 local win = vim.fn.has("win32") == 1
 
+-- The panes manifest keeps a single cross-platform entrypoint per program but
+-- Windows entries carry a "-win" suffix (herdr rejects duplicate ids across
+-- platforms). tuicr/nvim panes run bare binaries on Linux/macOS; only tuicr
+-- needs a Windows wrapper because it lives outside the server's frozen PATH.
+local function entrypoint_for_platform(ep)
+  if win and (ep == "tuicr" or ep == "tuicr-worktree") then return ep .. "-win" end
+  return ep
+end
+
 local function quote(s)
   if win then return "'" .. s:gsub("'", "''") .. "'" end
   return vim.fn.shellescape(s)
@@ -124,7 +224,7 @@ end
 
 local open_args = {
   "plugin", "pane", "open",
-  "--plugin", "panes", "--entrypoint", entrypoint,
+  "--plugin", "panes", "--entrypoint", entrypoint_for_platform(entrypoint),
   "--placement", placement, "--focus",
   "--cwd", cwd,
 }
