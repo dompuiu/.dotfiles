@@ -22,9 +22,18 @@ if not (entrypoint and label and mode and placement and cmd[1]) then
   os.exit(2)
 end
 
+-- herdr starts panes with its own PATH, which on Windows lacks tools that
+-- `mise activate` adds in $PROFILE. Fall back to the "-mise" pane variant.
 if vim.fn.executable(cmd[1]) == 0 then
-  notify(cmd[1] .. " not found on PATH")
-  os.exit(1)
+  local ok, res = pcall(function()
+    return vim.system({ "mise", "which", cmd[1] }, { text = true }):wait()
+  end)
+  if not (ok and res.code == 0) then
+    notify(cmd[1] .. " not found on PATH or in mise")
+    os.exit(1)
+  end
+  entrypoint = entrypoint .. "-mise"
+  cmd = vim.list_extend({ "mise", "exec", "--" }, cmd)
 end
 
 local function decode(s)

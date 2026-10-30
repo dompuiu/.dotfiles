@@ -25,6 +25,19 @@ title = "tuicr"
 placement = "split"
 command = ["tuicr", "-w"]
 
+# Used by open.lua when tuicr isn't on herdr's PATH (mise-managed on Windows).
+[[panes]]
+id = "tuicr-mise"
+title = "tuicr"
+placement = "split"
+command = ["mise", "exec", "--", "tuicr"]
+
+[[panes]]
+id = "tuicr-worktree-mise"
+title = "tuicr"
+placement = "split"
+command = ["mise", "exec", "--", "tuicr", "-w"]
+
 # The launcher runs in headless nvim with --clean (no user config/plugins), so
 # one Lua script covers every platform and needs nothing beyond herdr + nvim.
 # Usage: open.lua <entrypoint> <label> <focus|toggle|reopen|new> <split|tab> <cmd> [args...]
