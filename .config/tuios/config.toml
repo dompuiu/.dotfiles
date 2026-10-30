@@ -102,22 +102,28 @@ type = "plugin_action"
 command = "panes.tuicr-worktree"
 description = "tuicr uncommitted changes"
 
+# Plugin actions are per platform (sesh.open-picker vs sesh.open-picker-win,
+# herdr-tsk.open-board vs herdr-tsk.open-board-windows), so run them through a
+# shell and fall back on the other id, the way .config/herdr/config.toml does.
+# tuios runs a shell entry with cmd /C on Windows and sh -c elsewhere; both
+# understand `||`.
+
 [[keybindings.command]] # sesh picker: open sessions / saved sessions / zoxide
 key = "prefix+alt+o"
-type = "plugin_action"
-command = "sesh.open-picker"
+type = "shell"
+command = "tuios plugins run sesh open-picker || tuios plugins run sesh open-picker-win"
 description = "sesh picker"
 
 [[keybindings.command]] # previous session
 key = "prefix+;"
-type = "plugin_action"
-command = "sesh.last"
+type = "shell"
+command = "tuios plugins run sesh last || tuios plugins run sesh last-win"
 description = "previous session"
 
 [[keybindings.command]]
 key = "prefix+alt+t"
-type = "plugin_action"
-command = "herdr-tsk.open-board"
+type = "shell"
+command = "tuios plugins run herdr-tsk open-board-windows || tuios plugins run herdr-tsk open-board"
 description = "tsk board"
 
 [plugins]
@@ -128,4 +134,10 @@ enabled = false
 
 [appearance]
 theme = "tokyo_night_storm"
+# tuios tries powershell.exe (5.1) before pwsh.exe. 5.1 reads
+# Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1, so panes came
+# up with an empty profile. pwsh.exe runs PowerShell 7 and loads
+# Documents\PowerShell\Microsoft.PowerShell_profile.ps1. On macOS the name is
+# not found, and tuios falls back to $SHELL.
+preferred_shell = "pwsh.exe"
 nvim_navigation = true                        # alt+arrows cross nvim splits (tuios-nvim-navigator)
