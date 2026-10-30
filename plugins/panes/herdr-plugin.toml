@@ -1,0 +1,64 @@
+id = "panes"
+name = "panes"
+version = "0.1.0"
+description = "Open a program (nvim, tuicr) in a right split or tab at the focused pane's cwd; the pane closes when the program exits."
+min_herdr_version = "0.7.0"
+platforms = ["linux", "macos", "windows"]
+
+# Each program is the pane's own process, so quitting it closes the pane.
+# Pane ids double as pane labels, which open.lua uses to find existing panes.
+[[panes]]
+id = "nvim"
+title = "nvim"
+placement = "split"
+command = ["nvim"]
+
+[[panes]]
+id = "tuicr"
+title = "tuicr"
+placement = "split"
+command = ["tuicr"]
+
+[[panes]]
+id = "tuicr-worktree"
+title = "tuicr"
+placement = "split"
+command = ["tuicr", "-w"]
+
+# The launcher runs in headless nvim with --clean (no user config/plugins), so
+# one Lua script covers every platform and needs nothing beyond herdr + nvim.
+# Usage: open.lua <entrypoint> <label> <focus|toggle|reopen|new> <split|tab> <cmd> [args...]
+# <label> is the pane title; an existing pane with it in the focused tab is:
+#   focus:  focused, never closed (protects unsaved nvim buffers)
+#   toggle: focused, or closed if it is already focused
+#   reopen: closed, then a fresh one is opened
+#   new:    ignored, always open another
+[[actions]]
+id = "nvim"
+title = "nvim side pane"
+description = "Open nvim in a right split at the focused pane's cwd, or focus the existing one."
+command = ["nvim", "--clean", "--headless", "-l", "scripts/open.lua", "nvim", "nvim", "focus", "split", "nvim"]
+
+[[actions]]
+id = "nvim-tab"
+title = "nvim (tab)"
+description = "Open nvim in its own tab at the focused pane's cwd."
+command = ["nvim", "--clean", "--headless", "-l", "scripts/open.lua", "nvim", "nvim", "new", "tab", "nvim"]
+
+[[actions]]
+id = "tuicr"
+title = "tuicr"
+description = "Open tuicr (commit / working tree selector) in a split pane."
+command = ["nvim", "--clean", "--headless", "-l", "scripts/open.lua", "tuicr", "tuicr", "reopen", "split", "tuicr"]
+
+[[actions]]
+id = "tuicr-tab"
+title = "tuicr (tab)"
+description = "Open tuicr (commit / working tree selector) in its own tab."
+command = ["nvim", "--clean", "--headless", "-l", "scripts/open.lua", "tuicr", "tuicr", "new", "tab", "tuicr"]
+
+[[actions]]
+id = "tuicr-worktree"
+title = "tuicr uncommitted changes"
+description = "Toggle a tuicr review of uncommitted changes in a split pane (open / focus / close)."
+command = ["nvim", "--clean", "--headless", "-l", "scripts/open.lua", "tuicr-worktree", "tuicr", "toggle", "split", "tuicr", "-w"]
