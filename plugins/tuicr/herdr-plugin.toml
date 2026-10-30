@@ -1,0 +1,87 @@
+id = "tuicr"
+name = "tuicr"
+version = "0.1.0"
+description = "Open tuicr code review in a split or tab, or toggle a review of uncommitted changes. zsh on Linux/macOS, pwsh on Windows."
+min_herdr_version = "0.7.0"
+platforms = ["linux", "macos", "windows"]
+
+# herdr rejects duplicate ids even when platforms differ, so Linux/macOS use
+# plain ids and Windows entries carry a "-win" suffix. Key bindings invoke the
+# plain id and fall back to the "-win" one.
+#
+# Pane script paths can't be relative (they would resolve against the project
+# --cwd, not the plugin root), so resolve via HERDR_PLUGIN_ROOT.
+
+# --- Linux / macOS (zsh) ---------------------------------------------------
+
+[[panes]]
+id = "tuicr"
+title = "tuicr"
+placement = "split"
+platforms = ["linux", "macos"]
+command = ["zsh", "-c", "exec zsh \"$HERDR_PLUGIN_ROOT/scripts/tuicr.zsh\""]
+
+[[panes]]
+id = "tuicr-worktree"
+title = "tuicr"
+placement = "split"
+platforms = ["linux", "macos"]
+command = ["zsh", "-c", "exec zsh \"$HERDR_PLUGIN_ROOT/scripts/tuicr.zsh\" -w"]
+
+[[actions]]
+id = "open-tuicr"
+title = "tuicr"
+description = "Open tuicr (commit / working tree selector) in a split pane."
+platforms = ["linux", "macos"]
+command = ["zsh", "scripts/open-tuicr.zsh", "split"]
+
+[[actions]]
+id = "open-tuicr-tab"
+title = "tuicr (tab)"
+description = "Open tuicr (commit / working tree selector) in its own tab."
+platforms = ["linux", "macos"]
+command = ["zsh", "scripts/open-tuicr.zsh", "tab"]
+
+[[actions]]
+id = "open-tuicr-worktree"
+title = "tuicr uncommitted changes"
+description = "Toggle a tuicr review of uncommitted changes in a split pane (open / focus / close)."
+platforms = ["linux", "macos"]
+command = ["zsh", "scripts/open-tuicr-worktree.zsh"]
+
+# --- Windows (pwsh) --------------------------------------------------------
+
+[[panes]]
+id = "tuicr-win"
+title = "tuicr"
+placement = "split"
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "& (Join-Path $env:HERDR_PLUGIN_ROOT 'scripts/tuicr.ps1')"]
+
+[[panes]]
+id = "tuicr-worktree-win"
+title = "tuicr"
+placement = "split"
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", "& (Join-Path $env:HERDR_PLUGIN_ROOT 'scripts/tuicr.ps1') -w"]
+
+[[actions]]
+id = "open-tuicr-win"
+title = "tuicr"
+description = "Open tuicr (commit / working tree selector) in a split pane."
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/open-tuicr.ps1", "split"]
+
+[[actions]]
+id = "open-tuicr-tab-win"
+title = "tuicr (tab)"
+description = "Open tuicr (commit / working tree selector) in its own tab."
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/open-tuicr.ps1", "tab"]
+
+[[actions]]
+id = "open-tuicr-worktree-win"
+title = "tuicr uncommitted changes"
+description = "Toggle a tuicr review of uncommitted changes in a split pane (open / focus / close)."
+platforms = ["windows"]
+command = ["pwsh", "-NoLogo", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "scripts/open-tuicr-worktree.ps1"]

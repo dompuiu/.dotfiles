@@ -8,7 +8,7 @@
 #
 # The herdr plugins in plugins/ run unchanged in tuios. bin/link-plugins
 # links and enables them; or by hand, once, from a terminal OUTSIDE tuios:
-#   tuios plugins enable hunk sesh nvim herdr-tsk
+#   tuios plugins enable tuicr sesh nvim herdr-tsk
 #
 # Check keys with: tuios keybinds doctor
 
@@ -78,29 +78,23 @@ type = "plugin_action"
 command = "nvim.open"
 description = "nvim side pane"
 
-[[keybindings.command]] # hunk picker in a split
+[[keybindings.command]] # tuicr in a split
 key = "prefix+alt+i"
 type = "plugin_action"
-command = "hunk.open-hunk-picker"
-description = "hunk picker"
+command = "tuicr.open-tuicr"
+description = "tuicr"
 
-[[keybindings.command]] # hunk picker in its own tab
+[[keybindings.command]] # tuicr in its own tab
 key = "prefix+alt+shift+i"
 type = "plugin_action"
-command = "hunk.open-hunk-picker-tab"
-description = "hunk picker (tab)"
+command = "tuicr.open-tuicr-tab"
+description = "tuicr (tab)"
 
-[[keybindings.command]] # live hunk diff in a split (open / focus / close)
+[[keybindings.command]] # tuicr review of uncommitted changes in a split (open / focus / close)
 key = "prefix+alt+d"
 type = "plugin_action"
-command = "hunk.open-hunk-watch"
-description = "hunk live diff"
-
-[[keybindings.command]]
-key = "ctrl+alt+a"
-type = "plugin_action"
-command = "hunk.toggle-autodiff"
-description = "hunk autodiff on/off"
+command = "tuicr.open-tuicr-worktree"
+description = "tuicr uncommitted changes"
 
 [[keybindings.command]] # sesh picker: open sessions / saved sessions / zoxide
 key = "prefix+alt+o"
@@ -121,7 +115,7 @@ command = "herdr-tsk.open-board"
 description = "tsk board"
 
 [plugins]
-enabled = ["nvim", "hunk", "herdr-tsk", "sesh"]
+enabled = ["nvim", "tuicr", "herdr-tsk", "sesh"]
 
 [spotlight]
 enabled = false

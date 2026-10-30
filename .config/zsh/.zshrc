@@ -42,6 +42,8 @@ zi light Aloxaf/fzf-tab
 zi light wfxr/forgit
 
 checkIfCommandExists "zellij" && zellij setup --generate-completion zsh > ~/.zi/completions/_zellij
+checkIfCommandExists "tuios" && tuios completion zsh > ~/.zi/completions/_tuios
+checkIfCommandExists "herdr" && herdr completion zsh > ~/.zi/completions/_herdr
 
 # examples here -> https://wiki.zshell.dev/ecosystem/category/-annexes
 if [[ -d "$HOME/.zi/completions" ]]; then

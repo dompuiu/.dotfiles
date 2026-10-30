@@ -134,7 +134,7 @@ loaded when present and are not part of the repo.
 
 - [herdr](https://herdr.dev/) 0.8.2+ - terminal workspace manager (`.config/herdr`)
 - [tuios](https://tuios.dev/) - terminal window manager (`.config/tuios`); runs herdr plugins as they are
-- [hunk](https://hunk.dev/) - diff viewer for the `hunk` plugin
+- [tuicr](https://github.com/agavra/tuicr) - code review TUI for the `tuicr` plugin
 
 ### Plugins
 
@@ -166,7 +166,7 @@ the repo.
 | Plugin                                                                                                | Keys                                                   | Requires      | Optional    |
 | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------- | ----------- |
 | `sesh` - workspace picker (open workspaces, saved sessions, zoxide) and previous-workspace jump | `prefix+alt+o`, `prefix+;`                                 | fzf 0.65+, jq | zoxide, eza |
-| `hunk` - hunk diff picker, live diff and agent-idle autodiff                                    | `prefix+alt+i`, `prefix+alt+shift+i`, `prefix+alt+d`, `ctrl+alt+a` | hunk, fzf, jq |             |
+| `tuicr` - tuicr review in a split or tab, and uncommitted-changes review                       | `prefix+alt+i`, `prefix+alt+shift+i`, `prefix+alt+d`       | tuicr, jq     |             |
 | `nvim` - nvim side pane                                                                         | `prefix+alt+v`                                             | nvim          |             |
 
 Plugin scripts use zsh on macOS/Linux and

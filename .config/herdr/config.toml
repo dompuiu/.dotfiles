@@ -67,25 +67,20 @@ command = "nvim.open"
 description = "nvim side pane"
 
 
-[[keys.command]] # hunk picker in a split (fzf: working tree / staged / commit / range / stash)
+[[keys.command]] # tuicr in a split (commit / working tree selector)
 key = "prefix+alt+i"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-picker --plugin hunk || herdr plugin action invoke open-hunk-picker-win --plugin hunk"
+command = "herdr plugin action invoke open-tuicr --plugin tuicr || herdr plugin action invoke open-tuicr-win --plugin tuicr"
 
-[[keys.command]] # hunk picker in its own tab
+[[keys.command]] # tuicr in its own tab
 key = "prefix+alt+shift+i"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-picker-tab --plugin hunk || herdr plugin action invoke open-hunk-picker-tab-win --plugin hunk"
+command = "herdr plugin action invoke open-tuicr-tab --plugin tuicr || herdr plugin action invoke open-tuicr-tab-win --plugin tuicr"
 
-[[keys.command]] # live hunk diff in a split (open / focus / close)
+[[keys.command]] # tuicr review of uncommitted changes in a split (open / focus / close)
 key = "prefix+alt+d"
 type = "shell"
-command = "herdr plugin action invoke open-hunk-watch --plugin hunk || herdr plugin action invoke open-hunk-watch-win --plugin hunk"
-
-[[keys.command]] # autodiff on/off
-key = "ctrl+alt+a"
-type = "shell"
-command = "herdr plugin action invoke toggle-autodiff --plugin hunk || herdr plugin action invoke toggle-autodiff-win --plugin hunk"
+command = "herdr plugin action invoke open-tuicr-worktree --plugin tuicr || herdr plugin action invoke open-tuicr-worktree-win --plugin tuicr"
 
 [[keys.command]] # sesh picker: open workspaces / saved sessions / zoxide
 key = "prefix+alt+o"
