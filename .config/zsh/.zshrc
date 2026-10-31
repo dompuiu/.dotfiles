@@ -21,6 +21,8 @@ unset brew_prefix
 addPathToFront $HOME/.local/share/bob/nvim-bin
 addPathToFront $PNPM_HOME/bin
 addPathToFront $HOME/.local/bin
+addPathToFront /home/linuxbrew/.linuxbrew/bin
+addPathToFront /home/linuxbrew/.linuxbrew/sbin
 addPathToFront /opt/homebrew/bin
 addPathToFront /opt/homebrew/sbin
 addPathToFront $HOME/.cargo/bin
