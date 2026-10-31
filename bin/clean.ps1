@@ -61,7 +61,7 @@ function Get-LinkedParent {
 }
 
 $removed = 0
-$destParents = New-Object Collections.Generic.HashSet[string]
+$removedPaths = New-Object Collections.Generic.List[string]
 $handledParents = New-Object Collections.Generic.HashSet[string]([StringComparer]::OrdinalIgnoreCase)
 
 foreach ($source in (Get-DotfileSources $RepoRoot)) {
@@ -79,6 +79,7 @@ foreach ($source in (Get-DotfileSources $RepoRoot)) {
                     # Delete() removes only the link, never the repo contents behind it.
                     $linkedParent.Delete()
                     Write-Host "Removed directory link: $parentPath"
+                    $removedPaths.Add($parentPath)
                     $removed++
                 }
             } else {
@@ -89,7 +90,6 @@ foreach ($source in (Get-DotfileSources $RepoRoot)) {
     }
     $item = Get-Item $destination -Force -ErrorAction SilentlyContinue
     if (-not $item) { continue }
-    [void]$destParents.Add((Split-Path $destination -Parent))
     if ($item.LinkType) {
         $ours = $false
         foreach ($t in @($item.Target)) {
@@ -99,6 +99,7 @@ foreach ($source in (Get-DotfileSources $RepoRoot)) {
             if ($PSCmdlet.ShouldProcess($destination, 'Remove link')) {
                 Remove-Item $destination -Force
                 Write-Host "Removed link: $destination"
+                $removedPaths.Add($destination)
                 $removed++
             }
         } else {
@@ -122,23 +123,28 @@ if (Test-Path $configHome) {
             if ($PSCmdlet.ShouldProcess($item.FullName, 'Remove broken link')) {
                 Remove-Item $item.FullName -Force
                 Write-Host "Removed broken link: $($item.FullName)"
+                $removedPaths.Add($item.FullName)
                 $removed++
             }
         }
     }
 }
 
-# Prune directories left empty by link removal, deepest first.
-$ordered = $destParents | Sort-Object -Property Length -Descending
-foreach ($dir in $ordered) {
-    if (-not (Test-Path $dir)) { continue }
-    if (-not [IO.Path]::GetFullPath($dir).StartsWith([IO.Path]::GetFullPath($HOME), [StringComparison]::OrdinalIgnoreCase)) { continue }
-    $children = Get-ChildItem -Path $dir -Force -ErrorAction SilentlyContinue
-    if (-not $children) {
-        if ($PSCmdlet.ShouldProcess($dir, 'Remove empty directory')) {
-            Remove-Item $dir -Force
-            Write-Host "Removed empty directory: $dir"
-        }
+# Delete folders left empty by the removals above, walking up until a folder
+# still has contents. Never removes $HOME or ~/.config.
+$homeFull = [IO.Path]::GetFullPath($HOME).TrimEnd('\', '/')
+$configFull = [IO.Path]::GetFullPath($configHome).TrimEnd('\', '/')
+foreach ($path in $removedPaths) {
+    $dir = Split-Path $path -Parent
+    while ($dir -and (Test-PathUnderRoot $dir $homeFull) -and
+           ($dir.TrimEnd('\', '/') -ne $configFull) -and (Test-Path -LiteralPath $dir)) {
+        $item = Get-Item -LiteralPath $dir -Force
+        if ($item.LinkType) { break }
+        if (Get-ChildItem -LiteralPath $dir -Force -ErrorAction SilentlyContinue) { break }
+        if (-not $PSCmdlet.ShouldProcess($dir, 'Remove empty directory')) { break }
+        Remove-Item -LiteralPath $dir -Force
+        Write-Host "Removed empty directory: $dir"
+        $dir = Split-Path $dir -Parent
     }
 }
 

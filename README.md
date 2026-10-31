@@ -44,8 +44,8 @@ script again.
 - `bin/install` - symlinks every repo file into `$HOME`, creating folders
   as needed. Safe to re-run: existing links are kept, and real files in the
   way are skipped and listed. `--force` runs `bin/clean` first.
-- `bin/install.ps1` - Windows version. Skips files that already exist
-  unless `-Force`. Also sets `XDG_CONFIG_HOME` to `~\.config`
+- `bin/install.ps1` - Windows version, same behaviour (`-Force` runs
+  `clean.ps1` first). Also sets `XDG_CONFIG_HOME` to `~\.config`
   (`-SkipXdg` to opt out).
 - `bin/clean` - removes the links `install` created. See below.
 - `bin/clean.ps1` - Windows version of `clean`. Supports `-WhatIf` for a

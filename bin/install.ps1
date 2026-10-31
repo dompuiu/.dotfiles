@@ -4,14 +4,15 @@
 
 .DESCRIPTION
   Mirrors bin/install: every file in the repo (except .git, bin, plugins and README*)
-  is symlinked to the matching path under $HOME.
+  is symlinked to the matching path under $HOME. Safe to re-run: existing
+  links are kept, and anything else in the way is skipped and listed.
 
   Also ensures user-level XDG_CONFIG_HOME=$HOME\.config so tools like Neovim
   use ~/.config (otherwise ~/.config/nvim is ignored on Windows).
 
 .PARAMETER Force
-  Run clean.ps1 first (removes previously created links), and replace any
-  existing destination with the correct link.
+  Run clean.ps1 first (removes previously created links). Real files in the
+  way are never deleted; they are skipped and listed.
 
 .PARAMETER SkipXdg
   Do not touch the XDG_CONFIG_HOME environment variable.
@@ -45,27 +46,36 @@ if ($Force) {
     & (Join-Path $PSScriptRoot 'clean.ps1') -WhatIf:$WhatIfPreference
 }
 
-$linked = 0; $skipped = 0
+function Resolve-RealPath {
+    # Follows symlinks/junctions in every component of $Path, like `readlink -f`.
+    param([string]$Path)
+    $full = [IO.Path]::GetFullPath($Path)
+    $root = [IO.Path]::GetPathRoot($full)
+    $current = $root
+    foreach ($part in $full.Substring($root.Length).Split([IO.Path]::DirectorySeparatorChar, [StringSplitOptions]::RemoveEmptyEntries)) {
+        $current = Join-Path $current $part
+        $item = Get-Item -LiteralPath $current -Force -ErrorAction SilentlyContinue
+        if ($item -and $item.LinkType) {
+            $target = $item.ResolveLinkTarget($true)
+            if ($target) { $current = $target.FullName }
+        }
+    }
+    return $current
+}
+
+$linked = 0
+$skipped = New-Object Collections.Generic.List[string]
 foreach ($source in (Get-DotfileSources $RepoRoot)) {
     $destination = Join-Path $HOME ([IO.Path]::GetRelativePath($RepoRoot, $source))
-    $existing = Get-Item $destination -ErrorAction SilentlyContinue
+    $existing = Get-Item -LiteralPath $destination -Force -ErrorAction SilentlyContinue
     if ($existing) {
-        $targets = @($existing.Target) | Where-Object { $_ }
-        if ($existing.LinkType -and ($targets -contains $source)) {
-            Write-Host "Exists (ok): $destination"
-            $skipped++
-            continue
-        }
-        if ($Force) {
-            if ($PSCmdlet.ShouldProcess($destination, 'Remove existing and re-link')) {
-                Remove-Item $destination -Recurse -Force
-                $existing = $null
-            } else { $skipped++; continue }
-        } else {
-            Write-Warning "Exists, skipping (re-run with -Force to replace): $destination"
-            $skipped++
-            continue
-        }
+        # Already linked (directly or through a linked parent folder).
+        if ((Test-Path -LiteralPath $destination) -and
+            ((Resolve-RealPath $destination) -eq (Resolve-RealPath $source))) { continue }
+        # Leave anything else in the way alone: real files, or links pointing elsewhere.
+        Write-Warning "Skipping ${destination}: it already exists and is not a link to $source."
+        $skipped.Add($destination)
+        continue
     }
     $parent = Split-Path $destination -Parent
     if (-not (Test-Path $parent)) {
@@ -102,4 +112,10 @@ if ((Test-Path $localNvim) -and (-not $SkipXdg)) {
     Write-Warning "$localNvim still exists. With XDG_CONFIG_HOME set, nvim prefers the .config path instead. Verify the new location is picked up, then remove the old link."
 }
 
-Write-Host "Done. Linked: $linked, skipped: $skipped."
+Write-Host "Done. Linked: $linked."
+if ($skipped.Count -gt 0) {
+    Write-Host ""
+    Write-Host "Skipped $($skipped.Count) path(s) that are in the way. Move them aside and run again:"
+    $skipped | ForEach-Object { Write-Host "  $_" }
+    exit 1
+}
