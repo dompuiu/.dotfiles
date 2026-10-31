@@ -1,3 +1,12 @@
+# zi runs compinit itself; skip Debian/Ubuntu's global compinit (~75 ms here).
+export skip_global_compinit=1
+
+# Timestamp for the interactive startup report printed at the end of .zshrc.
+if [[ -o interactive ]]; then
+  zmodload zsh/datetime
+  ZSH_STARTUP_START=$EPOCHREALTIME
+fi
+
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"

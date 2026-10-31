@@ -9,10 +9,14 @@ fi
 PERSONAL=$XDG_CONFIG_HOME/personal
 source $PERSONAL/env.zsh
 
-if type brew &>/dev/null
-then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-fi
+# Homebrew's zsh completions. Checking known prefixes avoids running
+# `brew --prefix` (or scanning a long PATH for a missing `brew`) every shell.
+for brew_prefix in "${HOMEBREW_PREFIX:-}" /opt/homebrew /home/linuxbrew/.linuxbrew /usr/local; do
+  [[ -n $brew_prefix && -d $brew_prefix/share/zsh/site-functions ]] || continue
+  FPATH="$brew_prefix/share/zsh/site-functions:${FPATH}"
+  break
+done
+unset brew_prefix
 
 addPathToFront $HOME/.local/share/bob/nvim-bin
 addPathToFront $PNPM_HOME/bin
@@ -31,7 +35,10 @@ zi snippet OMZL::completion.zsh
 zi snippet OMZL::key-bindings.zsh
 zi snippet OMZL::history.zsh
 zi snippet OMZL::functions.zsh
-zi snippet OMZP::mise/mise.plugin.zsh
+# Shims mode: tool versions still resolve through mise's shims, but the shell
+# skips the per-prompt hook that costs ~300 ms at startup.
+command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh --shims)"
+cacheCompletion mise mise completion zsh
 zi ice wait lucid; zi snippet OMZP::fzf/fzf.plugin.zsh
 
 zi ice blockf; zi light zsh-users/zsh-completions
@@ -75,3 +82,10 @@ bindkey "^d" bash-ctrl-d
 eval "$(starship init zsh)"
 
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
+
+# Report how long this shell took to load. Set ZSH_STARTUP_TIME=0 to silence it.
+if [[ -n $ZSH_STARTUP_START && ${ZSH_STARTUP_TIME:-1} != 0 ]]; then
+  typeset -i startup_ms=$(( (EPOCHREALTIME - ZSH_STARTUP_START) * 1000 ))
+  print -P "%F{244}zsh startup: ${startup_ms} ms%f"
+  unset startup_ms ZSH_STARTUP_START
+fi

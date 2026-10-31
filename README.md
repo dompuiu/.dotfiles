@@ -75,6 +75,10 @@ broken links.
 Aliases worth knowing: `ls` → eza, `cat` → bat, `find` → fd, `cd` → zoxide
 (the originals stay available as `realls`, `realcat` and `realfind`).
 
+New interactive shells print how long they took to load (`zsh startup: 123 ms`).
+Start the timer at the top of `.zshenv` and report at the end of `.zshrc`. Set
+`ZSH_STARTUP_TIME=0` to silence it.
+
 Machine-specific settings go in `~/.zshenv.local` and `~/.zshrc.local`. They are
 loaded when present and are not part of the repo.
 
@@ -122,7 +126,8 @@ loaded when present and are not part of the repo.
   [eza](https://github.com/eza-community/eza), [zoxide](https://github.com/ajeetdsouza/zoxide),
   [lazygit](https://github.com/jesseduffield/lazygit), [delta](https://github.com/dandavison/delta),
   [jq](https://jqlang.org/)
-- Optional, picked up when installed: [mise](https://mise.jdx.dev/),
+- Optional, picked up when installed: [mise](https://mise.jdx.dev/) (shims mode, so
+  tool versions resolve without the slower per-prompt activation hook),
   [bob](https://github.com/MordechaiHadad/bob) (Neovim versions), pnpm, Rust (`~/.cargo/bin`).
 - The terminal, workspace manager and macOS tools you want from the tables above.
 

@@ -1,5 +1,5 @@
 checkIfCommandExists() {
-  [[ -x "$(command -v $1)" ]]
+  (( $+commands[$1] ))
 }
 
 checkIfFileExists() {
@@ -41,7 +41,7 @@ cacheCompletion() {
     local file="$HOME/.zi/completions/_$name"
     local bin real
     bin=$(command -v "$name" 2>/dev/null) || return 1
-    if [[ ${bin:A} == */mise ]]; then
+    if [[ ${bin:A} == */mise/shims/* ]]; then
         real=$(mise which "$name" 2>/dev/null | head -1)
         [[ -n $real ]] && bin=$real
     fi
