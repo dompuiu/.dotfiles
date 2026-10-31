@@ -37,18 +37,20 @@ zi snippet OMZL::completion.zsh
 zi snippet OMZL::key-bindings.zsh
 zi snippet OMZL::history.zsh
 zi snippet OMZL::functions.zsh
-# Shims mode: tool versions still resolve through mise's shims, but the shell
-# skips the per-prompt hook that costs ~300 ms at startup.
-command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh --shims)"
-cacheCompletion mise mise completion zsh
+# Shims mode: tool versions resolve through mise's shims without the per-prompt
+# hook. `mise activate zsh --shims` only prepends the shims dir, so do that
+# directly instead of starting mise on every shell.
+if (( $+commands[mise] )); then
+  addPathToFront "${MISE_DATA_DIR:-$XDG_DATA_HOME/mise}/shims"
+  cacheCompletion mise mise completion zsh
+fi
 zi ice wait lucid; zi snippet OMZP::fzf/fzf.plugin.zsh
 
 zi ice blockf; zi light zsh-users/zsh-completions
 zi ice wait lucid atload'_zsh_autosuggest_start'; zi light zsh-users/zsh-autosuggestions
-zi light z-shell/F-Sy-H # alternative to ---> zi light zsh-users/zsh-syntax-highlighting
+zi ice wait lucid; zi light z-shell/F-Sy-H # alternative to ---> zi light zsh-users/zsh-syntax-highlighting
 zi light MichaelAquilina/zsh-autoswitch-virtualenv
 zi light Aloxaf/fzf-tab
-zi light wfxr/forgit
 
 cacheCompletion tuios tuios completion zsh
 cacheCompletion herdr herdr completion zsh
@@ -59,11 +61,11 @@ if [[ -d "$HOME/.zi/completions" ]]; then
     [[ -e "$link" ]] || command rm -f "$link"
   done
 fi
-zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
+compinitCached
 zicdreplay -q
 
 # Zoxide. The OPZP plugin doesn't let you provide flags to the init command.
-checkIfCommandExists "zoxide" && eval "$(zoxide init zsh --cmd cd)"
+cacheInit zoxide zoxide init zsh --cmd cd
 
 ! checkIfCommandExists "fd" && checkIfCommandExists "fdfind" && alias fd="fdfind"
 alias realfind="/usr/bin/find"
@@ -81,7 +83,7 @@ zle -N bash-ctrl-d
 bindkey "^d" bash-ctrl-d
 
 # Init starship
-eval "$(starship init zsh)"
+cacheInit starship starship init zsh
 
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
 

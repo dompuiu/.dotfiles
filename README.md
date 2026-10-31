@@ -13,6 +13,7 @@ path under `$HOME`, so editing a config in `~/.config` edits the repo:
 ```text
 ~/.dotfiles/.config/nvim/init.lua  ->  ~/.config/nvim/init.lua
 ~/.dotfiles/.zshenv                ->  ~/.zshenv
+~/.dotfiles/.config/zsh/.zshenv    ->  ~/.config/zsh/.zshenv
 ```
 
 `bin/`, `plugins/` and `README.md` are not linked.
@@ -41,7 +42,8 @@ script again.
 ## Scripts
 
 - `bin/install` - symlinks every repo file into `$HOME`, creating folders
-  as needed. `--force` runs `bin/clean` first.
+  as needed. Safe to re-run: existing links are kept, and real files in the
+  way are skipped and listed. `--force` runs `bin/clean` first.
 - `bin/install.ps1` - Windows version. Skips files that already exist
   unless `-Force`. Also sets `XDG_CONFIG_HOME` to `~\.config`
   (`-SkipXdg` to opt out).
@@ -72,10 +74,14 @@ the broken links.
 
 ### Shell
 
-- `.zshenv` - zsh: XDG folders, moves zsh config to `~/.config/zsh`,
-  `EDITOR=nvim`, fzf/ripgrep defaults.
+- `.zshenv` - zsh bootstrap: points `ZDOTDIR` at `~/.config/zsh` and
+  sources the real `.zshenv` from there (nested shells read it directly).
+- `.config/zsh/.zshenv` - zsh: XDG folders, `EDITOR=nvim`, fzf/ripgrep
+  defaults.
 - `.config/zsh/.zshrc` - zsh: `PATH`, zi plugins (autosuggestions,
-  syntax highlighting, fzf-tab, forgit), zoxide, starship and aliases.
+  syntax highlighting, fzf-tab), zoxide, starship and aliases. Tool init
+  scripts are cached in `~/.cache/zsh` and regenerated when the tool is
+  upgraded.
 - `.config/personal/env.zsh` - zsh: helper functions used by `.zshrc`
   (`addPath`, `checkIfCommandExists`, ...).
 - `.config/starship.toml` - [starship](https://starship.rs/): prompt.
