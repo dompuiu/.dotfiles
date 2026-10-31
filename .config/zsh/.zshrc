@@ -83,9 +83,16 @@ eval "$(starship init zsh)"
 
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
 
-# Report how long this shell took to load. Set ZSH_STARTUP_TIME=0 to silence it.
-if [[ -n $ZSH_STARTUP_START && ${ZSH_STARTUP_TIME:-1} != 0 ]]; then
-  typeset -i startup_ms=$(( (EPOCHREALTIME - ZSH_STARTUP_START) * 1000 ))
-  print -P "%F{244}zsh startup: ${startup_ms} ms%f"
-  unset startup_ms ZSH_STARTUP_START
+# Record how long this shell took to load. It stays silent unless asked:
+# `ZSH_STARTUP_TIME=1 zsh` prints it, `zsh-startup` measures a fresh shell.
+if [[ -n $ZSH_STARTUP_START ]]; then
+  typeset -gi ZSH_STARTUP_MS=$(( (EPOCHREALTIME - ZSH_STARTUP_START) * 1000 ))
+  unset ZSH_STARTUP_START
+  if [[ ${ZSH_STARTUP_TIME:-0} != 0 ]]; then
+    print -P "%F{244}zsh startup: ${ZSH_STARTUP_MS} ms%f"
+  fi
 fi
+
+zsh-startup() {
+  ZSH_STARTUP_TIME=1 zsh -i -c exit
+}

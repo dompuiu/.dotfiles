@@ -84,9 +84,9 @@ Aliases worth knowing: `ls` → eza, `cat` → bat, `find` → fd, `cd` →
 zoxide (the originals stay available as `realls`, `realcat` and
 `realfind`).
 
-New interactive shells print how long they took to load
-(`zsh startup: 123 ms`). Start the timer at the top of `.zshenv` and report
-at the end of `.zshrc`. Set `ZSH_STARTUP_TIME=0` to silence it.
+New interactive shells record their load time silently. Run `zsh-startup` to
+print it for a fresh shell, `ZSH_STARTUP_TIME=1 zsh` to make a shell print its
+own time, or check `$ZSH_STARTUP_MS` for the current shell.
 
 Machine-specific settings go in `~/.zshenv.local` and `~/.zshrc.local`. They
 are loaded when present and are not part of the repo.
