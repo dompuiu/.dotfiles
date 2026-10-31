@@ -1,8 +1,9 @@
 # .dotfiles
 
-My terminal setup for macOS, with partial Windows support: zsh, Neovim, terminal
-emulators, workspace managers, git and a few macOS automation tools. Everything shares
-the same font (FiraCode Nerd Font) and theme (Tokyo Night).
+My terminal setup for macOS, with partial Windows support: zsh, Neovim,
+terminal emulators, workspace managers, git and a few macOS automation
+tools. Everything shares the same font (FiraCode Nerd Font) and theme
+(Tokyo Night).
 
 ## How it works
 
@@ -39,103 +40,175 @@ script again.
 
 ## Scripts
 
-| Script                       | What it does                                                                                                     |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `bin/install`                | Symlinks every repo file into `$HOME`, creating folders as needed. `--force` runs `bin/clean` first.             |
-| `bin/install.ps1`            | Windows version. Skips files that already exist unless `-Force`. Also sets `XDG_CONFIG_HOME` to `~\.config` (`-SkipXdg` to opt out). |
-| `bin/clean`                  | Removes the links `install` created. See below.                                                                  |
-| `bin/clean.ps1`              | Windows version of `clean`. Supports `-WhatIf` for a dry run.                                                    |
-| `bin/link-plugins`           | Links the plugins in `plugins/` into herdr and/or tuios, whichever is installed, and unlinks stale ones (`.ps1` for Windows). |
+- `bin/install` - symlinks every repo file into `$HOME`, creating folders
+  as needed. `--force` runs `bin/clean` first.
+- `bin/install.ps1` - Windows version. Skips files that already exist
+  unless `-Force`. Also sets `XDG_CONFIG_HOME` to `~\.config`
+  (`-SkipXdg` to opt out).
+- `bin/clean` - removes the links `install` created. See below.
+- `bin/clean.ps1` - Windows version of `clean`. Supports `-WhatIf` for a
+  dry run.
+- `bin/link-plugins` - links the plugins in `plugins/` into herdr and/or
+  tuios, whichever is installed, and unlinks stale ones (`.ps1` for
+  Windows).
 
 ### What `clean` removes
 
 `clean` only removes things the dotfiles created:
 
-- Symlinks in `$HOME` that point into this repo. Real files are never deleted.
-- Folder symlinks that point into the repo, e.g. `~/.config/opencode -> ~/.dotfiles/.config/opencode`.
+- Symlinks in `$HOME` that point into this repo. Real files are never
+  deleted.
+- Folder symlinks that point into the repo, e.g.
+  `~/.config/opencode -> ~/.dotfiles/.config/opencode`.
   Only the link is removed, never the repo files behind it.
-- Broken symlinks in `~/.config` that point into the repo, e.g. links to files
-  deleted from the repo.
+- Broken symlinks in `~/.config` that point into the repo, e.g. links to
+  files deleted from the repo.
 - Folders left empty after removing those links.
 
-Run it before deleting or moving files in the repo, or afterwards to clear the
-broken links.
+Run it before deleting or moving files in the repo, or afterwards to clear
+the broken links.
 
 ## What's configured
 
 ### Shell
 
-| Path                         | Tool                                                     | Notes                                                                                                                       |
-| ---------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `.zshenv`                    | zsh                                                      | XDG folders, moves zsh config to `~/.config/zsh`, `EDITOR=nvim`, fzf/ripgrep defaults.                                      |
-| `.config/zsh/.zshrc`         | zsh                                                      | `PATH`, zi plugins (autosuggestions, syntax highlighting, fzf-tab, forgit), zoxide, starship and aliases.                   |
-| `.config/personal/env.zsh`   | zsh                                                      | Helper functions used by `.zshrc` (`addPath`, `checkIfCommandExists`, ...).                                                 |
-| `.config/starship.toml`      | [starship](https://starship.rs/)                         | Prompt.                                                                                                                     |
+- `.zshenv` - zsh: XDG folders, moves zsh config to `~/.config/zsh`,
+  `EDITOR=nvim`, fzf/ripgrep defaults.
+- `.config/zsh/.zshrc` - zsh: `PATH`, zi plugins (autosuggestions,
+  syntax highlighting, fzf-tab, forgit), zoxide, starship and aliases.
+- `.config/personal/env.zsh` - zsh: helper functions used by `.zshrc`
+  (`addPath`, `checkIfCommandExists`, ...).
+- `.config/starship.toml` - [starship](https://starship.rs/): prompt.
 
-Aliases worth knowing: `ls` → eza, `cat` → bat, `find` → fd, `cd` → zoxide
-(the originals stay available as `realls`, `realcat` and `realfind`).
+Aliases worth knowing: `ls` → eza, `cat` → bat, `find` → fd, `cd` →
+zoxide (the originals stay available as `realls`, `realcat` and
+`realfind`).
 
-New interactive shells print how long they took to load (`zsh startup: 123 ms`).
-Start the timer at the top of `.zshenv` and report at the end of `.zshrc`. Set
-`ZSH_STARTUP_TIME=0` to silence it.
+New interactive shells print how long they took to load
+(`zsh startup: 123 ms`). Start the timer at the top of `.zshenv` and report
+at the end of `.zshrc`. Set `ZSH_STARTUP_TIME=0` to silence it.
 
-Machine-specific settings go in `~/.zshenv.local` and `~/.zshrc.local`. They are
-loaded when present and are not part of the repo.
+Machine-specific settings go in `~/.zshenv.local` and `~/.zshrc.local`. They
+are loaded when present and are not part of the repo.
 
 ### Editor
 
-| Path            | Tool                                   | Notes                                                                                                 |
-| --------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `.config/nvim`  | [LazyVim](https://www.lazyvim.org/)    | Tokyo Night, gitsigns, markdown preview, and `ctrl+h/j/k/l` window navigation.                        |
+- `.config/nvim` - [LazyVim](https://www.lazyvim.org/): Tokyo Night,
+  gitsigns, markdown preview, and `ctrl+h/j/k/l` window navigation.
 
 ### Terminals and workspace managers
 
-| Path                     | Tool                                           | Notes                                                                           |
-| ------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------- |
-| `.config/ghostty/config` | [Ghostty](https://ghostty.org/)                | Main terminal. Starts zsh, follows the system light/dark theme.                 |
-| `.wezterm.lua`           | [WezTerm](https://wezterm.org/)                | Alternative terminal. On Windows it opens WSL (Ubuntu 24.04) by default.        |
-| `.config/herdr`          | [herdr](https://herdr.dev/)                    | Terminal workspace manager. See [Herdr and tuios](#herdr-and-tuios).                |
-| `.config/tuios`          | [tuios](https://tuios.dev/)                    | herdr's keys on top of the tuios defaults; runs the [plugins](#plugins) unchanged. |
+- `.config/ghostty/config` - [Ghostty](https://ghostty.org/): main
+  terminal. Starts zsh, follows the system light/dark theme.
+- `.wezterm.lua` - [WezTerm](https://wezterm.org/): alternative terminal.
+  On Windows it opens WSL (Ubuntu 24.04) by default.
+- `.config/herdr` - [herdr](https://herdr.dev/): terminal workspace
+  manager. See [Herdr and tuios](#herdr-and-tuios).
+- `.config/tuios` - [tuios](https://tuios.dev/): herdr's keys on top of
+  the tuios defaults; runs the [plugins](#plugins) unchanged.
 
 ### Git and CLI tools
 
-| Path                         | Tool                                                   | Notes                                                       |
-| ---------------------------- | ------------------------------------------------------ | ----------------------------------------------------------- |
-| `.gitconfig`                 | git                                                    | Aliases (`git aliases` lists them), rebase on pull.         |
-| `.config/git/ignore`         | git                                                    | Global ignore file.                                         |
-| `.config/lazygit/config.yml` | [lazygit](https://github.com/jesseduffield/lazygit)   |                                                             |
-| `.config/fd/ignore`          | [fd](https://github.com/sharkdp/fd)                    | Global ignore file.                                         |
-| `.config/ripgrep/ripgreprc`  | [ripgrep](https://github.com/BurntSushi/ripgrep)       | Loaded through `RIPGREP_CONFIG_PATH`.                       |
-| `.config/opencode`           | [opencode](https://opencode.ai/)                       | Settings, TUI settings and a Tokyo Night Moon theme.        |
+- `.gitconfig` - git: aliases (`git aliases` lists them), rebase on pull.
+- `.config/git/ignore` - git: global ignore file.
+- `.config/lazygit/config.yml` -
+  [lazygit](https://github.com/jesseduffield/lazygit).
+- `.config/fd/ignore` - [fd](https://github.com/sharkdp/fd): global ignore
+  file.
+- `.config/ripgrep/ripgreprc` -
+  [ripgrep](https://github.com/BurntSushi/ripgrep): loaded through
+  `RIPGREP_CONFIG_PATH`.
+- `.config/opencode` - [opencode](https://opencode.ai/): settings, TUI
+  settings and a Tokyo Night Moon theme.
 
 ### macOS automation
 
-| Path                      | Tool                                                    | Notes                                                                             |
-| ------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `.hammerspoon/init.lua`   | [Hammerspoon](https://www.hammerspoon.org/)             | `cmd+esc` toggles Ghostty and jumps back to the previous app. `ctrl+alt+cmd+arrows` snaps windows. |
+- `.hammerspoon/init.lua` -
+  [Hammerspoon](https://www.hammerspoon.org/): `cmd+esc` toggles Ghostty
+  and jumps back to the previous app. `ctrl+alt+cmd+arrows` snaps
+  windows.
 
 ## Prerequisites
 
 - [Homebrew](https://brew.sh/)
-- FiraCode Nerd Font from [Nerd Fonts](https://www.nerdfonts.com/font-downloads)
+- FiraCode Nerd Font from
+  [Nerd Fonts](https://www.nerdfonts.com/font-downloads)
 - [zsh](https://www.zsh.org/) and [starship](https://starship.rs/)
-- [Neovim](https://neovim.io/), [LazyVim](https://www.lazyvim.org/installation) and
+- [Neovim](https://neovim.io/),
+  [LazyVim](https://www.lazyvim.org/installation) and
   [tree-sitter-cli](https://www.npmjs.com/package/tree-sitter-cli)
-- CLI tools: [fd](https://github.com/sharkdp/fd), [fzf](https://github.com/junegunn/fzf),
-  [ripgrep](https://github.com/BurntSushi/ripgrep), [bat](https://github.com/sharkdp/bat),
-  [eza](https://github.com/eza-community/eza), [zoxide](https://github.com/ajeetdsouza/zoxide),
-  [lazygit](https://github.com/jesseduffield/lazygit), [delta](https://github.com/dandavison/delta),
+- CLI tools: [fd](https://github.com/sharkdp/fd),
+  [fzf](https://github.com/junegunn/fzf),
+  [ripgrep](https://github.com/BurntSushi/ripgrep),
+  [bat](https://github.com/sharkdp/bat),
+  [eza](https://github.com/eza-community/eza),
+  [zoxide](https://github.com/ajeetdsouza/zoxide),
+  [lazygit](https://github.com/jesseduffield/lazygit),
+  [delta](https://github.com/dandavison/delta),
   [jq](https://jqlang.org/)
-- Optional, picked up when installed: [mise](https://mise.jdx.dev/) (shims mode, so
-  tool versions resolve without the slower per-prompt activation hook),
-  [bob](https://github.com/MordechaiHadad/bob) (Neovim versions), pnpm, Rust (`~/.cargo/bin`).
-- The terminal, workspace manager and macOS tools you want from the tables above.
+- Optional, picked up when installed: [mise](https://mise.jdx.dev/)
+  (shims mode, so tool versions resolve without the slower per-prompt
+  activation hook), [bob](https://github.com/MordechaiHadad/bob) (Neovim
+  versions), pnpm, Rust (`~/.cargo/bin`).
+- The terminal, workspace manager and macOS tools you want from the
+  lists above.
+
+## WSL: Windows tools on PATH
+
+WSL appends every Windows `PATH` directory to Linux processes by default.
+That puts ~30 `/mnt/c` folders on `PATH`, and each command lookup — plus
+zsh's one-time command hash — stats all of them over the 9p filesystem. It
+costs roughly 60–100 ms per new shell.
+
+If you rarely call Windows binaries from WSL, turn it off globally in
+`/etc/wsl.conf` (`sudoedit /etc/wsl.conf` creates it if it does not exist):
+
+```ini
+[interop]
+appendWindowsPath = false
+```
+
+Then restart WSL from Windows:
+
+```powershell
+wsl --shutdown
+```
+
+Symlink the few Windows commands you still want into `~/.local/bin`, which
+is already on `PATH`. Symlinks to `.exe` files work, and VS Code's `code`
+wrapper resolves its own location through `realpath`, so it works through a
+symlink too:
+
+```sh
+code_path="/mnt/c/Users/YOUR_WINDOWS_USER/AppData/Local"
+code_path="$code_path/Programs/Microsoft VS Code/bin/code"
+ln -s /mnt/c/WINDOWS/system32/cmd.exe ~/.local/bin/
+ln -s /mnt/c/WINDOWS/system32/wsl.exe ~/.local/bin/
+ln -s /mnt/c/WINDOWS/explorer.exe ~/.local/bin/
+ln -s "$code_path" ~/.local/bin/code
+ln -s "/mnt/c/Program Files/PowerShell/7/pwsh.exe" ~/.local/bin/pwsh.exe
+```
+
+Replace `YOUR_WINDOWS_USER` with your Windows user name (the folder under
+`/mnt/c/Users`). Check them with:
+
+```sh
+command -v code explorer.exe cmd.exe wsl.exe pwsh.exe
+```
+
+Other Windows tools (Windows `yarn`, `flutter`, `nvim.exe`, ...) need their
+own symlink; the directories are still visible under `/mnt/c`. Skip this
+section entirely if you use Windows binaries regularly — the config works
+either way, startup is just slower.
 
 ## Herdr and tuios
 
-- [herdr](https://herdr.dev/) 0.8.2+ - terminal workspace manager (`.config/herdr`)
-- [tuios](https://tuios.dev/) - terminal window manager (`.config/tuios`); runs herdr plugins as they are
-- [tuicr](https://github.com/agavra/tuicr) - code review TUI for the `panes` plugin
+- [herdr](https://herdr.dev/) 0.8.2+ - terminal workspace manager
+  (`.config/herdr`)
+- [tuios](https://tuios.dev/) - terminal window manager (`.config/tuios`);
+  runs herdr plugins as they are
+- [tuicr](https://github.com/agavra/tuicr) - code review TUI for the
+  `panes` plugin
 
 ### Plugins
 
@@ -150,28 +223,32 @@ bin/link-plugins          # macOS / Linux
 bin/link-plugins.ps1      # Windows
 ```
 
-The script checks which of herdr and tuios is on `PATH` and skips the missing
-one. With herdr it runs `herdr plugin link` for every directory with a
-`herdr-plugin.toml`. tuios also reads herdr's plugin list, so with both present
-it only enables the plugins in tuios; with tuios alone it runs
+The script checks which of herdr and tuios is on `PATH` and skips the
+missing one. With herdr it runs `herdr plugin link` for every directory with
+a `herdr-plugin.toml`. tuios also reads herdr's plugin list, so with both
+present it only enables the plugins in tuios; with tuios alone it runs
 `tuios plugins link --enable`. It prints `<host>: linked <name>` or
 `<host>: failed <name>` per plugin and is safe to re-run after adding one.
 
 Before linking, it removes plugins that point into this repo but no longer
 match a folder in `plugins/` (renamed, moved or deleted), e.g. the old
 `herdr-sesh` links from `.config/herdr/plugins`. In tuios it turns them off
-first, then unlinks them from herdr. Plugins from elsewhere, like `herdr-tsk`,
-are left alone. Run it from a terminal outside tuios, and again after moving
-the repo.
+first, then unlinks them from herdr. Plugins from elsewhere, like
+`herdr-tsk`, are left alone. Run it from a terminal outside tuios, and again
+after moving the repo.
 
-| Plugin                                                                                                | Keys                                                   | Requires      | Optional    |
-| ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ------------- | ----------- |
-| `sesh` - workspace picker (open workspaces, saved sessions, zoxide) and previous-workspace jump | `prefix+alt+o`, `prefix+;`                                 | fzf 0.65+, jq | zoxide, eza |
-| `panes` - nvim side pane or tab; tuicr review in a split or tab, and uncommitted-changes review | `prefix+alt+v`, `prefix+alt+shift+v`, `prefix+alt+i`, `prefix+alt+shift+i`, `prefix+alt+d` | nvim | tuicr |
+- `sesh` - workspace picker (open workspaces, saved sessions, zoxide) and
+  previous-workspace jump. Keys: `prefix+alt+o`, `prefix+;`. Requires:
+  fzf 0.65+, jq. Optional: zoxide, eza.
+- `panes` - nvim side pane or tab; tuicr review in a split or tab, and
+  uncommitted-changes review. Keys: `prefix+alt+v`,
+  `prefix+alt+shift+v`, `prefix+alt+i`, `prefix+alt+shift+i`,
+  `prefix+alt+d`. Requires: nvim. Optional: tuicr.
 
 Plugin scripts use zsh on macOS/Linux and
-[PowerShell 7](https://github.com/PowerShell/PowerShell) (`pwsh`) on Windows;
-jq is not needed on Windows. A Nerd Font is needed for the picker icons.
+[PowerShell 7](https://github.com/PowerShell/PowerShell) (`pwsh`) on
+Windows; jq is not needed on Windows. A Nerd Font is needed for the picker
+icons.
 
 `sesh` saved sessions go in `$(herdr plugin config-dir sesh)/sessions`,
 one `name | path | startup command` per line;
