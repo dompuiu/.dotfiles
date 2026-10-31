@@ -11,21 +11,40 @@ done < <(find $files_dir -type f -not -path "*.git/*" -not -path "*/bin/*" -not 
 # printf '%s\n' "${files[@]}"
 
 # Run clean script when force flag is given.
-[[ $force ]] && "$bin_dir/clean"
+[[ $force == true ]] && "$bin_dir/clean"
+
+skipped=()
 
 for source in "${files[@]}"; do
   destination="$HOME${source/$files_dir/}"
-  directory=$(dirname ${destination})
-  mkdir_cmd="mkdir -p $directory"
-  symlink_cmd="ln -s $source $destination"
+  directory=$(dirname "$destination")
+
+  # Already linked (directly or through a linked parent folder).
+  [[ -e $destination && $(readlink -f "$destination") == "$source" ]] && continue
+
+  # Leave anything else in the way alone: real files, or links pointing elsewhere.
+  if [[ -e $destination || -L $destination ]]; then
+    echo "Skipping $destination: it already exists and is not a link to $source."
+    skipped+=("$destination")
+    continue
+  fi
 
   if [[ ! -d $directory ]]; then
     echo "Creating directory $directory..."
-    $mkdir_cmd
-    [[ $? -ne 0 ]] && echo "Failed creating directory $directory." && exit $?
+    mkdir -p "$directory"
+    rc=$?
+    [[ $rc -ne 0 ]] && echo "Failed creating directory $directory." && exit $rc
   fi
 
   echo "Creating symlink $source --> $destination..."
-  $symlink_cmd
-  [[ $? -ne 0 ]] && echo "Failed creating symlink $source --> $destination." && exit $?
+  ln -s "$source" "$destination"
+  rc=$?
+  [[ $rc -ne 0 ]] && echo "Failed creating symlink $source --> $destination." && exit $rc
 done
+
+if [[ ${#skipped[@]} -gt 0 ]]; then
+  echo
+  echo "Skipped ${#skipped[@]} path(s) that are in the way. Move them aside and run again:"
+  printf '  %s\n' "${skipped[@]}"
+  exit 1
+fi
