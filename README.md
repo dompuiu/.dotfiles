@@ -1,7 +1,7 @@
 # .dotfiles
 
 My terminal setup for macOS, with partial Windows support: zsh, Neovim, terminal
-emulators, multiplexers, git and a few macOS automation tools. Everything shares
+emulators, workspace managers, git and a few macOS automation tools. Everything shares
 the same font (FiraCode Nerd Font) and theme (Tokyo Night).
 
 ## How it works
@@ -73,8 +73,7 @@ broken links.
 | `.config/starship.toml`      | [starship](https://starship.rs/)                         | Prompt.                                                                                                                     |
 
 Aliases worth knowing: `ls` → eza, `cat` → bat, `find` → fd, `cd` → zoxide
-(the originals stay available as `realls`, `realcat` and `realfind`). `z`
-starts zellij, and `z <layout>` starts it with a layout such as `oc` or `cc`.
+(the originals stay available as `realls`, `realcat` and `realfind`).
 
 Machine-specific settings go in `~/.zshenv.local` and `~/.zshrc.local`. They are
 loaded when present and are not part of the repo.
@@ -83,16 +82,14 @@ loaded when present and are not part of the repo.
 
 | Path            | Tool                                   | Notes                                                                                                 |
 | --------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `.config/nvim`  | [LazyVim](https://www.lazyvim.org/)    | Tokyo Night, gitsigns, markdown preview, and `ctrl+h/j/k/l` navigation shared with tmux.              |
+| `.config/nvim`  | [LazyVim](https://www.lazyvim.org/)    | Tokyo Night, gitsigns, markdown preview, and `ctrl+h/j/k/l` window navigation.                        |
 
-### Terminals and multiplexers
+### Terminals and workspace managers
 
 | Path                     | Tool                                           | Notes                                                                           |
 | ------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------- |
 | `.config/ghostty/config` | [Ghostty](https://ghostty.org/)                | Main terminal. Starts zsh, follows the system light/dark theme.                 |
 | `.wezterm.lua`           | [WezTerm](https://wezterm.org/)                | Alternative terminal. On Windows it opens WSL (Ubuntu 24.04) by default.        |
-| `.config/tmux/tmux.conf` | [tmux](https://github.com/tmux/tmux)           | Prefix `ctrl+z`. `prefix ctrl+o` opens tmux-sessionizer.                        |
-| `.config/zellij`         | [zellij](https://zellij.dev/)                  | Starts locked. Layouts: `oc` (opencode + lazygit) and `cc` (claude + lazygit). Includes a sessionizer plugin. |
 | `.config/herdr`          | [herdr](https://herdr.dev/)                    | Terminal workspace manager. See [Herdr and tuios](#herdr-and-tuios).                |
 | `.config/tuios`          | [tuios](https://tuios.dev/)                    | herdr's keys on top of the tuios defaults; runs the [plugins](#plugins) unchanged. |
 
@@ -125,10 +122,9 @@ loaded when present and are not part of the repo.
   [eza](https://github.com/eza-community/eza), [zoxide](https://github.com/ajeetdsouza/zoxide),
   [lazygit](https://github.com/jesseduffield/lazygit), [delta](https://github.com/dandavison/delta),
   [jq](https://jqlang.org/)
-- [tmux-sessionizer](https://github.com/jrmoulton/tmux-sessionizer) (`tms`). `.zshrc` loads its completions.
 - Optional, picked up when installed: [mise](https://mise.jdx.dev/),
   [bob](https://github.com/MordechaiHadad/bob) (Neovim versions), pnpm, Rust (`~/.cargo/bin`).
-- The terminal, multiplexer and macOS tools you want from the tables above.
+- The terminal, workspace manager and macOS tools you want from the tables above.
 
 ## Herdr and tuios
 

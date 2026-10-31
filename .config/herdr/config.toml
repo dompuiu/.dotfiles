@@ -1,4 +1,4 @@
-# herdr config – mirrors .config/zellij/config.kdl + .config/tmux/tmux.conf
+# herdr config – keys ported from the old zellij + tmux setups
 # Prefix is ctrl+z everywhere (zellij locked Ctrl+z -> normal, tmux prefix C-z).
 onboarding = false
 

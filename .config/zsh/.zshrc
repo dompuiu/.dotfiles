@@ -19,7 +19,7 @@ addPathToFront $PNPM_HOME/bin
 addPathToFront $HOME/.local/bin
 addPathToFront /opt/homebrew/bin
 addPathToFront /opt/homebrew/sbin
-addPath $HOME/.cargo/bin
+addPathToFront $HOME/.cargo/bin
 addPath /usr/local/cuda/bin
 
 source "$HOME/.zi/bin/zi.zsh"
@@ -32,7 +32,7 @@ zi snippet OMZL::key-bindings.zsh
 zi snippet OMZL::history.zsh
 zi snippet OMZL::functions.zsh
 zi snippet OMZP::mise/mise.plugin.zsh
-zi snippet OMZP::fzf/fzf.plugin.zsh
+zi ice wait lucid; zi snippet OMZP::fzf/fzf.plugin.zsh
 
 zi ice blockf; zi light zsh-users/zsh-completions
 zi ice wait lucid atload'_zsh_autosuggest_start'; zi light zsh-users/zsh-autosuggestions
@@ -41,9 +41,8 @@ zi light MichaelAquilina/zsh-autoswitch-virtualenv
 zi light Aloxaf/fzf-tab
 zi light wfxr/forgit
 
-checkIfCommandExists "zellij" && zellij setup --generate-completion zsh > ~/.zi/completions/_zellij
-checkIfCommandExists "tuios" && tuios completion zsh > ~/.zi/completions/_tuios
-checkIfCommandExists "herdr" && herdr completion zsh > ~/.zi/completions/_herdr
+cacheCompletion tuios tuios completion zsh
+cacheCompletion herdr herdr completion zsh
 
 # examples here -> https://wiki.zshell.dev/ecosystem/category/-annexes
 if [[ -d "$HOME/.zi/completions" ]]; then
@@ -67,26 +66,6 @@ checkIfCommandExists "bat" && alias cat="bat --paging=never"
 alias realls='/bin/ls --color=auto'
 checkIfCommandExists "eza" && alias ls="eza"
 
-z() {
-  if [ $# -eq 0 ]; then
-    zellij delete-all-sessions -y -f && zellij
-    return
-  fi
-
-  case "$1" in
-    action|attach|a|edit|e|run|r|list-sessions|ls|kill-session|k|kill-all-sessions|ka|delete-session|delete-all-sessions|options|setup|plugin|pipe|-* )
-      zellij "$@"
-      ;;
-    *)
-      # assume layout name
-      zellij delete-all-sessions -y -f && zellij --layout "$@"
-      ;;
-  esac
-}
-
-alias ze='zellij edit'
-alias zr='zellij run --'
-
 # Bash like ctrl-d wrapper for IGNOREEOF
 setopt ignore_eof
 zle -N bash-ctrl-d
@@ -94,8 +73,5 @@ bindkey "^d" bash-ctrl-d
 
 # Init starship
 eval "$(starship init zsh)"
-
-# Complete tmux sessionizer
-source <(COMPLETE=zsh tms)
 
 [[ ! -f ~/.zshrc.local ]] || source ~/.zshrc.local
