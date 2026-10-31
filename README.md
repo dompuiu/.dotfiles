@@ -85,6 +85,9 @@ the broken links.
 - `.config/personal/env.zsh` - zsh: helper functions used by `.zshrc`
   (`addPath`, `checkIfCommandExists`, ...).
 - `.config/starship.toml` - [starship](https://starship.rs/): prompt.
+- `.config/powershell/Microsoft.PowerShell_profile.ps1` - PowerShell 7
+  profile. Loaded directly on macOS/Linux; on Windows `install.ps1` adds a
+  line to `$PROFILE` that loads it.
 
 Aliases worth knowing: `ls` → eza, `cat` → bat, `find` → fd, `cd` →
 zoxide (the originals stay available as `realls`, `realcat` and
@@ -92,7 +95,8 @@ zoxide (the originals stay available as `realls`, `realcat` and
 
 New interactive shells record their load time silently. Run `zsh-startup` to
 print it for a fresh shell, `ZSH_STARTUP_TIME=1 zsh` to make a shell print its
-own time, or check `$ZSH_STARTUP_MS` for the current shell.
+own time, or check `$ZSH_STARTUP_MS` for the current shell. PowerShell has the
+same: `pwsh-startup`, `$env:PWSH_STARTUP_TIME = 1` and `$PwshStartupMs`.
 
 Machine-specific settings go in `~/.zshenv.local` and `~/.zshrc.local`. They
 are loaded when present and are not part of the repo.

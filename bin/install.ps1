@@ -107,6 +107,21 @@ if (-not $SkipXdg) {
     }
 }
 
+# Windows pwsh reads its profile from Documents, not ~/.config, so load the
+# repo profile from there. Existing profile content is kept.
+$repoProfile = Join-Path $HOME '.config\powershell\Microsoft.PowerShell_profile.ps1'
+$profileLoader = '. "$HOME\.config\powershell\Microsoft.PowerShell_profile.ps1"'
+$userProfile = $PROFILE.CurrentUserCurrentHost
+if ($IsWindows -and $userProfile -and ($userProfile -ne $repoProfile)) {
+    $hasLoader = (Test-Path $userProfile) -and
+        (Select-String -LiteralPath $userProfile -SimpleMatch $profileLoader -Quiet)
+    if (-not $hasLoader -and $PSCmdlet.ShouldProcess($userProfile, 'Add loader for repo profile')) {
+        New-Item -ItemType Directory -Force -Path (Split-Path $userProfile -Parent) | Out-Null
+        Add-Content -LiteralPath $userProfile -Value $profileLoader
+        Write-Host "Added repo profile loader to $userProfile"
+    }
+}
+
 $localNvim = Join-Path $env:LOCALAPPDATA 'nvim'
 if ((Test-Path $localNvim) -and (-not $SkipXdg)) {
     Write-Warning "$localNvim still exists. With XDG_CONFIG_HOME set, nvim prefers the .config path instead. Verify the new location is picked up, then remove the old link."
