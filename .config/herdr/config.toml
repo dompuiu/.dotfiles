@@ -102,3 +102,8 @@ command = "herdr plugin action invoke last --plugin sesh || herdr plugin action 
 key = "prefix+alt+t"
 type = "shell"
 command = "herdr plugin action invoke open-board-windows --plugin herdr-tsk || herdr plugin action invoke open-board --plugin herdr-tsk"
+
+[[keys.command]]
+key = "prefix+alt+a"
+type = "plugin_action"
+command = "herdr-tsk.quick-capture"
