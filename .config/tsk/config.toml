@@ -93,6 +93,11 @@
 
 [agent.opencode]
 command = ["opencode", "--prompt"]
+prompt_append = """
+Process
+- Implement using the `implement` skill.
+- Then run two sub-agents: one using the `code-review` skill, one using the
+  `code-simplification` skill. Address their findings."""
 
 # `env` sets variables for that agent only, here to mark its commits as the
 # agent's. Do not put API keys here: this file is plain text.
