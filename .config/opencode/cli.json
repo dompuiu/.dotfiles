@@ -18,5 +18,5 @@
   "terminal": {
     "copy": "select"
   },
-  "plugins": ["./herdr-opencode"]
+  "plugins": ["./herdr-opencode", "opencode-quill"]
 }
