@@ -89,4 +89,26 @@ foreach ($p in $current) {
   }
 }
 
+# Annotate is installed from GitHub, not linked from plugins/. Herdr keeps its
+# own record, so install it once and leave upgrades to `herdr plugin update`.
+if ($hasHerdr) {
+  if ((herdr plugin list 2>$null | Out-String) -match '(?m)^- annotate ') {
+    Write-Output 'herdr: annotate already installed'
+  } else {
+    Invoke-Plugin 'herdr' 'installed' 'annotate' {
+      herdr plugin install -y plannotator/herdr-annotate/windows-full
+    }
+  }
+
+  # Add-on: routes Ctrl-clicked file:// Markdown links to Annotate. Needs the
+  # Full install above.
+  if ((herdr plugin list 2>$null | Out-String) -match '(?m)^- annotate-links ') {
+    Write-Output 'herdr: annotate-links already installed'
+  } else {
+    Invoke-Plugin 'herdr' 'installed' 'annotate-links' {
+      herdr plugin install -y plannotator/herdr-annotate/links
+    }
+  }
+}
+
 exit $status

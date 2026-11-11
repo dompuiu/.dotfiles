@@ -122,6 +122,23 @@ if ($IsWindows -and $userProfile -and ($userProfile -ne $repoProfile)) {
     }
 }
 
+# plannotator-tui reads its config from %APPDATA% on Windows, not ~/.config,
+# so link the repo file there too.
+$tuiSource = Join-Path $HOME '.config\plannotator-tui\config.toml'
+$tuiTarget = Join-Path $env:APPDATA 'plannotator-tui\config.toml'
+if (Test-Path $tuiSource) {
+    $tuiExisting = Get-Item -LiteralPath $tuiTarget -Force -ErrorAction SilentlyContinue
+    if (-not $tuiExisting) {
+        if ($PSCmdlet.ShouldProcess($tuiTarget, "Link to $tuiSource")) {
+            New-Item -ItemType Directory -Force -Path (Split-Path $tuiTarget -Parent) | Out-Null
+            New-Item -ItemType SymbolicLink -Path $tuiTarget -Target $tuiSource | Out-Null
+            Write-Host "Linked: $tuiSource --> $tuiTarget"
+        }
+    } elseif (-not ((Resolve-RealPath $tuiTarget) -eq (Resolve-RealPath $tuiSource))) {
+        Write-Warning "Skipping ${tuiTarget}: it already exists and is not a link to $tuiSource."
+    }
+}
+
 $localNvim = Join-Path $env:LOCALAPPDATA 'nvim'
 if ((Test-Path $localNvim) -and (-not $SkipXdg)) {
     Write-Warning "$localNvim still exists. With XDG_CONFIG_HOME set, nvim prefers the .config path instead. Verify the new location is picked up, then remove the old link."

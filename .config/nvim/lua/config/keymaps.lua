@@ -50,3 +50,26 @@ for key, direction in pairs({ h = "left", j = "down", k = "up", l = "right" }) d
     require("tuios-nvim-navigator").navigate(direction)
   end, { silent = true, desc = "Navigate " .. direction .. " through TUIOS" })
 end
+
+-- Send the selection to Herdr Annotate (herdr-annotate plugin). It cannot read
+-- a Neovim selection, so hand it over in a file: the plugin looks in
+-- $XDG_RUNTIME_DIR (else the system temp dir), under herdr-annotate-<uid>, and
+-- ignores a file older than 15 seconds.
+keymap("x", "<leader>a", function()
+  vim.cmd('normal! "zy')
+  local base = vim.env.XDG_RUNTIME_DIR
+  if not base or base == "" then
+    base = vim.env.TMPDIR or vim.env.TMP or vim.env.TEMP
+    if not base or base == "" then
+      base = vim.fn.has("win32") == 1 and vim.env.USERPROFILE or "/tmp"
+    end
+  end
+  local uid = "user"
+  if vim.fn.has("unix") == 1 then
+    uid = tostring((vim.uv or vim.loop).os_get_passwd().uid)
+  end
+  local dir = base .. "/herdr-annotate-" .. uid
+  vim.fn.mkdir(dir, "p", "0700")
+  vim.fn.writefile(vim.split(vim.fn.getreg("z"), "\n"), dir .. "/selection")
+  vim.fn.jobstart({ "herdr", "plugin", "action", "invoke", "annotate.capture" })
+end, { desc = "Annotate selection in Herdr" })

@@ -130,6 +130,24 @@ if (Test-Path $configHome) {
     }
 }
 
+# plannotator-tui reads its config from %APPDATA% on Windows; install.ps1
+# links the repo file there, so remove that link here too.
+$tuiLink = Join-Path $env:APPDATA 'plannotator-tui\config.toml'
+$tuiItem = Get-Item -LiteralPath $tuiLink -Force -ErrorAction SilentlyContinue
+if ($tuiItem -and $tuiItem.LinkType) {
+    $ours = $false
+    foreach ($t in @($tuiItem.Target)) {
+        if (Test-TargetInRepo $t $tuiLink $RepoRoot) { $ours = $true; break }
+    }
+    if ($ours) {
+        if ($PSCmdlet.ShouldProcess($tuiLink, 'Remove link')) {
+            Remove-Item $tuiLink -Force
+            Write-Host "Removed link: $tuiLink"
+            $removed++
+        }
+    }
+}
+
 # Delete folders left empty by the removals above, walking up until a folder
 # still has contents. Never removes $HOME or ~/.config.
 $homeFull = [IO.Path]::GetFullPath($HOME).TrimEnd('\', '/')

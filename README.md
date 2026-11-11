@@ -104,7 +104,8 @@ are loaded when present and are not part of the repo.
 ### Editor
 
 - `.config/nvim` - [LazyVim](https://www.lazyvim.org/): Tokyo Night,
-  gitsigns, markdown preview, and `ctrl+h/j/k/l` window navigation.
+  gitsigns, markdown preview, `ctrl+h/j/k/l` window navigation, and
+  `<leader>a` in visual mode to annotate the selection in Herdr.
 
 ### Terminals and workspace managers
 
@@ -114,6 +115,9 @@ are loaded when present and are not part of the repo.
   On Windows it opens WSL (Ubuntu 24.04) by default.
 - `.config/herdr` - [herdr](https://herdr.dev/): terminal workspace
   manager. See [Herdr and tuios](#herdr-and-tuios).
+- `.config/plannotator-tui` -
+  [plannotator-tui](https://github.com/plannotator/plannotator-tui): the
+  review window herdr-annotate opens; placement and theme.
 - `.config/tuios` - [tuios](https://tuios.dev/): herdr's keys on top of
   the tuios defaults; runs the [plugins](#plugins) unchanged.
 
@@ -239,6 +243,8 @@ a `herdr-plugin.toml`. tuios also reads herdr's plugin list, so with both
 present it only enables the plugins in tuios; with tuios alone it runs
 `tuios plugins link --enable`. It prints `<host>: linked <name>` or
 `<host>: failed <name>` per plugin and is safe to re-run after adding one.
+It also installs [Herdr Annotate](#herdr-annotate) and its Links add-on from
+GitHub when they are missing, and leaves them alone otherwise.
 
 Before linking, it removes plugins that point into this repo but no longer
 match a folder in `plugins/` (renamed, moved or deleted), e.g. the old
@@ -264,3 +270,41 @@ icons.
 one `name | path | startup command` per line;
 see `plugins/sesh/sessions.example`. In tuios the picker labels open
 sessions `tuios` and in herdr it labels them `herdr`.
+
+### Herdr Annotate
+
+[Herdr Annotate](https://github.com/plannotator/herdr-annotate) is installed
+from GitHub, not linked from `plugins/`. `bin/link-plugins` installs it when
+it is missing, picking the Windows Full variant on Windows. It annotates
+terminal text, reviews documents and agent replies in
+[plannotator-tui](https://github.com/plannotator/plannotator-tui), and sends
+the feedback back to the agent. Requires herdr 0.9.0+. To install it by hand:
+
+```sh
+herdr plugin install plannotator/herdr-annotate            # macOS / Linux
+```
+
+```powershell
+herdr plugin install plannotator/herdr-annotate/windows-full   # Windows
+```
+
+Keys: `prefix+a` (comment on the selection), `prefix+shift+a` (copy all as
+Markdown), `prefix+ctrl+a` (copy and archive), `prefix+ctrl+v` (paste into
+the agent's prompt), `prefix+ctrl+s` (send to the agent), `prefix+m`
+(manage), `prefix+d` (folder review), `prefix+shift+o` (agent's replies),
+`prefix+ctrl+o` (newest reply), `prefix+t` (pane output), `prefix+ctrl+d`
+(folder review with Approve). Since Annotate took `prefix+a` and
+`prefix+shift+a`, the agent jumps moved to `prefix+alt+n` /
+`prefix+alt+shift+n`, and `open_notification_target` to
+`prefix+alt+shift+o`.
+
+Optional add-on, routes Ctrl-clicked `file://…md` links to Annotate:
+`herdr plugin install plannotator/herdr-annotate/links` (installed by
+`bin/link-plugins` too). Update both with `herdr plugin update`. Settings
+live in `.config/plannotator-tui` (`placement`, `theme`); on Windows that
+file is linked to `%APPDATA%\plannotator-tui\config.toml` by
+`bin/install.ps1`. tuios cannot run it, since it drives herdr's API.
+
+In Neovim, `<leader>a` in visual mode sends the selection to Annotate
+(`.config/nvim/lua/config/keymaps.lua`), since the plugin cannot read a
+Neovim selection itself.

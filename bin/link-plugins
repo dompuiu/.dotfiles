@@ -87,4 +87,22 @@ for entry in "${current[@]}"; do
   fi
 done
 
+# Annotate is installed from GitHub, not linked from plugins/. Herdr keeps its
+# own record, so install it once and leave upgrades to `herdr plugin update`.
+if $has_herdr; then
+  if herdr plugin list 2>/dev/null | grep -qE '^- annotate '; then
+    echo "herdr: annotate already installed"
+  else
+    run herdr installed annotate herdr plugin install -y plannotator/herdr-annotate
+  fi
+
+  # Add-on: routes Ctrl-clicked file:// Markdown links to Annotate. Needs the
+  # Full install above.
+  if herdr plugin list 2>/dev/null | grep -qE '^- annotate-links '; then
+    echo "herdr: annotate-links already installed"
+  else
+    run herdr installed annotate-links herdr plugin install -y plannotator/herdr-annotate/links
+  fi
+fi
+
 exit $status

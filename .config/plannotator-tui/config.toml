@@ -1,0 +1,16 @@
+# plannotator-tui – document and agent-reply review, opened by the
+# herdr-annotate plugin (prefix+d, prefix+shift+o, prefix+ctrl+o).
+# https://github.com/plannotator/plannotator-tui
+
+[herdr]
+# Where a review opens in herdr:
+#   overlay = full tab (default)
+#   split   = beside the invoking pane
+#   popup   = floating over the invoking pane
+placement = "overlay"
+
+[ui]
+# Ask the terminal for its background colour and pick a matching palette.
+# Set "light" or "dark" to skip that round trip (a key typed while the
+# terminal answers is lost).
+theme = "auto"

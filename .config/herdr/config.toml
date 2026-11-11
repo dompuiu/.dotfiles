@@ -26,7 +26,7 @@ edit_scrollback = "prefix+e"
 swap_pane_left = "prefix+{"
 swap_pane_right = "prefix+}"
 cycle_pane_next = "prefix+tab"
-open_notification_target = "prefix+shift+o" # prefix+alt+o -> sesh picker
+open_notification_target = "prefix+alt+shift+o" # prefix+alt+o -> sesh picker
 
 # Direct focus, no prefix: zellij locked Ctrl+h/j/k/l (navigator plugin).
 # Note: shells/editors also see these; use prefix+h/j/k/l on conflict.
@@ -51,8 +51,9 @@ toggle_sidebar = "prefix+b"
 new_worktree = "prefix+shift+u"
 
 # Agents: one-shot jumps (no persistent picker mode in herdr)
-next_agent = "prefix+a"
-previous_agent = "prefix+shift+a"
+# prefix+a / prefix+shift+a belong to herdr-annotate (capture / copy context)
+next_agent = "prefix+alt+n"
+previous_agent = "prefix+alt+shift+n"
 
 [[keys.command]]
 key = "prefix+!"
@@ -107,3 +108,62 @@ command = "herdr plugin action invoke open-board-windows --plugin herdr-tsk || h
 key = "prefix+alt+a"
 type = "plugin_action"
 command = "herdr-tsk.quick-capture"
+
+# herdr-annotate (Windows Full install): annotate terminal text, review
+# documents / agent replies, send the feedback back to the agent.
+# prefix+a and prefix+shift+a were the agent jumps; they moved to alt+n.
+
+[[keys.command]] # comment on the selected text (Ctrl+S saves)
+key = "prefix+a"
+type = "plugin_action"
+command = "annotate.capture"
+
+[[keys.command]] # copy all annotations as Markdown
+key = "prefix+shift+a"
+type = "plugin_action"
+command = "annotate.copy-context"
+
+[[keys.command]] # copy all annotations, then archive them
+key = "prefix+ctrl+a"
+type = "plugin_action"
+command = "annotate.copy-archive"
+
+[[keys.command]] # paste annotations into the agent's prompt, archive them
+key = "prefix+ctrl+v"
+type = "plugin_action"
+command = "annotate.paste-archive"
+
+[[keys.command]] # send annotations to the agent as its next message, archive
+key = "prefix+ctrl+s"
+type = "plugin_action"
+command = "annotate.send-archive"
+
+[[keys.command]] # manage annotations: jump to pane, edit, copy, archive
+key = "prefix+m"
+type = "plugin_action"
+command = "annotate.manage"
+
+[[keys.command]] # review documents in this folder (plannotator-tui)
+key = "prefix+d"
+type = "plugin_action"
+command = "annotate.open"
+
+[[keys.command]] # review the agent's recent replies
+key = "prefix+shift+o"
+type = "plugin_action"
+command = "annotate.last"
+
+[[keys.command]] # review the agent's newest reply, no picker
+key = "prefix+ctrl+o"
+type = "plugin_action"
+command = "annotate.last-newest"
+
+[[keys.command]] # review this pane's recent output
+key = "prefix+t"
+type = "plugin_action"
+command = "annotate.terminal"
+
+[[keys.command]] # review this folder with an Approve button
+key = "prefix+ctrl+d"
+type = "plugin_action"
+command = "annotate.gate"
