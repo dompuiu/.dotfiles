@@ -142,6 +142,33 @@ are loaded when present and are not part of the repo.
   and jumps back to the previous app. `ctrl+alt+cmd+arrows` snaps
   windows.
 
+## Skills
+
+Agent skills I use with opencode (and other agents). They are installed
+globally into `~/.agents/skills`, tracked by `~/.agents/.skill-lock.json`, and
+are not part of this repo.
+
+- [ui-ux-pro-max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) -
+  UI/UX design intelligence: searchable styles, palettes, font pairings, UX
+  rules and stack-specific guidance. Install with
+  `npx ui-ux-pro-max-cli init --ai universal --global` (needs Python 3).
+- [impeccable](https://github.com/pbakaus/impeccable) - design vocabulary and
+  reviewer for interfaces: `critique`, `audit`, `polish`, `bolder`, plus a slop
+  detector. Install with `npx impeccable install --scope=global`.
+- [awesome-design-md](https://github.com/VoltAgent/awesome-design-md) -
+  DESIGN.md files extracted from real sites; copy one into a project and let
+  the agent follow it.
+- [mattpocock/skills](https://github.com/mattpocock/skills) - engineering and
+  writing workflows: grilling, specs, implement, TDD, code review, handoff,
+  research. Install with `npx skills add mattpocock/skills -g`.
+- [agent-skills](https://github.com/addyosmani/agent-skills) - broad
+  engineering skill set: architecture, debugging, security, performance,
+  docs, shipping. Install with `npx skills add addyosmani/agent-skills -g`.
+- [herdr-annotate](https://github.com/plannotator/herdr-annotate) - its
+  `plannotator-tui` skill lets an agent ask me to review a plan or document in
+  [Annotate](#herdr-annotate). Install with
+  `npx skills add plannotator/herdr-annotate --skill plannotator-tui -g`.
+
 ## Prerequisites
 
 - [Homebrew](https://brew.sh/)
