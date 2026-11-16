@@ -72,9 +72,10 @@ script again.
 - `bin/install-software.ps1` - Windows version: winget first, then mise for
   Node, Python, Rust, herdr, tuios, opencode, tree-sitter and rtk. Removes
   Node/Python/Rustup/fnm that winget installed so there is one copy.
-  Hand-installs only the last resort (tuicr), the FiraCode Nerd Font and the
-  npx skills. `-InstallOnly`, `-SkipOptional`, `-SkipSkills` and `-SkipFont`
-  map to the flags above; `-WithWsl` runs the Linux script inside WSL.
+  Hand-installs the last resort (PowerShell 7, tuicr), the FiraCode Nerd Font
+  and the npx skills. `-InstallOnly`, `-SkipOptional`, `-SkipSkills` and
+  `-SkipFont` map to the flags above; `-WithWsl` runs the Linux script
+  inside WSL.
 
 ### What `clean` removes
 
@@ -222,8 +223,9 @@ are not part of this repo.
 and updates everything in this list: Homebrew formulae on macOS/Linux and
 winget packages on Windows, plus the tools those package managers do not
 have. Node, Python and Rust come from mise; on Windows so do herdr, tuios,
-opencode, tree-sitter and rtk. GUI apps and the font are macOS casks and are
-only installed with `--with-gui`.
+opencode, tree-sitter and rtk. PowerShell 7 is linked from its Store package
+on Windows (see [Herdr and tuios](#herdr-and-tuios)). GUI apps and the font
+are macOS casks and are only installed with `--with-gui`.
 
 ## WSL: Windows tools on PATH
 
@@ -281,6 +283,13 @@ either way, startup is just slower.
   runs herdr plugins as they are
 - [tuicr](https://github.com/agavra/tuicr) - code review TUI for the
   `panes` plugin
+
+On Windows, herdr starts panes in PowerShell 7 only when a real `pwsh.exe`
+(not the 0-byte App Execution Alias of a Store install) is on `PATH`.
+`bin/install-software.ps1` points
+`%LOCALAPPDATA%\Programs\PowerShell\7` at the current Store package and adds
+it to `PATH`; re-run it after a Store update. No `[terminal] default_shell`
+in `.config/herdr/config.toml`, so macOS and Linux keep using `$SHELL`.
 
 ### Plugins
 

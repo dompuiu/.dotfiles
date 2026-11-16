@@ -5,7 +5,8 @@
 .DESCRIPTION
   Tries each source in order: winget first, then mise for Node, Python,
   Rust, herdr, tuios, opencode, tree-sitter and rtk, and hand-installs only
-  the last resort (tuicr), the FiraCode Nerd Font and the npx agent skills.
+  the last resort (PowerShell 7, tuicr), the FiraCode Nerd Font and the npx
+  agent skills.
   Node, Python, Rust and fnm previously installed with winget are removed so
   there is one copy. Safe to re-run: missing tools are installed and
   installed ones are upgraded.
@@ -212,6 +213,51 @@ function Get-LatestReleaseAsset {
     return $asset
 }
 
+# winget only ships PowerShell 7 as an MSIX bundle now, and the latest
+# releases have no MSI (7.7 dropped it). An MSIX install lands in
+# C:\Program Files\WindowsApps and puts a 0-byte App Execution Alias on PATH,
+# which is not a PE image, so tools that look for a real pwsh.exe (herdr's
+# pane shell detection) fall back to powershell.exe. Expose the real package
+# directory through a stable junction instead. Re-run to repoint it after a
+# Store update.
+function Ensure-Pwsh {
+    $link = Join-Path $env:LOCALAPPDATA 'Programs\PowerShell\7'
+    $msi = Join-Path $env:ProgramFiles 'PowerShell\7\pwsh.exe'
+
+    if (Test-Path $msi) {
+        Write-Host 'OK: PowerShell 7 (MSI install)'
+        Invoke-Action "add $(Split-Path $msi) to PATH" { Add-UserPath (Split-Path $msi) }
+        return
+    }
+
+    $package = Get-ChildItem (Join-Path $env:ProgramFiles 'WindowsApps') -Directory `
+        -Filter 'Microsoft.PowerShell_*_x64__8wekyb3d8bbwe' -ErrorAction SilentlyContinue |
+        Where-Object { Test-Path (Join-Path $_.FullName 'pwsh.exe') } |
+        Sort-Object { try { [version](($_.Name -split '_')[1]) } catch { [version]'0.0.0.0' } } |
+        Select-Object -Last 1
+    if (-not $package) {
+        Write-Warning 'PowerShell 7 was not found. Install it from https://aka.ms/powershell-release?tag=stable, then re-run this script.'
+        return
+    }
+
+    $current = Get-Item $link -ErrorAction SilentlyContinue
+    if ($current -and $current.LinkType -eq 'Junction' -and
+        @($current.Target) -contains $package.FullName -and
+        (Test-Path (Join-Path $link 'pwsh.exe'))) {
+        Write-Host 'OK: PowerShell 7 (installed)'
+        Invoke-Action "add $link to PATH" { Add-UserPath $link }
+        return
+    }
+
+    Invoke-Action "link PowerShell 7 into $link" {
+        New-Item -ItemType Directory -Force (Split-Path $link) | Out-Null
+        # Directory.Delete drops the junction itself, never the package it points at.
+        if ([IO.Directory]::Exists($link)) { [IO.Directory]::Delete($link) }
+        New-Item -ItemType Junction -Path $link -Target $package.FullName | Out-Null
+        Add-UserPath $link
+    }
+}
+
 function Ensure-Tuicr {
     $destination = Join-Path $env:LOCALAPPDATA 'Programs\tuicr'
     if ((Test-Path (Join-Path $destination 'tuicr.exe')) -and $InstallOnly) {
@@ -314,7 +360,6 @@ function Install-Skills {
 
 $core = @(
     @{ Id = 'Git.Git'; Name = 'Git' },
-    @{ Id = 'Microsoft.PowerShell'; Name = 'PowerShell 7' },
     @{ Id = 'Neovim.Neovim'; Name = 'Neovim' },
     @{ Id = 'Starship.Starship'; Name = 'starship' },
     @{ Id = 'sharkdp.fd'; Name = 'fd' },
@@ -392,6 +437,7 @@ if (Get-Command rtk -ErrorAction SilentlyContinue) {
 }
 
 Write-Host '== Hand-installed tools =='
+Ensure-Pwsh
 Ensure-Tuicr
 Update-SessionPath
 
