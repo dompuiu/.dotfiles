@@ -64,7 +64,8 @@ script again.
   tuios, whichever is installed, and unlinks stale ones (`.ps1` for
   Windows).
 - `bin/install-software` - installs or upgrades the software the dotfiles
-  need, using Homebrew, with Node, Python and Rust from mise.
+  need, using Homebrew, with Node, Python and Rust from mise. Runs
+  `rtk init -g --opencode` to install the RTK OpenCode plugin.
   `--install-only` skips upgrades, `--dry-run` prints the commands,
   `--skip-optional` and `--skip-skills` leave those out, and `--with-gui`
   adds the macOS casks.
@@ -154,8 +155,9 @@ are loaded when present and are not part of the repo.
   [ripgrep](https://github.com/BurntSushi/ripgrep): loaded through
   `RIPGREP_CONFIG_PATH`.
 - `.config/opencode` - [opencode](https://opencode.ai/): settings, TUI
-  settings, a Tokyo Night Moon theme and the `openrtk`, `opencode-mesh` and
-  `opencode-quill` plugins.
+  settings, a Tokyo Night Moon theme and the `opencode-mesh` and
+  `opencode-quill` plugins. RTK is wired up by `rtk init -g --opencode`,
+  which writes its own plugin file instead of the broken `openrtk` package.
 
 ### macOS automation
 

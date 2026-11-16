@@ -376,13 +376,19 @@ if (Get-Command mise -ErrorAction SilentlyContinue) {
 
 Write-Host '== opencode plugins =='
 if (Get-Command opencode -ErrorAction SilentlyContinue) {
-    Invoke-Native 'opencode plugin openrtk' 'opencode' @('plugin', 'add', 'openrtk')
     Invoke-Native 'opencode plugin opencode-mesh' 'opencode' @('plugin', 'add', 'opencode-mesh')
     if (-not $InstallOnly) {
         Invoke-Native 'opencode plugin update' 'opencode' @('plugin', 'update')
     }
 } else {
     Write-Warning 'opencode was not found; skipping its plugins.'
+}
+
+Write-Host '== rtk init =='
+if (Get-Command rtk -ErrorAction SilentlyContinue) {
+    Invoke-Native 'rtk init -g --opencode' 'rtk' @('init', '-g', '--opencode')
+} else {
+    Write-Warning 'rtk was not found; skipping rtk init.'
 }
 
 Write-Host '== Hand-installed tools =='

@@ -1,5 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "autoupdate": true,
-  "plugins": ["openrtk", "opencode-mesh"],
+  "plugins": ["opencode-mesh"],
 }

@@ -156,7 +156,7 @@ ensure mise
 if command -v mise >/dev/null 2>&1; then
   run "mise node (latest)" mise use -g node@latest
   run "mise python (latest)" mise use -g python@latest
-  # rtk is the CLI behind the openrtk opencode plugin.
+  # rtk is the token-optimizing CLI proxy used by the opencode hooks.
   run "mise rtk (latest)" mise use -g rtk@latest
   if ! $skip_optional; then
     run "mise rust (latest)" mise use -g rust@latest
@@ -175,9 +175,13 @@ fi
 
 if command -v opencode >/dev/null 2>&1; then
   echo "== opencode plugins =="
-  run "opencode plugin openrtk" opencode plugin add openrtk
   run "opencode plugin opencode-mesh" opencode plugin add opencode-mesh
   $install_only || run "opencode plugin update" opencode plugin update
+fi
+
+if command -v rtk >/dev/null 2>&1; then
+  echo "== rtk init =="
+  run "rtk init -g --opencode" rtk init -g --opencode
 fi
 
 if $with_gui; then
