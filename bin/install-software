@@ -1,0 +1,210 @@
+#!/bin/bash
+# Install or update the software the dotfiles need on macOS and Linux (incl. WSL).
+#
+# Usage: bin/install-software [options]
+#
+#   --install-only    Install what is missing; leave installed tools alone.
+#   --dry-run         Print the commands instead of running them.
+#   --skip-optional   Skip the optional tools (bob, pnpm, fnm, mise Rust).
+#   --skip-skills     Skip the npx agent skills.
+#   --with-gui        Also install the macOS GUI casks (Ghostty, WezTerm,
+#                     Hammerspoon, FiraCode Nerd Font). Ignored on Linux.
+#   -h, --help        Show this help.
+#
+# GUI apps and the Nerd Font are macOS-only casks, so on Linux/WSL install
+# them on the Windows side with bin/install-software.ps1. Not handled here:
+# LazyVim (the Neovim config in this repo) and zi (installed by .zshrc).
+
+set -u
+
+install_only=false
+dry_run=false
+skip_optional=false
+skip_skills=false
+with_gui=false
+
+usage() {
+  cat <<'EOF'
+Install or update the software the dotfiles need on macOS and Linux (incl. WSL).
+
+Usage: bin/install-software [options]
+
+  --install-only    Install what is missing; leave installed tools alone.
+  --dry-run         Print the commands instead of running them.
+  --skip-optional   Skip the optional tools (bob, pnpm, fnm, mise Rust).
+  --skip-skills     Skip the npx agent skills.
+  --with-gui        Also install the macOS GUI casks (Ghostty, WezTerm,
+                    Hammerspoon, FiraCode Nerd Font). Ignored on Linux.
+  -h, --help        Show this help.
+
+GUI apps and the Nerd Font are macOS-only casks, so on Linux/WSL install them
+on the Windows side with bin/install-software.ps1. Not handled here: LazyVim
+(the Neovim config in this repo) and zi (installed by .config/zsh/.zshrc).
+EOF
+}
+
+while (($#)); do
+  case $1 in
+    --install-only) install_only=true ;;
+    --dry-run) dry_run=true ;;
+    --skip-optional) skip_optional=true ;;
+    --skip-skills) skip_skills=true ;;
+    --with-gui) with_gui=true ;;
+    -h|--help) usage; exit 0 ;;
+    *) echo "Unknown option: $1" >&2; echo >&2; usage >&2; exit 2 ;;
+  esac
+  shift
+done
+
+os=linux
+[[ $(uname -s) == Darwin ]] && os=macos
+
+# Interactive shells get Homebrew from the shell profile; find it here too.
+if ! command -v brew >/dev/null 2>&1; then
+  for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew /home/linuxbrew/.linuxbrew/bin/brew; do
+    [[ -x $brew_bin ]] || continue
+    eval "$("$brew_bin" shellenv)"
+    break
+  done
+fi
+
+if ! command -v brew >/dev/null 2>&1; then
+  cat >&2 <<'EOF'
+Homebrew is required but was not found.
+
+  macOS: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  Linux: https://docs.brew.sh/Homebrew-on-Linux
+EOF
+  exit 1
+fi
+
+ok=()
+failed=()
+
+run() { # run <description> <command...>
+  local description=$1
+  shift
+  if $dry_run; then
+    echo "would run: $*"
+    return 0
+  fi
+  if "$@"; then
+    ok+=("$description")
+  else
+    echo "Failed: $description" >&2
+    failed+=("$description")
+  fi
+}
+
+installed_formula() { brew list --formula "$1" >/dev/null 2>&1; }
+
+ensure() { # ensure <formula> - install it, or upgrade it when already installed
+  if installed_formula "$1"; then
+    $install_only && return 0
+    run "upgrade $1" brew upgrade "$1"
+  else
+    run "install $1" brew install "$1"
+  fi
+}
+
+ensure_if_missing() { # ensure_if_missing <formula> <command>
+  # Upgrade a Homebrew copy, but do not add a second copy of something another
+  # version manager already provides (node via mise/fnm, git or zsh from apt).
+  if installed_formula "$1"; then
+    $install_only || run "upgrade $1" brew upgrade "$1"
+    return
+  fi
+  command -v "$2" >/dev/null 2>&1 && return 0
+  run "install $1" brew install "$1"
+}
+
+ensure_cask() { # ensure_cask <cask>
+  if brew list --cask "$1" >/dev/null 2>&1; then
+    $install_only && return 0
+    run "upgrade $1 (cask)" brew upgrade --cask "$1"
+  else
+    run "install $1 (cask)" brew install --cask "$1"
+  fi
+}
+
+# `opencode` is the core formula now; older machines still have the tap's
+# `opencode-v2`. Keep whichever is there, install the core name otherwise.
+ensure_opencode() {
+  if installed_formula opencode; then
+    $install_only || run "upgrade opencode" brew upgrade opencode
+  elif installed_formula opencode-v2; then
+    $install_only || run "upgrade opencode-v2" brew upgrade opencode-v2
+  else
+    run "install opencode" brew install opencode
+  fi
+}
+
+echo "== Core tools =="
+for formula in starship tree-sitter-cli fd ripgrep bat eza zoxide lazygit git-delta jq herdr tuios tuicr; do
+  ensure "$formula"
+done
+ensure_opencode
+
+# Prefer whatever another manager already provides (bob's nvim, mise's fzf).
+ensure_if_missing neovim nvim
+ensure_if_missing fzf fzf
+ensure_if_missing zsh zsh
+ensure_if_missing git git
+# Needed by the npx agent skills.
+ensure_if_missing node node
+ensure_if_missing python3 python3
+
+# mise is the version manager for Rust (and whatever else its config pins).
+ensure mise
+if ! $skip_optional && command -v mise >/dev/null 2>&1; then
+  run "mise rust (latest)" mise use -g rust@latest
+  run "mise reshim" mise reshim
+fi
+
+if $skip_optional; then
+  echo "== Optional tools == (skipped)"
+else
+  echo "== Optional tools =="
+  for formula in bob pnpm fnm; do
+    ensure "$formula"
+  done
+fi
+
+if $with_gui; then
+  if [[ $os == macos ]]; then
+    echo "== GUI casks =="
+    for cask in ghostty wezterm hammerspoon font-fira-code-nerd-font; do
+      ensure_cask "$cask"
+    done
+  else
+    echo "== GUI casks == (macOS only; install them on Windows with bin/install-software.ps1)"
+  fi
+fi
+
+if $skip_skills; then
+  echo "== Agent skills == (skipped)"
+elif ! command -v npx >/dev/null 2>&1; then
+  echo "== Agent skills == (npx not found; skipped)"
+else
+  echo "== Agent skills =="
+  # The second -y (or --force) is for the tool; npx's -y only skips its own prompt.
+  run "skill ui-ux-pro-max" npx -y ui-ux-pro-max-cli init --ai universal --global --force
+  run "skill impeccable" npx -y impeccable install --scope=global -y
+  run "skill mattpocock/skills" npx -y skills add mattpocock/skills -g -y
+  run "skill addyosmani/agent-skills" npx -y skills add addyosmani/agent-skills -g -y
+  run "skill plannotator-tui" npx -y skills add plannotator/herdr-annotate --skill plannotator-tui -g -y
+  echo "awesome-design-md has no installer; copy a DESIGN.md from"
+  echo "https://github.com/VoltAgent/awesome-design-md when you want one."
+fi
+
+echo
+if $dry_run; then
+  echo "Dry run done; nothing was changed."
+  exit 0
+fi
+
+echo "Done: ${#ok[@]} succeeded, ${#failed[@]} failed."
+if ((${#failed[@]})); then
+  printf '  failed: %s\n' "${failed[@]}"
+  exit 1
+fi

@@ -22,7 +22,17 @@ path under `$HOME`, so editing a config in `~/.config` edits the repo:
 
 1. Install the [prerequisites](#prerequisites).
 2. Clone the repo to `~/.dotfiles`.
-3. Link everything:
+3. Install or update the software:
+
+   ```sh
+   ~/.dotfiles/bin/install-software          # macOS / Linux
+   ```
+
+   ```powershell
+   ~\.dotfiles\bin\install-software.ps1      # Windows
+   ```
+
+4. Link everything:
 
    ```sh
    ~/.dotfiles/bin/install            # macOS / Linux
@@ -32,9 +42,9 @@ path under `$HOME`, so editing a config in `~/.config` edits the repo:
    ~\.dotfiles\bin\install.ps1        # Windows
    ```
 
-4. Open a new terminal. On first start zsh installs its plugin manager
+5. Open a new terminal. On first start zsh installs its plugin manager
    ([zi](https://github.com/z-shell/zi)) and plugins by itself.
-5. Optional: [link the herdr/tuios plugins](#plugins).
+6. Optional: [link the herdr/tuios plugins](#plugins).
 
 New files added to the repo are not linked automatically; run the install
 script again.
@@ -53,6 +63,15 @@ script again.
 - `bin/link-plugins` - links the plugins in `plugins/` into herdr and/or
   tuios, whichever is installed, and unlinks stale ones (`.ps1` for
   Windows).
+- `bin/install-software` - installs or upgrades the software the dotfiles
+  need, using Homebrew, and Rust through mise. `--install-only` skips
+  upgrades, `--dry-run` prints the commands, `--skip-optional` and
+  `--skip-skills` leave those out, and `--with-gui` adds the macOS casks.
+- `bin/install-software.ps1` - Windows version: winget first, mise for
+  herdr, tuios, opencode, tree-sitter and Rust, and by hand only the last
+  resort (tuicr), the FiraCode Nerd Font and the npx skills.
+  `-InstallOnly`, `-SkipOptional`, `-SkipSkills` and `-SkipFont` map to the
+  flags above; `-WithWsl` runs the Linux script inside WSL afterwards.
 
 ### What `clean` removes
 
@@ -190,9 +209,16 @@ are not part of this repo.
 - Optional, picked up when installed: [mise](https://mise.jdx.dev/)
   (shims mode, so tool versions resolve without the slower per-prompt
   activation hook), [bob](https://github.com/MordechaiHadad/bob) (Neovim
-  versions), pnpm, Rust (`~/.cargo/bin`).
+  versions), pnpm, Rust (via mise).
 - The terminal, workspace manager and macOS tools you want from the
   lists above.
+
+`bin/install-software` (or `bin/install-software.ps1` on Windows) installs
+and updates everything in this list: Homebrew formulae on macOS/Linux and
+winget packages on Windows, plus the tools those package managers do not
+have. Rust comes from mise, and so do herdr, tuios and opencode on Windows.
+GUI apps and the font are macOS casks and are only installed with
+`--with-gui`.
 
 ## WSL: Windows tools on PATH
 
