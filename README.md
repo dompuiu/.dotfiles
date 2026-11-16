@@ -64,14 +64,16 @@ script again.
   tuios, whichever is installed, and unlinks stale ones (`.ps1` for
   Windows).
 - `bin/install-software` - installs or upgrades the software the dotfiles
-  need, using Homebrew, and Rust through mise. `--install-only` skips
-  upgrades, `--dry-run` prints the commands, `--skip-optional` and
-  `--skip-skills` leave those out, and `--with-gui` adds the macOS casks.
-- `bin/install-software.ps1` - Windows version: winget first, mise for
-  herdr, tuios, opencode, tree-sitter and Rust, and by hand only the last
-  resort (tuicr), the FiraCode Nerd Font and the npx skills.
-  `-InstallOnly`, `-SkipOptional`, `-SkipSkills` and `-SkipFont` map to the
-  flags above; `-WithWsl` runs the Linux script inside WSL afterwards.
+  need, using Homebrew, with Node, Python and Rust from mise.
+  `--install-only` skips upgrades, `--dry-run` prints the commands,
+  `--skip-optional` and `--skip-skills` leave those out, and `--with-gui`
+  adds the macOS casks.
+- `bin/install-software.ps1` - Windows version: winget first, then mise for
+  Node, Python, Rust, herdr, tuios, opencode, tree-sitter and rtk. Removes
+  Node/Python/Rustup/fnm that winget installed so there is one copy.
+  Hand-installs only the last resort (tuicr), the FiraCode Nerd Font and the
+  npx skills. `-InstallOnly`, `-SkipOptional`, `-SkipSkills` and `-SkipFont`
+  map to the flags above; `-WithWsl` runs the Linux script inside WSL.
 
 ### What `clean` removes
 
@@ -152,7 +154,8 @@ are loaded when present and are not part of the repo.
   [ripgrep](https://github.com/BurntSushi/ripgrep): loaded through
   `RIPGREP_CONFIG_PATH`.
 - `.config/opencode` - [opencode](https://opencode.ai/): settings, TUI
-  settings and a Tokyo Night Moon theme.
+  settings, a Tokyo Night Moon theme and the `openrtk`, `opencode-mesh` and
+  `opencode-quill` plugins.
 
 ### macOS automation
 
@@ -216,9 +219,9 @@ are not part of this repo.
 `bin/install-software` (or `bin/install-software.ps1` on Windows) installs
 and updates everything in this list: Homebrew formulae on macOS/Linux and
 winget packages on Windows, plus the tools those package managers do not
-have. Rust comes from mise, and so do herdr, tuios and opencode on Windows.
-GUI apps and the font are macOS casks and are only installed with
-`--with-gui`.
+have. Node, Python and Rust come from mise; on Windows so do herdr, tuios,
+opencode, tree-sitter and rtk. GUI apps and the font are macOS casks and are
+only installed with `--with-gui`.
 
 ## WSL: Windows tools on PATH
 

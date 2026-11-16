@@ -5,7 +5,7 @@
 #
 #   --install-only    Install what is missing; leave installed tools alone.
 #   --dry-run         Print the commands instead of running them.
-#   --skip-optional   Skip the optional tools (bob, pnpm, fnm, mise Rust).
+#   --skip-optional   Skip the optional tools (bob, pnpm, mise Rust).
 #   --skip-skills     Skip the npx agent skills.
 #   --with-gui        Also install the macOS GUI casks (Ghostty, WezTerm,
 #                     Hammerspoon, FiraCode Nerd Font). Ignored on Linux.
@@ -31,7 +31,7 @@ Usage: bin/install-software [options]
 
   --install-only    Install what is missing; leave installed tools alone.
   --dry-run         Print the commands instead of running them.
-  --skip-optional   Skip the optional tools (bob, pnpm, fnm, mise Rust).
+  --skip-optional   Skip the optional tools (bob, pnpm, mise Rust).
   --skip-skills     Skip the npx agent skills.
   --with-gui        Also install the macOS GUI casks (Ghostty, WezTerm,
                     Hammerspoon, FiraCode Nerd Font). Ignored on Linux.
@@ -109,7 +109,7 @@ ensure() { # ensure <formula> - install it, or upgrade it when already installed
 
 ensure_if_missing() { # ensure_if_missing <formula> <command>
   # Upgrade a Homebrew copy, but do not add a second copy of something another
-  # version manager already provides (node via mise/fnm, git or zsh from apt).
+  # version manager already provides (node via mise, git or zsh from apt).
   if installed_formula "$1"; then
     $install_only || run "upgrade $1" brew upgrade "$1"
     return
@@ -150,14 +150,17 @@ ensure_if_missing neovim nvim
 ensure_if_missing fzf fzf
 ensure_if_missing zsh zsh
 ensure_if_missing git git
-# Needed by the npx agent skills.
-ensure_if_missing node node
-ensure_if_missing python3 python3
 
-# mise is the version manager for Rust (and whatever else its config pins).
+# mise manages Node, Python and Rust (and whatever else its config pins).
 ensure mise
-if ! $skip_optional && command -v mise >/dev/null 2>&1; then
-  run "mise rust (latest)" mise use -g rust@latest
+if command -v mise >/dev/null 2>&1; then
+  run "mise node (latest)" mise use -g node@latest
+  run "mise python (latest)" mise use -g python@latest
+  # rtk is the CLI behind the openrtk opencode plugin.
+  run "mise rtk (latest)" mise use -g rtk@latest
+  if ! $skip_optional; then
+    run "mise rust (latest)" mise use -g rust@latest
+  fi
   run "mise reshim" mise reshim
 fi
 
@@ -165,9 +168,16 @@ if $skip_optional; then
   echo "== Optional tools == (skipped)"
 else
   echo "== Optional tools =="
-  for formula in bob pnpm fnm; do
+  for formula in bob pnpm; do
     ensure "$formula"
   done
+fi
+
+if command -v opencode >/dev/null 2>&1; then
+  echo "== opencode plugins =="
+  run "opencode plugin openrtk" opencode plugin add openrtk
+  run "opencode plugin opencode-mesh" opencode plugin add opencode-mesh
+  $install_only || run "opencode plugin update" opencode plugin update
 fi
 
 if $with_gui; then

@@ -50,5 +50,3 @@ $global:PwshStartupMs = [int]((Get-Date) - (Get-Process -Id $PID).StartTime).Tot
 if ($env:PWSH_STARTUP_TIME -and $env:PWSH_STARTUP_TIME -ne '0') {
     Write-Host "pwsh startup: $global:PwshStartupMs ms" -ForegroundColor DarkGray
 }
-
-fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression

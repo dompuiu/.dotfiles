@@ -3,20 +3,22 @@
   Install or update the software the dotfiles need on Windows.
 
 .DESCRIPTION
-  Tries each source in order: winget first, mise next for what winget does
-  not have (herdr, tuios, opencode, tree-sitter and Rust), and hand-installs
-  only the last resort (tuicr), the FiraCode Nerd Font and the npx agent
-  skills. Safe to re-run: missing tools are installed and installed ones are
-  upgraded.
+  Tries each source in order: winget first, then mise for Node, Python,
+  Rust, herdr, tuios, opencode, tree-sitter and rtk, and hand-installs only
+  the last resort (tuicr), the FiraCode Nerd Font and the npx agent skills.
+  Node, Python, Rust and fnm previously installed with winget are removed so
+  there is one copy. Safe to re-run: missing tools are installed and
+  installed ones are upgraded.
 
   Not handled here: LazyVim (the Neovim config in this repo) and zi (installed
   by .config/zsh/.zshrc, so run bin/install-software inside WSL).
 
 .PARAMETER InstallOnly
-  Install what is missing; leave installed tools alone.
+  Install what is missing; leave installed tools alone (also skips the winget
+  uninstalls below).
 
 .PARAMETER SkipOptional
-  Skip the optional tools (pnpm, fnm, Rust via mise).
+  Skip the optional tools (pnpm, Rust via mise).
 
 .PARAMETER SkipSkills
   Skip the npx agent skills.
@@ -106,7 +108,7 @@ function Invoke-Winget {
     }
     if ($code -eq 0) { $script:Ok.Add($Description); return }
     # winget returns an error when there is simply nothing to upgrade.
-    if (($output -join "`n") -match 'No applicable upgrade|No available upgrade|No newer package|already installed') {
+    if (($output -join "`n") -match 'No applicable upgrade|No available upgrade|No newer package|already installed|not installed') {
         Write-Host "OK: $Description (nothing to do)"
         $script:Ok.Add($Description)
         return
@@ -136,6 +138,16 @@ function Ensure-Winget {
             '--accept-source-agreements', '--accept-package-agreements',
             '--silent', '--disable-interactivity')
     }
+}
+
+function Remove-Winget {
+    param([string]$Id, [string]$Name = $Id)
+    if (-not (Test-Winget $Id)) { return }
+    if ($InstallOnly) {
+        Write-Host "OK: $Name stays (install-only)"
+        return
+    }
+    Invoke-Winget "uninstall $Name" @('uninstall', '--id', $Id, '-e', '--silent', '--disable-interactivity')
 }
 
 # winget updates the machine/user PATH, but this process keeps its old copy.
@@ -315,14 +327,11 @@ $core = @(
     @{ Id = 'dandavison.delta'; Name = 'delta' },
     @{ Id = 'jqlang.jq'; Name = 'jq' },
     @{ Id = 'wez.wezterm'; Name = 'WezTerm' },
-    @{ Id = 'OpenJS.NodeJS.LTS'; Name = 'Node.js LTS' },
-    @{ Id = 'Python.Python.3.13'; Name = 'Python 3.13' },
     @{ Id = 'jdx.mise'; Name = 'mise' }
 )
 
 $optional = @(
-    @{ Id = 'pnpm.pnpm'; Name = 'pnpm' },
-    @{ Id = 'Schniz.fnm'; Name = 'fnm' }
+    @{ Id = 'pnpm.pnpm'; Name = 'pnpm' }
 )
 
 Write-Host '== Core tools (winget) =='
@@ -336,20 +345,44 @@ if ($SkipOptional) {
 }
 
 Update-SessionPath
+
+Write-Host '== Remove old winget copies =='
+Remove-Winget 'OpenJS.NodeJS.LTS' 'Node.js (winget)'
+Remove-Winget 'Python.Python.3.13' 'Python 3.13 (winget)'
+Remove-Winget 'Schniz.fnm' 'fnm (winget)'
+if (-not $SkipOptional) {
+    Remove-Winget 'Rustlang.Rustup' 'Rustup (winget)'
+}
+
+Update-SessionPath
 Update-MisePath
 
 Write-Host '== mise tools =='
 if (Get-Command mise -ErrorAction SilentlyContinue) {
+    Ensure-MiseTool 'node' 'node'
+    Ensure-MiseTool 'python' 'python'
     Ensure-MiseTool 'herdr'
     Ensure-MiseTool 'tuios'
     Ensure-MiseTool 'opencode'
     Ensure-MiseTool 'tree-sitter'
+    Ensure-MiseTool 'rtk'
     if (-not $SkipOptional) {
         Ensure-MiseTool 'rust' 'rustc'
     }
     Update-MisePath
 } else {
     Write-Warning 'mise was not found; skipping the mise-managed tools.'
+}
+
+Write-Host '== opencode plugins =='
+if (Get-Command opencode -ErrorAction SilentlyContinue) {
+    Invoke-Native 'opencode plugin openrtk' 'opencode' @('plugin', 'add', 'openrtk')
+    Invoke-Native 'opencode plugin opencode-mesh' 'opencode' @('plugin', 'add', 'opencode-mesh')
+    if (-not $InstallOnly) {
+        Invoke-Native 'opencode plugin update' 'opencode' @('plugin', 'update')
+    }
+} else {
+    Write-Warning 'opencode was not found; skipping its plugins.'
 }
 
 Write-Host '== Hand-installed tools =='
