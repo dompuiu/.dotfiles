@@ -52,6 +52,10 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+# Windows PowerShell 5.1 renders a progress record per read, turning the 110 MB
+# PowerShell archive from ~4 s into minutes. This is the bootstrap script, so it
+# is usually run by 5.1; keep the bar off.
+$ProgressPreference = 'SilentlyContinue'
 
 $onWindows = $true
 if (Get-Variable -Name IsWindows -ErrorAction SilentlyContinue) { $onWindows = $IsWindows }
@@ -123,8 +127,18 @@ function Invoke-Winget {
     $output | Select-Object -Last 8 | ForEach-Object { Write-Host "  $_" }
 }
 
+# `winget list --id` costs about a second per call and the run probes ~20
+# packages, so take one full listing and reuse it. Rows are not truncated when
+# the output is redirected, and every Id is asked about at most once per run.
+$script:WingetInventory = $null
 function Test-Winget {
     param([string]$Id)
+    if ($null -eq $script:WingetInventory) {
+        $script:WingetInventory = @(& winget list --accept-source-agreements --disable-interactivity 2>&1 | ForEach-Object { "$_" })
+    }
+    if ($script:WingetInventory -match '^Name\s+Id\s+Version') {
+        return [bool]($script:WingetInventory -match [regex]::Escape($Id))
+    }
     $output = & winget list --id $Id -e --accept-source-agreements 2>&1 | ForEach-Object { "$_" }
     return [bool]($output -match [regex]::Escape($Id))
 }
@@ -209,6 +223,16 @@ function Ensure-MiseTool {
     Invoke-Native "mise use -g $Tool@latest" 'mise' @('use', '-g', "$Tool@latest")
 }
 
+# curl.exe ships with Windows 10 1803+ and is one native call, so the download
+# costs the same under 5.1 and 7. Returns nothing; throws on a failed transfer.
+function Save-RemoteFile {
+    param([string]$Uri, [string]$Path)
+    $curl = Join-Path $env:SystemRoot 'System32\curl.exe'
+    if (-not (Test-Path $curl)) { $curl = 'curl.exe' }
+    & $curl --fail --location --silent --show-error --output $Path $Uri
+    if ($LASTEXITCODE -ne 0) { throw "curl exited $LASTEXITCODE while downloading $Uri" }
+}
+
 function Get-LatestReleaseAsset {
     param([string]$Repository, [string]$Pattern)
     $release = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repository/releases/latest" -Headers @{ 'User-Agent' = 'dotfiles-install-software' }
@@ -266,7 +290,7 @@ function Ensure-Pwsh {
         New-Item -ItemType Directory -Force $tmp | Out-Null
         try {
             $archive = Join-Path $tmp 'pwsh.zip'
-            Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $archive -UseBasicParsing
+            Save-RemoteFile -Uri $asset.browser_download_url -Path $archive
             Unblock-File $archive
             $unpacked = Join-Path $tmp 'pwsh'
             Expand-Archive -Path $archive -DestinationPath $unpacked -Force
@@ -302,7 +326,7 @@ function Ensure-Tuicr {
         New-Item -ItemType Directory -Force $tmp | Out-Null
         try {
             $archive = Join-Path $tmp 'tuicr.zip'
-            Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $archive -UseBasicParsing
+            Save-RemoteFile -Uri $asset.browser_download_url -Path $archive
             Expand-Archive -Path $archive -DestinationPath $tmp -Force
             $found = Get-ChildItem -Path $tmp -Recurse -Filter 'tuicr.exe' | Select-Object -First 1
             if (-not $found) { throw 'tuicr.exe was not in the archive' }
@@ -338,7 +362,7 @@ function Install-NerdFont {
         New-Item -ItemType Directory -Force $tmp | Out-Null
         try {
             $archive = Join-Path $tmp 'font.zip'
-            Invoke-WebRequest -Uri $url -OutFile $archive -UseBasicParsing
+            Save-RemoteFile -Uri $url -Path $archive
             Expand-Archive -Path $archive -DestinationPath $tmp -Force
             $fonts = @(Get-ChildItem -Path $tmp -Recurse -Filter '*.ttf')
             if ($fonts.Count -eq 0) { throw 'no .ttf files were in the archive' }

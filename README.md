@@ -223,8 +223,8 @@ are not part of this repo.
 and updates everything in this list: Homebrew formulae on macOS/Linux and
 winget packages on Windows, plus the tools those package managers do not
 have. Node, Python and Rust come from mise; on Windows so do herdr, tuios,
-opencode, tree-sitter and rtk. PowerShell 7 is linked from its Store package
-on Windows (see [Herdr and tuios](#herdr-and-tuios)). GUI apps and the font
+opencode, tree-sitter and rtk. PowerShell 7 comes from its release ZIP on
+Windows (see [Herdr and tuios](#herdr-and-tuios)). GUI apps and the font
 are macOS casks and are only installed with `--with-gui`.
 
 ## WSL: Windows tools on PATH
@@ -286,9 +286,12 @@ either way, startup is just slower.
 
 On Windows, herdr starts panes in PowerShell 7 only when a real `pwsh.exe`
 (not the 0-byte App Execution Alias of a Store install) is on `PATH`.
-`bin/install-software.ps1` points
-`%LOCALAPPDATA%\Programs\PowerShell\7` at the current Store package and adds
-it to `PATH`; re-run it after a Store update. No `[terminal] default_shell`
+`bin/install-software.ps1` installs the official release ZIP into
+`%LOCALAPPDATA%\Programs\PowerShell\7` and adds it to `PATH`; re-run it to
+update PowerShell. The MSIX/Store copy is not used - remove it with
+`Get-AppxPackage Microsoft.PowerShell | Remove-AppxPackage`, and point the
+Windows Terminal profile at the ZIP (`commandline` instead of
+`"source": "Windows.Terminal.PowershellCore"`). No `[terminal] default_shell`
 in `.config/herdr/config.toml`, so macOS and Linux keep using `$SHELL`.
 
 ### Plugins
