@@ -35,6 +35,10 @@
   .\bin\install-software.ps1
 
 .EXAMPLE
+  powershell.exe -NoProfile -File .\bin\install-software.ps1
+  Bootstrap from Windows PowerShell 5.1, for when pwsh itself cannot start.
+
+.EXAMPLE
   .\bin\install-software.ps1 -WhatIf
 #>
 [CmdletBinding(SupportsShouldProcess = $true)]
@@ -215,13 +219,16 @@ function Get-LatestReleaseAsset {
 
 # winget only ships PowerShell 7 as an MSIX bundle now, and the latest
 # releases have no MSI (7.7 dropped it). An MSIX install lands in
-# C:\Program Files\WindowsApps and puts a 0-byte App Execution Alias on PATH,
-# which is not a PE image, so tools that look for a real pwsh.exe (herdr's
-# pane shell detection) fall back to powershell.exe. Expose the real package
-# directory through a stable junction instead. Re-run to repoint it after a
-# Store update.
+# C:\Program Files\WindowsApps with a 0-byte App Execution Alias on PATH,
+# which is not a PE image (herdr's pane shell detection falls back to
+# powershell.exe), and the package payload cannot be spawned at all: a
+# junction to it fails with ERROR_ACCESS_DENIED, because WindowsApps only
+# allows AppX activation. Install the release ZIP into a normal directory
+# instead, so there is a real pwsh.exe on a path every tool can execute.
+# Re-run to update it after a new release.
 function Ensure-Pwsh {
     $link = Join-Path $env:LOCALAPPDATA 'Programs\PowerShell\7'
+    $exe = Join-Path $link 'pwsh.exe'
     $msi = Join-Path $env:ProgramFiles 'PowerShell\7\pwsh.exe'
 
     if (Test-Path $msi) {
@@ -230,30 +237,55 @@ function Ensure-Pwsh {
         return
     }
 
-    $package = Get-ChildItem (Join-Path $env:ProgramFiles 'WindowsApps') -Directory `
-        -Filter 'Microsoft.PowerShell_*_x64__8wekyb3d8bbwe' -ErrorAction SilentlyContinue |
-        Where-Object { Test-Path (Join-Path $_.FullName 'pwsh.exe') } |
-        Sort-Object { try { [version](($_.Name -split '_')[1]) } catch { [version]'0.0.0.0' } } |
-        Select-Object -Last 1
-    if (-not $package) {
-        Write-Warning 'PowerShell 7 was not found. Install it from https://aka.ms/powershell-release?tag=stable, then re-run this script.'
-        return
+    # A junction into WindowsApps (what older versions of this script made)
+    # answers Test-Path for pwsh.exe but cannot be executed, so it counts as
+    # not installed and gets replaced.
+    $entry = Get-Item $link -ErrorAction SilentlyContinue
+    $installed = $null
+    if ($entry -and $entry.LinkType -ne 'Junction' -and (Test-Path $exe)) {
+        $installed = (Get-Item $exe).VersionInfo.ProductVersion
     }
 
-    $current = Get-Item $link -ErrorAction SilentlyContinue
-    if ($current -and $current.LinkType -eq 'Junction' -and
-        @($current.Target) -contains $package.FullName -and
-        (Test-Path (Join-Path $link 'pwsh.exe'))) {
-        Write-Host 'OK: PowerShell 7 (installed)'
+    if ($installed -and $InstallOnly) {
+        Write-Host "OK: PowerShell 7 $installed (installed)"
         Invoke-Action "add $link to PATH" { Add-UserPath $link }
         return
     }
 
-    Invoke-Action "link PowerShell 7 into $link" {
-        New-Item -ItemType Directory -Force (Split-Path $link) | Out-Null
-        # Directory.Delete drops the junction itself, never the package it points at.
-        if ([IO.Directory]::Exists($link)) { [IO.Directory]::Delete($link) }
-        New-Item -ItemType Junction -Path $link -Target $package.FullName | Out-Null
+    Invoke-Action "install/update PowerShell 7 into $link" {
+        $asset = Get-LatestReleaseAsset -Repository 'PowerShell/PowerShell' -Pattern '*-win-x64.zip'
+        $version = ($asset.name -replace '^PowerShell-', '') -replace '-win-x64\.zip$', ''
+        if ($installed -and ($installed -split '-')[0] -eq $version) {
+            Write-Host "OK: PowerShell 7 $installed (installed)"
+            Add-UserPath $link
+            return
+        }
+
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $tmp = Join-Path ([IO.Path]::GetTempPath()) "pwsh-$PID"
+        New-Item -ItemType Directory -Force $tmp | Out-Null
+        try {
+            $archive = Join-Path $tmp 'pwsh.zip'
+            Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $archive -UseBasicParsing
+            Unblock-File $archive
+            $unpacked = Join-Path $tmp 'pwsh'
+            Expand-Archive -Path $archive -DestinationPath $unpacked -Force
+            if (-not (Test-Path (Join-Path $unpacked 'pwsh.exe'))) { throw 'pwsh.exe was not in the archive' }
+            # Extracted files inherit the zone mark; SmartScreen stalls the first spawn.
+            Get-ChildItem $unpacked -Recurse -File | Unblock-File
+
+            New-Item -ItemType Directory -Force (Split-Path $link) | Out-Null
+            if ($entry -and $entry.LinkType -eq 'Junction') {
+                # Directory.Delete drops the junction itself, never the package it points at.
+                [IO.Directory]::Delete($link)
+            } elseif (Test-Path $link) {
+                # Real directory now, so recursing is safe.
+                Remove-Item -Recurse -Force $link
+            }
+            Move-Item -LiteralPath $unpacked -Destination $link
+        } finally {
+            Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue
+        }
         Add-UserPath $link
     }
 }
